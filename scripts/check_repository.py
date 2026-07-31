@@ -124,6 +124,18 @@ def main() -> int:
     if skill_link_check.returncode:
         failures.extend(f"skill-links: {item}" for item in skill_links.get("failures", []))
 
+    agent_parity_check = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "check_agent_parity.py")],
+        capture_output=True,
+        text=True,
+    )
+    try:
+        agent_parity = json.loads(agent_parity_check.stdout)
+    except json.JSONDecodeError:
+        agent_parity = {"failures": ["agent-parity check did not return JSON"]}
+    if agent_parity_check.returncode:
+        failures.extend(f"agent-parity: {item}" for item in agent_parity.get("failures", []))
+
     result = {
         "version": version,
         "metrics": metrics,
@@ -132,6 +144,7 @@ def main() -> int:
         "privacy": privacy,
         "cross_model": cross_model,
         "skill_links": skill_links,
+        "agent_parity": agent_parity,
         "failures": failures,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))

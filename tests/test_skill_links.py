@@ -1,5 +1,6 @@
 import copy
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,6 +9,7 @@ from scripts.check_skill_links import validate_skill_links
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MERMAID_BLOCK = re.compile(r"```mermaid\n(.*?)```", re.DOTALL)
 
 
 class SkillLinkTests(unittest.TestCase):
@@ -39,6 +41,17 @@ class SkillLinkTests(unittest.TestCase):
             )
             failures = validate_skill_links(manifest, root)
         self.assertTrue(any("rw-not-in-package" in failure for failure in failures))
+
+    def test_mmd_file_matches_the_markdown_mermaid_block(self):
+        markdown = (ROOT / "docs" / "skill-link-map.md").read_text(encoding="utf-8")
+        mmd = (ROOT / "docs" / "skill-link-map.mmd").read_text(encoding="utf-8")
+        match = MERMAID_BLOCK.search(markdown)
+        self.assertIsNotNone(match, "docs/skill-link-map.md must contain a ```mermaid block")
+        self.assertEqual(
+            match.group(1).strip(),
+            mmd.strip(),
+            "docs/skill-link-map.mmd has drifted from the mermaid block in docs/skill-link-map.md",
+        )
 
 
 if __name__ == "__main__":
