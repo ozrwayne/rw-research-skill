@@ -1,7 +1,7 @@
 {"id":"RWA-CLAIM-AUDIT-001","knowledge":"引用存在、格式正确和支持主张是三个不同问题。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-CLAIM-AUDIT-002","knowledge":"核验单位是可以独立判断的最小主张。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-CLAIM-AUDIT-003","knowledge":"VERIFIED 需要来源指针和具体 locator。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
-{"id":"RWA-CLAIM-AUDIT-004","knowledge":"来源支持范围小于句子范围时收窄句子。","source":"rw-phd-write","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-CLAIM-AUDIT-004","knowledge":"来源支持范围小于句子范围时收窄句子。","source":"rw-academic-writing","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-CLAIM-AUDIT-005","knowledge":"摘要不能支持摘要没有报告的细节。","source":"rw-paper-extractor","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-CLAIM-AUDIT-006","knowledge":"数字核验同时检查分母、单位、时间点、人群和分析集。","source":"rw-paper-extractor","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-CLAIM-AUDIT-007","knowledge":"因果措辞不能超过研究设计和来源措辞。","source":"rw-research-referee","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}

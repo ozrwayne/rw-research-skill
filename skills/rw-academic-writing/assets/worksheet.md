@@ -1,4 +1,4 @@
-# RW PhD Write 工作表
+# RW Academic Writing 工作表
 
 ## Research output profile
 

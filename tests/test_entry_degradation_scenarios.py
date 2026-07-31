@@ -52,9 +52,9 @@ class EntryDegradationScenarioTests(unittest.TestCase):
             {"REVIEW", "BLOCK"},
         )
 
-    def test_phd_write_degradation_scenarios(self):
+    def test_academic_writing_degradation_scenarios(self):
         self.assert_entry_scenarios(
-            "rw-phd-write",
+            "rw-academic-writing",
             {"BLOCK", "PENDING_VERIFICATION"},
         )
 
@@ -79,7 +79,7 @@ class EntryDegradationScenarioTests(unittest.TestCase):
         scenarios["scenarios"] = [
             scenario
             for scenario in scenarios["scenarios"]
-            if scenario["entry_skill"] != "rw-phd-write"
+            if scenario["entry_skill"] != "rw-academic-writing"
         ]
         failures = validate_scenarios(scenarios, self.registry, self.manifest)
         self.assertTrue(any("requires at least two degradation scenarios" in failure for failure in failures))

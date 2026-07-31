@@ -15,6 +15,7 @@
 
 <p align="center">
   <a href="#新手从这里开始">快速开始</a> ·
+  <a href="docs/RW-Research-Skill-从0到100.md">从 0 到 100 手册</a> ·
   <a href="#安装">安装</a> ·
   <a href="#常见场景与当前入口">常见场景</a> ·
   <a href="#4-个对外入口">4 个入口</a> ·
@@ -24,7 +25,7 @@
 
 ---
 
-RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.11.0`。对外提供 4 个入口，内部保留 21 个科研 Skill。当前包含 540 条知识原子、170 条公理、143 个案例和反例，以及 160 条行为合同。
+RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.11.0`。仓库共 21 个科研 Skill，其中 4 个是公开入口，17 个是内部模块。当前包含 542 条知识原子、171 条公理、144 个案例和反例，以及 161 条行为合同。
 
 适用于手上有研究想法、论文、数据、研究方案、章节草稿或审稿意见，需要判断下一步的人。你可以直接提交材料，也可以只说现在卡在哪里。系统会选择一个主 Skill，每次处理当前一步。
 
@@ -46,6 +47,8 @@ RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.11.0`。对外提
 | 一个需要选择工具的科研任务 | 根据任务、数据和环境选择工具，不把工具当成研究判断 |
 
 ## 新手从这里开始
+
+第一次安装、部署或排错时，按 [《RW Research Skill 从 0 到 100》](docs/RW-Research-Skill-从0到100.md) 操作。
 
 安装后，在 Codex 中输入：
 
@@ -144,7 +147,7 @@ RW Research Skill 每次选择一个主流程。用户只需要选择下面 4 �
 $rw-research-router 我不知道从哪里开始，请判断当前一步。
 $rw-paper-extractor 精读这些论文，提取图表和证据，并核验关键主张。
 $rw-research-referee 检查这个研究的综述方法、设计、材料、统计和结论边界。
-$rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务。
+$rw-academic-writing 根据现有证据处理这份论文写作、修改或投稿任务。
 ```
 
 ## 4 个对外入口
@@ -154,7 +157,7 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 | `rw-research-router` | 学习起点、研究问题、文献发现、检索策略、创新方向、项目状态和工具接续 |
 | `rw-paper-extractor` | PDF 工作区、章节和图表提取、分阶段精读、证据关系、引用和主张核验 |
 | `rw-research-referee` | 综述方法、研究设计、研究材料、统计报告和结论审查 |
-| `rw-phd-write` | 科研写作、作者语气、局部修订、审稿回复和投稿材料 |
+| `rw-academic-writing` | 科研写作、作者语气、局部修订、审稿回复和投稿材料 |
 
 21 个内部 Skill 仍可按原名称直接调用，用于兼容已有流程。对外入口和内部归属由 [`manifest.json`](manifest.json) 统一维护。完整前后关系见 [Skill 关系图](docs/skill-link-map.md)。
 
@@ -178,10 +181,10 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 
 公开包当前包含：
 
-- 540 条结构化知识原子。
-- 170 条运行公理。
-- 143 个案例和反例。
-- 160 条行为合同。
+- 542 条结构化知识原子。
+- 171 条运行公理。
+- 144 个案例和反例。
+- 161 条行为合同。
 - 21 个独立运行静态自检脚本。
 
 行为合同保存提示词、应做事项、不应做事项和下一步，用于后续模型评测。静态自检只检查文件、结构、数量和独立运行约束，不代表模型已经执行全部行为合同，也不证明真实任务提效。
@@ -198,11 +201,13 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 
 ## v0.11.0 更新
 
-- 将 21 个科研 Skill 收到 `rw-research-router`、`rw-paper-extractor`、`rw-research-referee` 和 `rw-phd-write` 4 个对外入口下。
+- 将 21 个科研 Skill 收到 `rw-research-router`、`rw-paper-extractor`、`rw-research-referee` 和 `rw-academic-writing` 4 个对外入口下。
 - 17 个内部 Skill 使用 `metadata.internal: true`，默认发现和安装后的普通列表只显示 4 个入口。内部模式仍可发现和调用全部 21 个 Skill。
 - `manifest.json` 记录每个内部 Skill 的唯一入口归属。
+- 仓库检查会验证结构化 Skill 交接目标是否存在，并区分公开入口和入口内部接续。
 - `ci/manifest.json` 统一本地、Pull Request、main 分支和 GitHub Release 的检查。
 - `docs/degradation-registry.json` 记录降级状态、替代动作、禁止行为和责任 Skill。
+- `rw-research-lab-router` 可选读取用户提供的工具登记表，并标记登记日期的 freshness 状态。
 - 为每个入口增加 2 个确定性降级场景，并用真实 Agent 各运行 1 个前向场景。
 - 前向测试只说明这 4 个合成提示中的行为，不表示所有模型和任务都会照做。
 
@@ -226,7 +231,7 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 - 候选主张先进入 `rw-claim-audit`；只有门禁为 PASS 才能生成 LitNet 回写预览。
 - LitNet 接口只生成预览，不写 Zotero，也不自动改正式卡片。
 
-## v0.8.0 更新
+## v0.8.0 本地积累扫描和学习起点
 
 - 新增 `rw-research-learning`。
 - 支持指定文件夹、当前项目和可读用户内容 3 种扫描模式。
@@ -241,7 +246,7 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 - 研究画像、索引和能力报告默认为本地私有状态，公开测试只使用合成材料。
 - `rw-research-router` 在用户不知道从哪里开始时，先路由到 `rw-research-learning`。
 
-## v0.8.0 更新
+## v0.8.0 本地模型和真实文档审阅
 
 - 默认模型表改为 Codex Sol、Terra、Luna 和 Claude Opus 4.8。
 - Claude 通过本机 Claude CLI 和现有登录状态运行，不经过本项目配置 API key。
@@ -273,7 +278,7 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 - 新增 `rw-claim-audit`，区分来源存在、引用格式和来源是否支持具体主张。
 - 新增 `rw-revision-patch`，按稳定 Markdown 块和 hash 执行局部替换，并报告保留比例。
 - 更新 `rw-research-router`，加入“新手入门”和 3 个新流程的路由。
-- 更新 `rw-phd-write`，按写作功能判断解释义务，不按章节编号套用模式。
+- 更新 `rw-academic-writing`，按写作功能判断解释义务，不按章节编号套用模式。
 - 公开包增加到 16 个科研 Skill。
 
 ## 本地构建

@@ -13,7 +13,7 @@
       "越过停止条件：没有作者样本时，不声称生成个人指纹。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
@@ -31,7 +31,7 @@
       "越过停止条件：没有作者样本时，不声称生成个人指纹。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
@@ -49,7 +49,7 @@
       "越过停止条件：没有作者样本时，不声称生成个人指纹。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
@@ -67,7 +67,7 @@
       "越过停止条件：没有作者样本时，不声称生成个人指纹。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },

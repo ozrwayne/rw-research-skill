@@ -24,7 +24,7 @@ import cross_model_eval as runtime  # noqa: E402
 
 
 DEFAULT_MODELS = ROOT / "evals" / "cross-model" / "models.json"
-DEFAULT_SKILLS = ["rw-research-referee", "rw-phd-write", "rw-phd-tone"]
+DEFAULT_SKILLS = ["rw-research-referee", "rw-academic-writing", "rw-phd-tone"]
 SKILL_FILES = ["SKILL.md", "references/method.md", "references/axioms.md", "references/acceptance.md"]
 VALID_PROVIDERS = {"codex", "claude"}
 VALID_SEVERITIES = {"blocker", "major", "minor", "clarification"}

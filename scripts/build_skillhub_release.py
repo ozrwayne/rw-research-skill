@@ -110,7 +110,7 @@ license: Apache-2.0
 
 # RW Research Skill
 
-这个包对外提供 {len(entries)} 个入口，内部保留 {len(skills)} 个科研模块。用户不需要先理解内部模块名称。
+这个包共 {len(skills)} 个科研模块，其中 {len(entries)} 个是公开入口，{len(skills) - len(entries)} 个是内部模块。用户不需要先理解内部模块名称。
 
 用户可以提供研究想法、文献、数据、草稿、审稿意见，或直接说明卡在哪里。一次只推进当前一步。
 
@@ -138,7 +138,7 @@ def write_readme(output: Path, version: str, entries: list[dict], skills: list[s
 
 版本：`{version}`
 
-这是 SkillHub 发行版。它对外提供 {len(entries)} 个入口，内部保留 {len(skills)} 个科研模块。每个模块的参考资料已合并。公共版不包含私人工作区说明、个人研究记录或本地决策来源。本地规则统一标为 `packaged_internal_rule`。
+这是 SkillHub 发行版。它共包含 {len(skills)} 个科研模块，其中 {len(entries)} 个是公开入口，{len(skills) - len(entries)} 个是内部模块。每个模块的参考资料已合并。公共版不包含私人工作区说明、个人研究记录或本地决策来源。本地规则统一标为 `packaged_internal_rule`。
 
 ## 对外入口
 

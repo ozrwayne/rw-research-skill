@@ -16,6 +16,7 @@ description: |
 - 项目状态和工具选择也从本入口进入。
 - 内部可接续 `rw-research-learning`、`rw-research-question`、`rw-literature-discovery`、`rw-search-strategy`、`rw-research-novelty`、`rw-research-passport` 和 `rw-research-lab-router`。
 - 对用户只说明当前主任务、所需材料、停止条件和下一步，不先展示内部清单。
+- 默认交给 4 个公开入口之一；内部 Skill 只在所属入口内接续。用户明确调用内部 Skill 时，保留旧名称兼容。
 
 ## 启动
 

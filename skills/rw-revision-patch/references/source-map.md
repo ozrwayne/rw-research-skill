@@ -8,7 +8,7 @@
 
 ## RW 系统关系
 
-- `rw-phd-write`：提供需要修改的论文段落和内容要求。
+- `rw-academic-writing`：提供需要修改的论文段落和内容要求。
 - `rw-phd-tone`：要求最小修改并保留作者语气。
 - `rw-journal-submission`：提供审稿意见 ID 和修改位置。
 - `rw-claim-audit`：复核修改后的事实性主张。

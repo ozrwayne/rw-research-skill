@@ -8,10 +8,10 @@
 
 ## RW 系统关系
 
-- `rw-save`：保存阶段状态和下一步。
+- 本 Skill 自带脚本保存阶段状态和下一步；私人工作区的保存模块不属于公开包运行依赖。
 - `rw-paper-extractor`：提供材料 ID、结构化字段和原文位置。
 - `rw-evidence-map`：连接研究、结果、冲突和证据关系。
-- `rw-phd-write`：接收已确认材料进入写作。
+- `rw-academic-writing`：接收已确认材料进入写作。
 
 ## 实现
 

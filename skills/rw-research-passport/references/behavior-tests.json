@@ -11,7 +11,7 @@
   },
   {
     "id": "normal-handoff",
-    "prompt": "把 3 篇已提取论文交给 rw-phd-write。",
+    "prompt": "把 3 篇已提取论文交给 rw-academic-writing。",
     "expect": [
       "只传材料 ID",
       "记录来源和目标阶段",

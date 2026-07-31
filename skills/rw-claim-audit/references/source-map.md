@@ -9,7 +9,7 @@
 ## RW 系统关系
 
 - `rw-paper-extractor`：保存页码、段落、表、图和补充材料位置。
-- `rw-phd-write`：建立 claim-to-source 表，按来源范围限制句子范围。
+- `rw-academic-writing`：建立 claim-to-source 表，按来源范围限制句子范围。
 - `rw-research-referee`：检查因果强度、替代解释和外推边界。
 
 ## 实现

@@ -1,4 +1,4 @@
-# RW PhD Write 方法
+# RW Academic Writing 方法
 
 ## 输入门
 

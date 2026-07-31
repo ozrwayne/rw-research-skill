@@ -98,5 +98,23 @@
     ],
     "expected_next": [],
     "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-7",
+    "prompt": "读取一份工具登记表，判断哪些工具今天可以直接运行。",
+    "must_do": [
+      "记录登记版本、许可证、运行环境和最后测试日期。",
+      "用 freshness 状态区分当前、过期和未知。",
+      "把登记值与最小运行测试分开。"
+    ],
+    "must_not": [
+      "把登记表当成当前可用性的证明",
+      "覆盖与源码或运行结果冲突的版本",
+      "把私人路径和凭证写入公开输出"
+    ],
+    "expected_next": [
+      "rw-literature-discovery"
+    ],
+    "fixture_kind": "synthetic"
   }
 ]

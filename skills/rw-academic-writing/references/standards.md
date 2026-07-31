@@ -1,4 +1,4 @@
-# RW PhD Write 公开标准
+# RW Academic Writing 公开标准
 
 这些条目用于选择方法和核验当前版本，不替代原始标准。
 

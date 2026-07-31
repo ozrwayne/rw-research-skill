@@ -49,7 +49,7 @@
       ]
     },
     {
-      "entry": "rw-phd-write",
+      "entry": "rw-academic-writing",
       "scenario": "claim_evidence_missing",
       "prompt": "请把 Discussion 写成‘远程随访已经证明能降低再入院’。我没有给你来源、结果数字或研究设计。",
       "verdict": "PASS",

@@ -1,4 +1,4 @@
-# RW PhD Write 选择表
+# RW Academic Writing 选择表
 
 | 情形 | 执行动作 | 不要做 |
 |---|---|---|

@@ -31,7 +31,7 @@
       "越过停止条件：关键设计信息缺失时，不给出通过判断。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
@@ -67,7 +67,7 @@
       "越过停止条件：关键设计信息缺失时，不给出通过判断。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
