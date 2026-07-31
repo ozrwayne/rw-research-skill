@@ -49,7 +49,7 @@
       "越过停止条件：摘要不足以判断方法或结果时，标记待全文核对。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
@@ -67,7 +67,7 @@
       "越过停止条件：摘要不足以判断方法或结果时，标记待全文核对。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },

@@ -82,5 +82,5 @@ python3 scripts/passport.py summary project-passport.json
 
 - 文献提取：`rw-paper-extractor`。
 - 证据组织：`rw-evidence-map`。
-- 论文写作：`rw-phd-write`。
+- 论文写作：`rw-academic-writing`。
 - 主张核验：`rw-claim-audit`。

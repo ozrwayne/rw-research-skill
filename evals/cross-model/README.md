@@ -47,7 +47,7 @@ Codex 使用本机 Codex CLI 登录状态。Claude 使用本机 Claude CLI 登�
 
 ## 真实文档审阅
 
-真实文档审阅与合成评测分开。它接受 `.md`、`.txt` 和 `.docx`，默认加载 `rw-research-referee`、`rw-phd-write` 和 `rw-phd-tone`。输出目录必须在这个公开仓库之外。
+真实文档审阅与合成评测分开。它接受 `.md`、`.txt` 和 `.docx`，默认加载 `rw-research-referee`、`rw-academic-writing` 和 `rw-phd-tone`。输出目录必须在这个公开仓库之外。
 
 ```bash
 python3 scripts/cross_model_review.py run \

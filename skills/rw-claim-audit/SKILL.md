@@ -84,7 +84,7 @@ python3 scripts/claim_audit.py gate claim-audit.json
 ## 接续
 
 - 提取原文：`rw-paper-extractor`。
-- 调整论文：`rw-phd-write`。
+- 调整论文：`rw-academic-writing`。
 - 核对引用身份和格式：`rw-citation-audit`。
 - 审查结论：`rw-research-referee`。
 - 局部修改：`rw-revision-patch`。

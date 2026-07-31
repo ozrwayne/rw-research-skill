@@ -88,7 +88,7 @@ python3 scripts/revision_patch.py apply draft.anchored.md --manifest draft.manif
 
 ## 接续
 
-- 学术写作：`rw-phd-write`。
+- 学术写作：`rw-academic-writing`。
 - 作者语气：`rw-phd-tone`。
 - 审稿回复：`rw-journal-submission`。
 - 主张复核：`rw-claim-audit`。

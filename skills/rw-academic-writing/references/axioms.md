@@ -1,4 +1,4 @@
-# RW PhD Write 公理
+# RW Academic Writing 公理
 
 ## AXIOM-01：写作从章节功能和主张开始
 

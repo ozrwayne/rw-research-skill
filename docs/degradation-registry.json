@@ -168,7 +168,7 @@
       "must_not": "不得生成不存在的来源、DOI、数据、研究结果或因果连接。",
       "user_signal": "阻断：当前证据不足以完成该主张。",
       "owners": [
-        "rw-phd-write",
+        "rw-academic-writing",
         "rw-phd-tone",
         "rw-revision-patch",
         "rw-journal-submission"

@@ -13,7 +13,7 @@ flowchart LR
   passport["rw-research-passport"]
   audit["rw-claim-audit"]
   patch["rw-revision-patch"]
-  write["rw-phd-write"]
+  write["rw-academic-writing"]
   tone["rw-phd-tone"]
   submission["rw-journal-submission"]
   tools["rw-research-lab-router"]
@@ -29,9 +29,10 @@ flowchart LR
   router --> search
   router --> novelty
   router --> passport
-  router --> audit
-  router --> patch
   router --> tools
+  router --> extractor
+  router --> referee
+  router --> write
   question --> discovery
   question --> search
   question --> design

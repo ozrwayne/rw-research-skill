@@ -1,10 +1,10 @@
 ---
-name: rw-phd-write
+name: rw-academic-writing
 description: |
-  根据用户提供的研究材料和可核验来源组织科研文本，判断章节、小节和段落的写作功能，补足证据、解释、重要性和研究问题之间的断点。 Use when the user asks for “写 PhD 章节”、“修改论文论证”、“根据来源写学术段落”、“按导师反馈修改科研写作”, or requests the rw-phd-write workflow. Runs without a private local workspace or preset research-lab; use user-provided material and bundled public-source methods.
+  根据用户提供的研究材料和可核验来源组织科研文本，判断章节、小节和段落的写作功能，补足证据、解释、重要性和研究问题之间的断点。 Use when the user asks for “写 PhD 章节”、“修改论文论证”、“根据来源写学术段落”、“按导师反馈修改科研写作”, or requests the rw-academic-writing workflow. Runs without a private local workspace or preset research-lab; use user-provided material and bundled public-source methods.
 ---
 
-# RW PhD Write
+# RW Academic Writing
 
 根据用户提供的研究材料和可核验来源组织科研文本。先判断当前部分承担什么写作功能，再决定需要哪些证据、解释和连接。
 

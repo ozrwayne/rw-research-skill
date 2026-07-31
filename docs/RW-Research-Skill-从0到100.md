@@ -43,7 +43,7 @@ $rw-research-router 新手入门
 - `rw-research-router`：研究启动与推进。
 - `rw-paper-extractor`：论文精读与证据。
 - `rw-research-referee`：研究设计与审查。
-- `rw-phd-write`：论文写作与投稿。
+- `rw-academic-writing`：论文写作与投稿。
 
 如果安装成功但入口没有出现，先新建一次对话，再重新调用。
 
@@ -93,7 +93,7 @@ RW Research Skill 要求先看你的目的。如果你想核验某个主张，�
 | `rw-research-router` | 不知道从哪里开始，或者需要判断下一步 | 想法、已有材料、当前卡点或目标 | 阶段判断、一个主入口、所需材料、停止条件 |
 | `rw-paper-extractor` | 需要精读 PDF、提取图表、建立论文卡片或核验主张 | PDF、补充材料、待核验问题 | 结构化提取、原文位置、缺失项、复核状态 |
 | `rw-research-referee` | 需要检查综述、研究设计、数据、统计报告或结论 | 方案、协议、数据说明、统计结果或结论 | 按严重程度排序的问题、结论影响、修复动作 |
-| `rw-phd-write` | 需要写作、局部修改、处理审稿意见或准备投稿 | 草稿、来源、研究问题、修改范围和目标要求 | 论证骨架或正文、来源缺口、修改说明、未解决项 |
+| `rw-academic-writing` | 需要写作、局部修改、处理审稿意见或准备投稿 | 草稿、来源、研究问题、修改范围和目标要求 | 论证骨架或正文、来源缺口、修改说明、未解决项 |
 
 普通用户只需要记住这4个入口。内部 Skill 由入口根据任务调用。
 
@@ -380,7 +380,7 @@ $rw-research-referee
 已有研究问题、来源和段落任务后，使用：
 
 ```text
-$rw-phd-write
+$rw-academic-writing
 这是我的研究问题、来源和现有小节。
 本次只修改这个小节，目标是说明现有研究怎样测量睡眠和学业表现，
 以及这些测量差异为什么限制比较。
@@ -453,7 +453,7 @@ RW Research Skill 不要求每个项目按同一顺序运行。
 - 只有研究兴趣：从 `rw-research-router` 开始。
 - 已有 PDF：从 `rw-paper-extractor` 开始。
 - 已有方案：从 `rw-research-referee` 开始。
-- 已有草稿：从 `rw-phd-write` 开始。
+- 已有草稿：从 `rw-academic-writing` 开始。
 - 不知道当前问题属于哪里：回到 `rw-research-router`。
 
 一次只处理当前瓶颈。完成后再决定下一步。
@@ -468,7 +468,7 @@ RW Research Skill 不要求每个项目按同一顺序运行。
 → 文献发现和检索策略
 → Paper Extractor 建立证据
 → Referee 检查设计
-→ PhD Write 组织写作
+→ Academic Writing 组织写作
 ```
 
 ### 路径B：从一批论文开始
@@ -495,7 +495,7 @@ PDF 和补充材料
 
 ```text
 草稿、来源和修改要求
-→ PhD Write 判断章节功能
+→ Academic Writing 判断章节功能
 → 核对主张和来源
 → 在批准范围内修改
 → 引用核验
@@ -506,7 +506,7 @@ PDF 和补充材料
 
 ```text
 审稿意见和原稿
-→ PhD Write 拆分意见
+→ Academic Writing 拆分意见
 → 确认修改范围
 → 修改指定位置
 → 核验主张和引用
@@ -642,7 +642,7 @@ $rw-paper-extractor
 
 ## 27. 写作的验收
 
-`rw-phd-write` 的结果应满足：
+`rw-academic-writing` 的结果应满足：
 
 - 当前章节或段落的功能得到说明。
 - 论点、证据、作者解释、重要性和研究问题连接能被区分。
@@ -663,7 +663,7 @@ $rw-paper-extractor
 - [ ] 能给出当前目标、已有材料和不能越过的范围。
 - [ ] 能用 Paper Extractor 提取带原文位置的证据。
 - [ ] 能用 Referee 检查设计和结论边界。
-- [ ] 能用 PhD Write 在来源和范围内写作。
+- [ ] 能用 Academic Writing 在来源和范围内写作。
 - [ ] 能保存项目状态并在新对话中继续。
 - [ ] 知道上游变化会让旧结果变成 STALE。
 - [ ] 能区分来源存在、引用格式和主张支持。
@@ -919,7 +919,7 @@ $rw-research-referee
 ## 修改论文
 
 ```text
-$rw-phd-write
+$rw-academic-writing
 这是研究问题、来源、现有段落和修改要求：……
 本次允许修改的范围：……
 先判断当前段落的写作功能，再建立论点和证据骨架。

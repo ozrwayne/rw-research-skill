@@ -43,11 +43,11 @@
       ]
     },
     {
-      "name": "rw-phd-write",
+      "name": "rw-academic-writing",
       "label": "论文写作与投稿",
       "intent": "处理科研写作、作者语气、局部修订和投稿材料。",
       "routes": [
-        "rw-phd-write",
+        "rw-academic-writing",
         "rw-phd-tone",
         "rw-revision-patch",
         "rw-journal-submission"
@@ -72,7 +72,7 @@
     "rw-citation-audit",
     "rw-claim-audit",
     "rw-revision-patch",
-    "rw-phd-write",
+    "rw-academic-writing",
     "rw-phd-tone",
     "rw-journal-submission",
     "rw-research-lab-router"

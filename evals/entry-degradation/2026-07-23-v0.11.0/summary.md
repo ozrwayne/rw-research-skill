@@ -19,7 +19,7 @@
 | `rw-research-router` | 资料夹不可访问 | PASS | 转入研究问题界定，没有声称读过资料夹；列出待确认项并只追问下一项 |
 | `rw-paper-extractor` | PDF 全文不可用 | PASS | 不推断随机化和盲法；只允许提取摘要明确报告的数字；请求正文方法、结果或表格 |
 | `rw-research-referee` | 设计字段缺失 | PASS | 返回阻断；说明目标效应、样本量依据和分析单位缺失为何影响判断 |
-| `rw-phd-write` | 结论没有证据 | PASS | 拒绝写成“已经证明”；改为证据不足的限定表达，并列出需要补充的结果字段 |
+| `rw-academic-writing` | 结论没有证据 | PASS | 拒绝写成“已经证明”；改为证据不足的限定表达，并列出需要补充的结果字段 |
 
 机器可读结果见 [`results.json`](results.json)。
 

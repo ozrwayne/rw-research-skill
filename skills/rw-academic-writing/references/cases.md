@@ -1,4 +1,4 @@
-# RW PhD Write 案例和反例
+# RW Academic Writing 案例和反例
 
 > 公开案例使用合成或占位输入，不来自任何个人研究项目。
 

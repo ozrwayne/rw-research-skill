@@ -50,9 +50,11 @@ def main() -> int:
         failures.append(f"Skill link outside manifest: {linked} from {', '.join(sorted(owners))}")
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    entry_count = len(manifest.get("entry_skills", []))
+    internal_count = metrics["skills"] - entry_count
     expected_intro = (
-        f"对外提供 {len(manifest.get('entry_skills', []))} 个入口，内部保留 {metrics['skills']} 个科研 Skill。"
-        f"当前包含 {metrics['atoms']} 条知识原子、"
+        f"仓库共 {metrics['skills']} 个科研 Skill，其中 {entry_count} 个是公开入口，"
+        f"{internal_count} 个是内部模块。当前包含 {metrics['atoms']} 条知识原子、"
         f"{metrics['axioms']} 条公理、{metrics['cases']} 个案例和反例，以及 {metrics['contracts']} 条行为合同。"
     )
     if expected_intro not in readme:
@@ -110,6 +112,18 @@ def main() -> int:
     if cross_model_check.returncode:
         failures.extend(f"cross-model: {item}" for item in cross_model.get("failures", []))
 
+    skill_link_check = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "check_skill_links.py")],
+        capture_output=True,
+        text=True,
+    )
+    try:
+        skill_links = json.loads(skill_link_check.stdout)
+    except json.JSONDecodeError:
+        skill_links = {"failures": ["Skill link check did not return JSON"]}
+    if skill_link_check.returncode:
+        failures.extend(f"skill-links: {item}" for item in skill_links.get("failures", []))
+
     result = {
         "version": version,
         "metrics": metrics,
@@ -117,6 +131,7 @@ def main() -> int:
         "degradation": degradation,
         "privacy": privacy,
         "cross_model": cross_model,
+        "skill_links": skill_links,
         "failures": failures,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))

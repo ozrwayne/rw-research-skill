@@ -1,4 +1,4 @@
 interface:
   display_name: "RW 论文写作与投稿"
   short_description: "处理科研写作、作者语气、局部修订、审稿回复和投稿材料。"
-  default_prompt: "Use $rw-phd-write to 根据现有证据处理这份论文写作或投稿任务。"
+  default_prompt: "Use $rw-academic-writing to 根据现有证据处理这份论文写作或投稿任务。"

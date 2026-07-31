@@ -6,10 +6,10 @@
 | 需要 MeSH、Emtree、CINAHL Headings、APA Thesaurus 或平台检索式 | 进入 rw-search-strategy | 把关键词清单当成数据库策略 |
 | 需要找文献或补论证 | 进入 rw-literature-discovery | 先建证据结论 |
 | 已有一批论文但字段未统一 | 进入 rw-paper-extractor | 直接综合 |
-| 已有结构化研究记录 | 进入 rw-evidence-map | 继续无边界检索 |
+| 已有结构化研究记录 | 进入 rw-paper-extractor，由其内部接续 rw-evidence-map | 继续无边界检索 |
 | 已有证据图，需要形成候选创新点 | 进入 rw-research-novelty | 把 gap 直接宣布为创新 |
-| 需要核对数据、代码、材料或数据声明 | 进入 rw-research-data | 把一句可用性声明当成访问证据 |
-| 需要核对 n、重复层级、统计方法或报告数字 | 进入 rw-statistics-audit | 在没有数据时声称重新分析 |
+| 需要核对数据、代码、材料或数据声明 | 进入 rw-research-referee，由其内部接续 rw-research-data | 把一句可用性声明当成访问证据 |
+| 需要核对 n、重复层级、统计方法或报告数字 | 进入 rw-research-referee，由其内部接续 rw-statistics-audit | 在没有数据时声称重新分析 |
 | 结论或设计可能站不住 | 进入 rw-research-referee | 先润色 |
 
 ## 核心规则

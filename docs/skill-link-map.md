@@ -19,7 +19,7 @@ flowchart LR
   citation["rw-citation-audit"]
   audit["rw-claim-audit"]
   patch["rw-revision-patch"]
-  write["rw-phd-write"]
+  write["rw-academic-writing"]
   tone["rw-phd-tone"]
   submission["rw-journal-submission"]
   tools["rw-research-lab-router"]
@@ -34,13 +34,11 @@ flowchart LR
   router --> discovery
   router --> search
   router --> novelty
-  router --> data
-  router --> stats
   router --> passport
-  router --> citation
-  router --> audit
-  router --> patch
   router --> tools
+  router --> extractor
+  router --> referee
+  router --> write
   question --> discovery
   question --> search
   question --> design
@@ -100,3 +98,5 @@ flowchart LR
   tools --> review
   tools --> design
 ```
+
+图中的 Router 边表示默认入口或入口内部接续。用户明确调用内部 Skill 时，仍保留旧名称兼容；默认路由不跨越其他公开入口的归属边界。

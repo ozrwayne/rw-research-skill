@@ -67,7 +67,7 @@
       "越过停止条件：分析单位或重复层级不清时，不给统计报告通过状态。"
     ],
     "expected_next": [
-      "rw-phd-write"
+      "rw-academic-writing"
     ],
     "fixture_kind": "synthetic"
   },
