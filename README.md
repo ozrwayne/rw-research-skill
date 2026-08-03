@@ -1,6 +1,6 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-2ea44f.svg"></a>
-  <a href="VERSION"><img alt="Version: v0.11.0" src="https://img.shields.io/badge/version-v0.11.0-blue.svg"></a>
+  <a href="VERSION"><img alt="Version: v0.12.0" src="https://img.shields.io/badge/version-v0.12.0-blue.svg"></a>
   <a href="#4-个对外入口"><img alt="4 public entries" src="https://img.shields.io/badge/public%20entries-4-6f42c1.svg"></a>
   <a href="#安装"><img alt="Works with Agent Skills" src="https://img.shields.io/badge/works%20with-Agent%20Skills-0969da.svg"></a>
   <a href="evals/cross-model/results/2026-07-20-cross-model-v2/summary.md"><img alt="Cross-model record: 4 models" src="https://img.shields.io/badge/cross--model%20record-4%20models-2ea44f.svg"></a>
@@ -24,7 +24,7 @@
 
 ---
 
-RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.11.0`。对外提供 4 个入口，内部保留 21 个科研 Skill。当前包含 540 条知识原子、170 条公理、143 个案例和反例，以及 160 条行为合同。
+RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.12.0`。对外提供 4 个入口，内部保留 21 个科研 Skill。当前包含 541 条知识原子、170 条公理、149 个案例和反例，以及 162 条行为合同。
 
 适用于手上有研究想法、论文、数据、研究方案、章节草稿或审稿意见，需要判断下一步的人。你可以直接提交材料，也可以只说现在卡在哪里。系统会选择一个主 Skill，每次处理当前一步。
 
@@ -151,7 +151,7 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 
 | 入口 | 处理范围 |
 | --- | --- |
-| `rw-research-router` | 学习起点、研究问题、文献发现、检索策略、创新方向、项目状态和工具接续 |
+| `rw-research-router` | 学习起点、研究问题、文献发现、检索策略、创新方向、项目状态、投稿和工具接续 |
 | `rw-paper-extractor` | PDF 工作区、章节和图表提取、分阶段精读、证据关系、引用和主张核验 |
 | `rw-research-referee` | 综述方法、研究设计、研究材料、统计报告和结论审查 |
 | `rw-phd-write` | 科研写作、作者语气、局部修订、审稿回复和投稿材料 |
@@ -178,10 +178,10 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 
 公开包当前包含：
 
-- 540 条结构化知识原子。
+- 541 条结构化知识原子。
 - 170 条运行公理。
-- 143 个案例和反例。
-- 160 条行为合同。
+- 149 个案例和反例。
+- 162 条行为合同。
 - 21 个独立运行静态自检脚本。
 
 行为合同保存提示词、应做事项、不应做事项和下一步，用于后续模型评测。静态自检只检查文件、结构、数量和独立运行约束，不代表模型已经执行全部行为合同，也不证明真实任务提效。
@@ -194,7 +194,14 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 
 每个 Skill 自带适用方法、来源入口、停止条件、案例、反例、工作表和自检。需要当前文献、API、期刊政策或报告规范时，仍需核验官方来源。
 
-发布检查结果见 [v0.11.0 验证记录](docs/validation.md)。
+发布检查结果见 [v0.12.0 验证记录](docs/validation.md)。
+
+## v0.12.0 更新
+
+- 新增 `rw-journal-submission` 的 Submission Packet、ScholarOne 交接合同和字段整理工具。
+- `rw-research-router` 在稿件完成、已有目标期刊或需要选刊时交接到 `rw-journal-submission`。
+- Agent 可以整理材料、核对缺口和协助填写；最终 `Submit` 由人类完成。
+- 公开边界检查、Router／投稿包测试和完整发布 CI 通过。
 
 ## v0.11.0 更新
 
@@ -288,7 +295,7 @@ python3 scripts/run_ci_manifest.py
 发布包生成在：
 
 ```text
-dist/rw-research-skill-0.11.0.zip
+dist/rw-research-skill-0.12.0.zip
 ```
 
 本地、Pull Request、main 分支和 GitHub Release 共用 [`ci/manifest.json`](ci/manifest.json)。构建过程检查版本、4 个对外入口、21 个内部 Skill、降级注册表、公开边界、确定性测试和 2 种发行包。

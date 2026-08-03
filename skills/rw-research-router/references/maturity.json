@@ -1,7 +1,7 @@
 {
   "skill": "rw-research-router",
   "version": "standalone-v1",
-  "generated_at": "2026-07-23",
+  "generated_at": "2026-08-04",
   "standalone": true,
   "local_hard_dependencies": [],
   "optional_integrations": [
@@ -9,9 +9,9 @@
     "internet access",
     "other RW skills"
   ],
-  "atom_count": 26,
+  "atom_count": 27,
   "axiom_count": 8,
-  "behavior_test_count": 16,
+  "behavior_test_count": 17,
   "public_source_count": 4,
   "grounding_status": "public-source-grounded"
 }

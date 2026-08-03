@@ -8,7 +8,7 @@ description: |
 
 # RW Journal Submission
 
-核验期刊、准备投稿文件、检查披露，并组织审稿回复和修改证据。
+核验期刊、准备投稿文件、检查披露，并组织审稿回复和修改证据。每次投稿建立独立的本地 Submission Packet；它可以用于新的投稿或继续填写已有门户草稿。
 
 ## 启动
 
@@ -18,6 +18,8 @@ description: |
 4. 需要选择方法或工具时读取 `references/domain-guide.md`，并使用 `assets/worksheet.md` 组织交付。
 5. 读取 `references/acceptance.md`。`references/behavior-tests.json` 只用于测试，不作为用户任务事实。
 6. 当前文献、API、报告规范和期刊要求可能变化时，打开 `references/source-map.md` 中的官方链接核验并记录日期。
+7. 需要建立或核验投稿资料包时，读取 `references/submission-packet-schema.md`，复制 `assets/submission-packet-template.json`，或运行 `scripts/submission_packet.py`。
+8. 需要在 ScholarOne 填入已确认字段时，读取 `assets/scholarone-agent-contract.md`。
 
 ## 工作阶段
 
@@ -28,6 +30,20 @@ description: |
 5. 准备只陈述可核验事实的 Cover Letter，不承诺录用概率。
 6. 把编辑和审稿意见拆成稳定编号，保留原文、提出者、轮次、要求和依赖关系。
 7. 逐条记录处理动作、修改位置、证据、不同意理由和待作者确认项，再核对回复信与修改稿。
+8. 为每次投稿建立 Submission Packet，分别记录文件、作者、披露、审稿人、门户步骤、缺口和审计记录。
+9. 已登录 ScholarOne 时，先读取门户错误；只填入用户确认的字段；保存后重新读取页面；在最终提交前停止。
+
+## 命令
+
+```bash
+python3 scripts/submission_packet.py init submission-packet.json --submission-id SUBMISSION-ID --title "Manuscript title" --journal "Journal name" --platform ScholarOne
+python3 scripts/submission_packet.py record-portal-check submission-packet.json --system ScholarOne --step "Authors & Institutions" --status incomplete --error "Corresponding author is required"
+python3 scripts/submission_packet.py record-submission-result submission-packet.json --state submitted --evidence-source user_confirmation --agent-observation not_observed
+python3 scripts/submission_packet.py validate submission-packet.json
+python3 scripts/submission_packet.py summary submission-packet.json
+```
+
+脚本只建立和核验本地 JSON，不读取浏览器登录态，也不发送投稿。
 
 ## 运行规则
 
@@ -36,6 +52,7 @@ description: |
 - 开放获取费用、版面费和其他收费要分开核验。
 - 作者资格、贡献角色和作者顺序要由作者团队确认。
 - CRediT 记录贡献角色，不单独决定作者资格。
+- 私人作者资料可以减少重复录入，但每次投稿仍要重新确认作者顺序、通讯作者、贡献和披露。
 - Cover Letter 不重复摘要，也不编造编辑兴趣。
 - 重复投稿、相关稿件和预印本状态要按期刊和 ICMJE 要求披露。
 - 利益冲突、资金、伦理、数据和 AI 使用声明要分别检查。
@@ -46,11 +63,14 @@ description: |
 - 不同意审稿意见时使用方法和证据回应，不评价审稿人。
 - 修改稿、清稿、回复信和补充文件要使用同一版本台账。
 - 不能根据历史经验声称当前录用概率或处理时间。
+- 门户草稿、已保存、已提交和已录用属于不同状态。用户明确确认的已提交与 Agent 读到的门户回执要分别记录证据来源。
+- 填入作者邮箱、披露或审稿人资料前，必须取得本次明确确认。最终 `Submit` 始终由人类完成。
 
 ## 输出
 
 - 带官方来源和日期的期刊比较。
 - 投稿文件、披露和版本清单。
+- 可验证的 Submission Packet、门户缺口和保存记录。
 - 带稳定意见编号、状态、修改位置和证据的回复台账。
 
 ## 可选 ADHD 友好输出
@@ -75,6 +95,7 @@ description: |
 - 不编造编辑姓名、偏好、费用、时限或录用概率。
 - 作者和披露存在争议时，停止最终提交清单。
 - 不进行未经授权的实际投稿或外部发送。
+- ScholarOne 页面要求验证码、支付、权限变更或最终提交时，停止并交给用户。最终 `Submit` 不由 Agent 点击。
 
 ## 独立运行
 

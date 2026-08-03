@@ -11,11 +11,11 @@ description: |
 ## 对外入口职责
 
 这是“研究启动与推进”入口。用户不需要先选择内部 Skill。
-
 - 学习起点、研究问题、文献发现、检索策略和创新方向由本入口判断后接续。
-- 项目状态和工具选择也从本入口进入。
-- 内部可接续 `rw-research-learning`、`rw-research-question`、`rw-literature-discovery`、`rw-search-strategy`、`rw-research-novelty`、`rw-research-passport` 和 `rw-research-lab-router`。
+- 项目状态、投稿和工具选择也从本入口进入。
+- 内部可接续 `rw-research-learning`、`rw-research-question`、`rw-literature-discovery`、`rw-search-strategy`、`rw-research-novelty`、`rw-research-passport`、`rw-journal-submission` 和 `rw-research-lab-router`。
 - 对用户只说明当前主任务、所需材料、停止条件和下一步，不先展示内部清单。
+
 
 ## 启动
 
@@ -62,6 +62,7 @@ description: |
 - 用户提供的原始材料优先于 Skill 内的通用示例。
 - 本地集成不存在时，使用自带路由表继续。
 - 新手入门时一次只问一个问题，不把整个科研流程一次发给用户。
+- 已有可投稿稿件、目标期刊或选刊请求，且无已知研究关键阻塞项时，选择 rw-journal-submission；路由器只交接材料和缺口。
 
 ## 输出
 

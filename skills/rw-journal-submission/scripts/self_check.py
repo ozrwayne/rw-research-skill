@@ -12,11 +12,11 @@ def main() -> int:
     refs = root / "references"
     failures: list[str] = []
     required = [
-        "SKILL.md", "agents/openai.yaml", "assets/worksheet.md",
+        "SKILL.md", "agents/openai.yaml", "assets/worksheet.md", "assets/submission-packet-template.json", "assets/scholarone-agent-contract.md", "scripts/submission_packet.py",
         "references/standalone.md", "references/source-map.md", "references/standards.md",
         "references/method.md", "references/domain-guide.md", "references/atoms.jsonl",
         "references/axioms.md", "references/cases.md", "references/behavior-tests.json",
-        "references/acceptance.md", "references/source-evidence.md", "references/maturity.json",
+        "references/acceptance.md", "references/source-evidence.md", "references/maturity.json", "references/submission-packet-schema.md",
     ]
     for relative in required:
         path = root / relative

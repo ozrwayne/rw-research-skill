@@ -37,6 +37,7 @@ flowchart LR
   router --> data
   router --> stats
   router --> passport
+  router --> submission
   router --> citation
   router --> audit
   router --> patch
