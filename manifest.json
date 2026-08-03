@@ -7,7 +7,7 @@
     {
       "name": "rw-research-router",
       "label": "研究启动与推进",
-      "intent": "判断当前研究阶段，处理学习起点、问题、检索、发现、创新、项目状态和工具接续。",
+      "intent": "判断当前研究阶段，处理学习起点、问题、检索、发现、创新、项目状态、投稿和工具接续。",
       "routes": [
         "rw-research-router",
         "rw-research-learning",

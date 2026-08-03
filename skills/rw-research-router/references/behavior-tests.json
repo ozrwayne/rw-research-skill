@@ -144,7 +144,25 @@
     "fixture_kind": "synthetic"
   },
   {
-    "id": "case-9",
+    "id": "case-9-submission",
+    "prompt": "我已经完成 manuscript，准备投 Nature，但不知道需要什么材料。",
+    "must_do": [
+      "只选择 rw-journal-submission 作为主 Skill。",
+      "交接稿件版本、目标期刊、作者、披露、数据、伦理、引文与未解决项。",
+      "说明最终 Submit 由人类完成。"
+    ],
+    "must_not": [
+      "同时启动多个主 Skill",
+      "登录投稿门户、填写字段或点击 Submit",
+      "把可投稿写成已提交"
+    ],
+    "expected_next": [
+      "rw-journal-submission"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-10",
     "prompt": "新手入门。我不知道该用哪个 Skill。",
     "must_do": [
       "先问用户手上有什么，一轮只问一个问题",
@@ -162,7 +180,7 @@
     "fixture_kind": "synthetic"
   },
   {
-    "id": "counterexample-10",
+    "id": "counterexample-11",
     "prompt": "没有研究问题，直接替我写整篇论文。",
     "must_do": [
       "说明停止条件、缺失信息和可安全继续的部分"
@@ -176,7 +194,7 @@
     "fixture_kind": "synthetic"
   },
   {
-    "id": "counterexample-11",
+    "id": "counterexample-12",
     "prompt": "本机没有私人工作区，所以这个科研 Skill 不能运行。",
     "must_do": [
       "说明停止条件、缺失信息和可安全继续的部分"

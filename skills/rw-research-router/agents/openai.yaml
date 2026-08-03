@@ -1,4 +1,4 @@
 interface:
-  display_name: "RW 研究启动与推进"
-  short_description: "从学习起点、问题、检索、文献、创新、项目状态和工具中选择当前一步。"
-  default_prompt: "Use $rw-research-router to 判断我现在的研究阶段，并推进当前一步。"
+  display_name: "RW Research Router"
+  short_description: "判断科研任务所处阶段，并把它交给一个主流程。适用于独立科研任务处理。"
+  default_prompt: "Use $rw-research-router to 判断科研任务所处阶段，并把它交给一个主流程。"
