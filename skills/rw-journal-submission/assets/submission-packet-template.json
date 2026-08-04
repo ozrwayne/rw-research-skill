@@ -1,0 +1,50 @@
+{
+  "schema_version": "rw-journal-submission/submission-packet/v2",
+  "submission_id": "SUBMISSION-ID",
+  "created_at": "2000-01-01T00:00:00Z",
+  "updated_at": "2000-01-01T00:00:00Z",
+  "manuscript": {
+    "title": "Manuscript title",
+    "article_type": "",
+    "version": ""
+  },
+  "target": {
+    "journal": "Journal name",
+    "platform": "ScholarOne",
+    "requirements_checked_at": ""
+  },
+  "materials": [],
+  "display_policy": {
+    "separate_files_required": false,
+    "numbering_policy": "separate_sequences",
+    "main_manuscript_embeds": "allowed",
+    "main_material_id": ""
+  },
+  "display_items": [],
+  "authors": [],
+  "declarations": [],
+  "reviewers": [],
+  "portal": {
+    "system": "",
+    "journal_url": "",
+    "draft_id": "",
+    "checked_at": "",
+    "steps": [],
+    "proof": {
+      "state": "not_generated",
+      "text_check": "not_run",
+      "visual_check": "not_run",
+      "checked_at": "",
+      "evidence_source": "",
+      "agent_observation": "not_observed"
+    },
+    "return_events": [],
+    "final_submission": {
+      "state": "not_submitted",
+      "evidence": null,
+      "agent_observation": "not_observed"
+    }
+  },
+  "gaps": [],
+  "audit_log": []
+}

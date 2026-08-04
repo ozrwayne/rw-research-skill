@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 
@@ -12,11 +13,11 @@ def main() -> int:
     refs = root / "references"
     failures: list[str] = []
     required = [
-        "SKILL.md", "agents/openai.yaml", "assets/worksheet.md",
+        "SKILL.md", "agents/openai.yaml", "assets/worksheet.md", "assets/submission-packet-template.json", "assets/scholarone-agent-contract.md", "scripts/submission_packet.py",
         "references/standalone.md", "references/source-map.md", "references/standards.md",
         "references/method.md", "references/domain-guide.md", "references/atoms.jsonl",
         "references/axioms.md", "references/cases.md", "references/behavior-tests.json",
-        "references/acceptance.md", "references/source-evidence.md", "references/maturity.json",
+        "references/acceptance.md", "references/source-evidence.md", "references/maturity.json", "references/submission-packet-schema.md",
     ]
     for relative in required:
         path = root / relative
@@ -40,6 +41,10 @@ def main() -> int:
         "research-" + "lab/",
         "~/" + ".claude",
     )
+    private_patterns = {
+        "email address": re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE),
+        "submission identifier": re.compile(r"\b[A-Z]{2,10}-20\d{2}-\d{3,}\b"),
+    }
     for path in root.rglob("*"):
         if not path.is_file() or path == Path(__file__).resolve():
             continue
@@ -49,6 +54,9 @@ def main() -> int:
         for marker in forbidden:
             if marker in text:
                 failures.append(f"hard local dependency in {path.relative_to(root)}: {marker}")
+        for label, pattern in private_patterns.items():
+            if pattern.search(text):
+                failures.append(f"possible {label} in {path.relative_to(root)}")
     print(json.dumps({"skill": root.name, "standalone": not failures, "failures": failures}, ensure_ascii=False, indent=2))
     return 1 if failures else 0
 
