@@ -18,3 +18,21 @@
 
 - 错误：因为材料状态是 `verified`，便声称论文结论正确。
 - 正确：回到研究设计、结果和原文位置核对。
+
+## 案例 3：会议形成研究决定
+
+- 把会议纪要登记为原始记录指针。
+- 将每个已定事项写成一个 Decision。
+- 记录 `settled_by`、`authority`、`basis`、`scope`、证据和开放未知项。
+- 生成 Research Credential 后再交给下游 Skill。
+
+## 案例 4：Agent 讨论形成共识
+
+- `settled_by` 记录参加讨论的 Agent ID。
+- `authority` 写为 `agent_consensus`。
+- 下游需要人类确认时继续停止，不能把 Agent 共识改写为 `human_confirmed`。
+
+## 反例：修改旧 Credential
+
+- 错误：研究方向改变后直接改写旧 Credential 的决定内容。
+- 正确：创建新 Credential，用 `supersedes` 指向旧 Credential。

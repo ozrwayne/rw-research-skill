@@ -8,5 +8,6 @@
   "decisions": [],
   "unknowns": [],
   "handoffs": [],
+  "credentials": [],
   "audit_log": []
 }

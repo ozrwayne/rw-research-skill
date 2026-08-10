@@ -3,12 +3,12 @@ name: rw-research-passport
 metadata:
   internal: true
 description: |
-  为单个研究项目建立和维护可审计的 JSON 状态文件，记录研究阶段、材料、判断、未知项、交接和变更日志。Use when the user asks for“建立研究档案”“保存这个研究项目的材料状态”“把文献、判断和下一步交给另一个科研 Skill”“检查研究状态文件”,or requests the rw-research-passport workflow.
+  为单个研究项目建立和维护可审计的 JSON 状态文件，记录研究阶段、材料、判断、Research Credential、未知项、交接和变更日志。Use when the user asks for“建立研究档案”“保存这个研究项目的材料状态”“记录会议或讨论定下来的事项”“给研究决定生成凭据”“把文献、判断和下一步交给另一个科研 Skill”“检查研究状态文件”,or requests the rw-research-passport workflow.
 ---
 
 # RW Research Passport
 
-为一个研究项目保存当前状态。Passport 是交接文件，不是文献库，也不替代原始材料。
+为一个研究项目保存当前状态。Passport 是交接文件，不是文献库，也不替代原始材料。Research Credential 记录一次会议、头脑风暴或人机讨论形成决定时的内容、参与者、权限、适用范围和原始记录位置。
 
 ## 启动
 
@@ -25,7 +25,8 @@ description: |
 3. 分开记录判断、未知项和被否定方向，不把推断写成事实。
 4. 交给下一个 Skill 时，只传所需材料 ID，并记录交接状态。
 5. 每次修改追加审计记录，不覆盖变化原因。
-6. 运行验证，输出当前状态、缺口、下一步和停止条件。
+6. 讨论形成决定时，为决定生成 Research Credential；没有形成决定时只记录未知项或讨论材料。
+7. 运行验证，输出当前状态、缺口、下一步和停止条件。
 
 ## 命令
 
@@ -33,6 +34,7 @@ description: |
 python3 scripts/passport.py init project-passport.json --project-id PROJECT-ID --title "Project title"
 python3 scripts/passport.py add-material project-passport.json --id MAT-001 --type paper --title "Paper title" --source-pointer "doi:..." --status verified
 python3 scripts/passport.py add-material project-passport.json --id MAT-002 --type paper --title "Updated paper" --source-pointer "path-or-id" --content-sha256 SHA256 --supersedes-id MAT-001
+python3 scripts/passport.py record-credential project-passport.json --credential-id RCRED-001 --decision-id DEC-001 --statement "Confirmed research decision" --status confirmed --session-id SESSION-001 --record-pointer "notes:SESSION-001" --settled-by human:HUMAN-ID --authority human_confirmed --basis reasoning --scope "PROJECT-ID"
 python3 scripts/passport.py validate project-passport.json
 python3 scripts/passport.py summary project-passport.json
 ```
@@ -44,7 +46,13 @@ python3 scripts/passport.py summary project-passport.json
 - 一个 Passport 只对应一个研究项目。
 - Passport 保存指针和状态，不复制论文全文。
 - `verified` 只表示完成指定核验，不自动表示研究质量高。
-- 判断必须连接材料 ID，或明确写成当前推断。
+- 判断必须说明依据。`evidence` 连接材料 ID；`reasoning` 记录讨论推理；`delegated_choice` 记录已委托范围内的选择。
+- 一个已定事项对应一个 Decision 和一个 Research Credential，不把多个决定合成一条凭据。
+- `settled_by` 记录参与确认的人或 Agent；`authority` 记录本次决定来自建议、Agent 共识、已委托权限或人类确认；`basis` 记录证据、推理或已委托选择。
+- Agent 共识不自动等于人类确认。下游 Skill 按任务需要检查 `authority`。
+- Credential 保存讨论记录指针和决定快照，不复制会议全文或聊天全文。
+- Credential 写入后不改写。决定变化时创建新 Credential，并用 `supersedes` 指向旧 Credential。
+- `content_hash` 只检查 Credential 内容是否变化，不证明研究决定正确。
 - 未知项不能因为流程推进而自动关闭。
 - 交接只传当前阶段需要的材料，避免把整个工作区当作上下文。
 - 原始材料 hash 变化后，旧材料和依赖判断不能继续作为已确认输入；按 `references/method.md` 的版本变化流程处理。
@@ -52,7 +60,7 @@ python3 scripts/passport.py summary project-passport.json
 
 ## 输出
 
-- 可验证的 Passport JSON。
+- 可验证的 Passport JSON 和 Research Credential。
 - 当前阶段、材料状态、已确认判断、未知项和下一步。
 - 验证错误和不能继续的原因。
 
@@ -77,6 +85,7 @@ python3 scripts/passport.py summary project-passport.json
 - 找不到原始材料时，不把对应材料标为 `verified`。
 - 项目 ID、材料 ID 或交接 ID 重复时，停止写入。
 - 关键判断没有材料或推断标签时，停止交接。
+- 已定事项缺少讨论记录指针、确认者、权限范围或 Credential 时，停止交接。
 
 ## 接续
 

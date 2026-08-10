@@ -1,4 +1,4 @@
 interface:
   display_name: "RW Research Passport"
-  short_description: "Track research materials, decisions, stages, and handoffs"
-  default_prompt: "Use $rw-research-passport to create or validate a research project passport."
+  short_description: "Track research materials, decisions, credentials, stages, and handoffs"
+  default_prompt: "Use $rw-research-passport to record or validate research materials, decisions, and Research Credentials."

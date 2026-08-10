@@ -2,9 +2,12 @@
 {"id":"RWA-RESEARCH-PASSPORT-002","knowledge":"Passport 保存材料指针和状态，不复制论文全文。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-003","knowledge":"材料、判断、未知项和交接使用不同 ID 空间。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-004","knowledge":"verified 只表示指定核验完成，不表示研究质量高。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
-{"id":"RWA-RESEARCH-PASSPORT-005","knowledge":"判断需要连接材料 ID，或明确保持 proposed。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-RESEARCH-PASSPORT-005","knowledge":"判断需要说明依据；证据判断连接材料 ID，讨论推理和已委托选择分开记录。","source":"packaged_method","source_kind":"packaged_method","date":"2026-08-10","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-006","knowledge":"未知项不能随阶段推进自动关闭。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-007","knowledge":"交接只传目标阶段需要的材料 ID。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-008","knowledge":"状态变化必须追加 audit_log。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-009","knowledge":"原始材料变化后，依赖它的判断需要重新核验。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-RESEARCH-PASSPORT-010","knowledge":"Passport 不作为跨项目个人记忆。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"boundary","confidence":"high"}
+{"id":"RWA-RESEARCH-PASSPORT-011","knowledge":"会议、头脑风暴和人机讨论形成决定后，为决定生成 Research Credential。","source":"packaged_method","source_kind":"packaged_method","date":"2026-08-10","type":"rule","confidence":"high"}
+{"id":"RWA-RESEARCH-PASSPORT-012","knowledge":"Research Credential 进入现有 rw-research-passport，不另建凭据系统。","source":"packaged_method","source_kind":"packaged_method","date":"2026-08-10","type":"rule","confidence":"high"}
+{"id":"RWA-RESEARCH-PASSPORT-013","knowledge":"Agent 共识、人类确认和已委托权限必须分开记录。","source":"packaged_method","source_kind":"packaged_method","date":"2026-08-10","type":"rule","confidence":"high"}

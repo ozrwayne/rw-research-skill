@@ -28,5 +28,36 @@
       "说明缺少原始材料"
     ],
     "fixture_kind": "synthetic"
+  },
+  {
+    "id": "record-human-decision",
+    "prompt": "会议已经确定研究范围，请留下凭据。",
+    "expect": [
+      "一个决定一条 Credential",
+      "记录 human 确认者",
+      "记录原始会议指针",
+      "生成内容 Hash"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "record-agent-consensus",
+    "prompt": "3 个 Agent 讨论后形成一致意见，请保存。",
+    "expect": [
+      "authority 为 agent_consensus",
+      "不改写为 human_confirmed",
+      "保留参与 Agent ID"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "supersede-credential",
+    "prompt": "新的研究决定替代上次会议决定。",
+    "expect": [
+      "保留旧 Credential",
+      "新建 Credential",
+      "用 supersedes 连接"
+    ],
+    "fixture_kind": "synthetic"
   }
 ]

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> int:
     required = [
-        "SKILL.md", "agents/openai.yaml", "scripts/passport.py", "references/method.md",
+        "SKILL.md", "agents/openai.yaml", "scripts/passport.py", "scripts/test_passport.py", "references/method.md",
         "references/schema.md", "references/axioms.md", "references/atoms.jsonl",
         "references/cases.md", "references/source-map.md", "references/source-evidence.md",
         "references/acceptance.md", "references/behavior-tests.json", "assets/passport-template.json",
@@ -25,6 +25,10 @@ def main() -> int:
         errors.append("need at least 10 atoms")
     if len(tests) < 3:
         errors.append("need at least 3 behavior tests")
+    if len(tests) < 6:
+        errors.append("need at least 6 behavior tests")
+    if skill.count("Research Credential") < 3:
+        errors.append("SKILL.md does not define Research Credential workflow")
     if "TODO" in skill:
         errors.append("SKILL.md contains TODO")
     if errors:
