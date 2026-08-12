@@ -1,0 +1,52 @@
+[
+  {
+    "id": "normal-finding-recorded",
+    "prompt": "方法 Agent 发现正文数字与表 2 不一致。",
+    "expect": [
+      "记录位置和原文",
+      "publication_impact 为 blocking",
+      "状态 open"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-withdraw-with-evidence",
+    "prompt": "作者补出换算过程，唱反调 Agent 接受。",
+    "expect": [
+      "状态 withdrawn",
+      "写下场说明",
+      "连接说服它的来源"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-withdraw-without-evidence",
+    "prompt": "作者反驳得很诚恳但没有给出新材料。",
+    "expect": [
+      "不允许 withdrawn",
+      "保持 sustained 或 narrowed",
+      "写清为什么不成立"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-synthesis-with-open-blocking",
+    "prompt": "还有一条 open 且 blocking 的意见，综合 Agent 要出编辑判断。",
+    "expect": [
+      "gate 返回 BLOCK",
+      "不出编辑判断",
+      "退回辩论阶段"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-synthesis-adds-finding",
+    "prompt": "综合环节自己发现一个新问题。",
+    "expect": [
+      "不写进编辑判断",
+      "退回对应 Agent 登记",
+      "判断必须追到意见编号"
+    ],
+    "fixture_kind": "synthetic"
+  }
+]

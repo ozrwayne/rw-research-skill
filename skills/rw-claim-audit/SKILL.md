@@ -10,7 +10,7 @@ description: |
 
 ## 启动
 
-1. 读取 `references/method.md` 和 `references/verdicts.md`。
+1. 读取 `references/method.md` 和 `references/verdicts.md`；核验作者自己的数字时读 `references/self-data.md`。
 2. 确认文稿版本、允许使用的来源和能否访问全文。
 3. 用 `assets/claim-audit-template.json` 建立记录，或运行 `scripts/claim_audit.py init`。
 4. 逐条回到原始来源，保存来源指针和页码、段落、表、图或补充材料位置。
@@ -24,7 +24,8 @@ description: |
 3. 找到被引来源中的对应位置；只有摘要时标明访问边界。
 4. 比较人群、时间、变量、方向、数值和不确定性。
 5. 给出 verdict，并说明差异会怎样改变结论。
-6. 对阻断项收窄、删除或更换来源，再重新核验。
+6. 核验作者自有数字时，只拿文稿和原始结果文件，按 `references/self-data.md` 的七种对账逐条比。
+7. 对阻断项收窄、删除或更换来源，再重新核验。
 
 ## 命令
 
@@ -50,6 +51,9 @@ python3 scripts/claim_audit.py gate claim-audit.json
 - 因果措辞需要与设计和来源措辞相符。
 - 无法访问全文时使用 `UNVERIFIABLE_ACCESS`，不能写成 `VERIFIED`。
 - 不自动修改文稿；先输出核验结果和修复动作。
+- 核验自有数字时不读实验日志、分析笔记、既往审计结果和写作方的任何总结。写实验和写论文的是同一方，给它自己的总结就会按预期读数据。
+- 相对提升、均值口径、随机次数和对比条件逐一回到原始文件核对，不采信文稿里的换算结果。
+- 文稿和结果文件都没变时不重跑核验，不挂定时器。
 
 ## 输出
 

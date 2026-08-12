@@ -23,6 +23,7 @@
     "rw-phd-write",
     "rw-phd-tone",
     "rw-journal-submission",
+    "rw-peer-review",
     "rw-research-lab-router"
   ],
   "release_policy": {
