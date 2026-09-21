@@ -10,4 +10,4 @@ description: |
 RW_FIXTURE_BODY_MARKER=baseline
 
 这一行下面的内容会被 `tests/probe_dsh.mjs` 临时改写再改回来。
-不要把这个 Skill 放进 `skills/`，它不属于 RW 的 21 个 Skill。
+不要把这个 Skill 放进 `skills/`，它不属于 RW 的 22 个 Skill。

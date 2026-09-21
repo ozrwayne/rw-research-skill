@@ -26,7 +26,7 @@ class AdhdFriendlyOutputTests(unittest.TestCase):
             skill_text = (SKILLS_ROOT / name / "SKILL.md").read_text(encoding="utf-8")
             sections.append(extract_section(skill_text))
 
-        self.assertEqual(21, len(sections))
+        self.assertEqual(len(MANIFEST["skills"]), len(sections))
         self.assertEqual(1, len(set(sections)))
 
     def test_branch_requires_explicit_output_request(self) -> None:

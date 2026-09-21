@@ -1,6 +1,6 @@
 {
   "name": "rw-research-skill",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "license": "Apache-2.0",
   "channel": "preview",
   "entry_skills": [
@@ -33,13 +33,14 @@
     {
       "name": "rw-research-referee",
       "label": "研究设计与审查",
-      "intent": "处理综述方法、研究设计、研究材料、统计报告和结论审查。",
+      "intent": "处理综述方法、研究设计、研究材料、统计报告、结论审查和外来稿件同行评审。",
       "routes": [
         "rw-research-referee",
         "rw-review-methods",
         "rw-research-design",
         "rw-research-data",
-        "rw-statistics-audit"
+        "rw-statistics-audit",
+        "rw-peer-review"
       ]
     },
     {
@@ -68,6 +69,7 @@
     "rw-research-data",
     "rw-statistics-audit",
     "rw-research-referee",
+    "rw-peer-review",
     "rw-research-passport",
     "rw-citation-audit",
     "rw-claim-audit",

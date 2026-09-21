@@ -1,5 +1,7 @@
 # RW Research Skill × DeepSeek Harness 兼容矩阵
 
+以下是 `0.12.0`、21 个 Skill 的历史 DSH 验收快照。当前合并包为 `0.13.0`、22 个 Skill；新增 `rw-peer-review` 后的 DSH 状态以本次复测记录为准，不把旧结果自动算作新版本通过。
+
 ## 一、基线
 
 | 项 | 值 |

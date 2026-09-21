@@ -1,6 +1,6 @@
 # RW Research Skill → DeepSeek Harness 适配（v0.1）
 
-把 RW Research Skill 的 21 个 Skill 接到 DeepSeek Harness（DSH）这个宿主上。
+把 RW Research Skill 的 22 个 Skill 接到 DeepSeek Harness（DSH）这个宿主上。
 不复制知识库，不改 Skill 正文，不动 Claude Code 和 Codex 现有适配。
 
 DSH 处于 Developer Preview。已知兼容缺口全部列在 `COMPATIBILITY.md`，
@@ -85,9 +85,9 @@ RW_DSH_RUNTIME_DIR=/path/to/dsh-install python3 -m unittest discover -s adapters
 
 - 补丁渲染出真实仓库路径，渲染后没有占位符残留。
 - 适配目录里没有本机绝对路径、用户名、疑似凭据。
-- fixture Skill 在 `skills/` 之外，不会污染 `check_repository.py` 的 21 个目录检查。
+- fixture Skill 在 `skills/` 之外，不会污染 `check_repository.py` 的 22 个目录检查。
 - 3 个研究 fixture 声明的入口和下游 Skill 真实存在。
-- DSH 发现 21 个 Skill，逐名与 `manifest.json` 相等（不是硬编码数字）。
+- DSH 探针要求发现 22 个 Skill，逐名与 `manifest.json` 相等。缺少运行时时会跳过，不能把跳过记为通过。
 - 4 个公开入口能加载完整正文，`resourceBase` 指向主来源。
 - 改 fixture Skill 正文后下一次加载读到新内容。
 - MCP stdio 和 streamable-http 两条都能发现工具、调用、拿到结果，工具名保持 `mcp__<server>__<raw>`。
@@ -111,7 +111,7 @@ adapters/dsh/
 │   ├── rw-dsh-headless.sh
 │   └── rw-dsh-web.sh
 ├── fixtures/
-│   ├── skills/rw-dsh-fixture-echo/   热改测试用，不属于 21 个 Skill
+│   ├── skills/rw-dsh-fixture-echo/   热改测试用，不属于 22 个 Skill
 │   ├── mcp/rw_fixture_mcp_server.mjs 零依赖 fixture MCP server
 │   └── tasks/                        3 个研究任务 fixture
 └── tests/

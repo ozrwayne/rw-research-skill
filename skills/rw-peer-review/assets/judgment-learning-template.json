@@ -1,0 +1,107 @@
+{
+  "schema_version": "rw-peer-review-judgment-learning/v1",
+  "review_id": "RVW-001",
+  "finding_id": "FIND-001",
+  "mode": "full",
+  "novice_support": {
+    "experience_declared": "unknown",
+    "baseline_case": {
+      "case_id": "",
+      "user_answer": "",
+      "status": "not_run"
+    },
+    "worked_example": {
+      "case_id": "",
+      "completed": false
+    },
+    "guided_review_card": {
+      "claim": "",
+      "evidence_location": "",
+      "study_design": "",
+      "research_object": "",
+      "estimand_or_target_effect": "",
+      "issue_type": "",
+      "publication_impact": "",
+      "proposed_fix": "",
+      "change_evidence": ""
+    },
+    "feedback": {
+      "missed_evidence": [],
+      "overreach": [],
+      "severity_notes": [],
+      "next_practice": []
+    },
+    "review_quality_check": {
+      "research_question_importance": "not_checked",
+      "originality": "not_checked",
+      "method_strengths_weaknesses": "not_checked",
+      "presentation_reporting": "not_checked",
+      "interpretation": "not_checked",
+      "constructiveness": "not_checked",
+      "substantiation": "not_checked"
+    },
+    "critical_miss": false,
+    "assessment_standard": {
+      "name": "",
+      "source": "",
+      "required_independent_cases": 0
+    },
+    "independent_case_records": [],
+    "assessed_by": "",
+    "mastery_decision": "not_assessed"
+  },
+  "machine_issue_map": {
+    "claim": "",
+    "evidence_locations": [],
+    "research_object": "",
+    "estimand_or_target_effect": "",
+    "unknowns": []
+  },
+  "user_initial_judgment": {
+    "statement": "",
+    "basis": [],
+    "confidence": "unknown",
+    "uncertainties": []
+  },
+  "strongest_challenge": {
+    "statement": "",
+    "target": "interpretation",
+    "evidence": []
+  },
+  "strongest_response": {
+    "statement": "",
+    "source": [],
+    "author_or_user_supplied": false
+  },
+  "verification": {
+    "main_text": "not_verified",
+    "supplement": "not_verified",
+    "author_explanation": "not_verified",
+    "statistical_principle": "not_verified",
+    "research_object_and_estimand": "not_verified",
+    "response_mentioned": "unclear",
+    "response_hits_issue": "unclear",
+    "response_is_sufficient": "unclear",
+    "body_still_needs_reporting": "unclear"
+  },
+  "concepts_used": [],
+  "user_final_judgment": {
+    "statement": "",
+    "disposition": "needs_input",
+    "basis": [],
+    "confidence": "unknown",
+    "remaining_uncertainties": [],
+    "changed_by_evidence": []
+  },
+  "transfer_check": {
+    "case_id": "",
+    "user_answer": "",
+    "feedback": "",
+    "status": "not_run"
+  },
+  "delivery_boundary": {
+    "internal_fields_excluded": false,
+    "cleanliness_check": "not_run"
+  },
+  "updated_at": "1970-01-01T00:00:00Z"
+}

@@ -225,7 +225,7 @@ class RepositoryHygieneTest(unittest.TestCase):
         self.assertEqual(offenders, [], "适配目录里出现了疑似凭据")
 
     def test_fixture_skill_is_outside_skills_dir(self) -> None:
-        """fixture Skill 不能混进 21 个 Skill，否则 check_repository.py 会挂。"""
+        """fixture Skill 不进入发布 Skill 列表，否则 check_repository.py 会失败。"""
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
         actual = {path.name for path in (REPO_ROOT / "skills").iterdir() if path.is_dir()}
         self.assertEqual(actual, set(manifest["skills"]))
@@ -272,7 +272,7 @@ class FixtureTaskTest(unittest.TestCase):
 
 
 class DshSkillDiscoveryTest(unittest.TestCase):
-    def test_all_21_skills_discovered(self) -> None:
+    def test_all_manifest_skills_discovered(self) -> None:
         skills = probe_report()["skills"]
         manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(skills["discovered_names"], sorted(manifest["skills"]))
@@ -296,10 +296,11 @@ class DshSkillDiscoveryTest(unittest.TestCase):
         self.assertTrue(live["resource_base"].endswith("fixtures/skills/rw-dsh-fixture-echo"))
 
     def test_internal_metadata_does_not_gate_dsh(self) -> None:
-        """已知缺口：DSH 不认 metadata.internal，21 个 Skill 全部对模型可见。"""
+        """已知缺口：DSH 不认 metadata.internal，所有 Skill 都对模型可见。"""
         skills = probe_report()["skills"]
-        self.assertEqual(skills["model_invocable_count"], 21)
-        self.assertEqual(skills["user_invocable_count"], 21)
+        expected = len(json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))["skills"])
+        self.assertEqual(skills["model_invocable_count"], expected)
+        self.assertEqual(skills["user_invocable_count"], expected)
 
 
 class DshMcpTest(unittest.TestCase):

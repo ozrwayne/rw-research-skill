@@ -58,9 +58,35 @@ def main() -> int:
 
     for name in release_skills:
         check_failures = []
-        result = run_json_check([sys.executable, str(root / "skills" / name / "scripts/self_check.py")], name, check_failures, allow_legacy_self_check=True)
-        if result.get("standalone") is False:
-            check_failures.append(f"{name}: standalone is false")
+        skill_root = root / "skills" / name
+        self_check = skill_root / "scripts/self_check.py"
+        if self_check.is_file():
+            result = run_json_check([sys.executable, str(self_check)], name, check_failures, allow_legacy_self_check=True)
+            if result.get("standalone") is False:
+                check_failures.append(f"{name}: standalone is false")
+        else:
+            tests = sorted((skill_root / "scripts").glob("test_*.py")) + sorted((skill_root / "tests").glob("test_*.py"))
+            if not tests:
+                check_failures.append(f"{name}: neither self_check nor deterministic tests found")
+            else:
+                count = 0
+                for directory in ("scripts", "tests"):
+                    if not any(path.parent.name == directory for path in tests):
+                        continue
+                    try:
+                        completed = subprocess.run(
+                            [sys.executable, "-m", "unittest", "discover", "-s", str(skill_root / directory), "-p", "test_*.py"],
+                            capture_output=True, text=True, timeout=120,
+                        )
+                    except (OSError, subprocess.TimeoutExpired) as exc:
+                        check_failures.append(f"{name}: {directory} tests failed to run: {exc}")
+                        continue
+                    output = completed.stdout + completed.stderr
+                    count += sum(int(value) for value in re.findall(r"^Ran (\d+) tests?", output, re.MULTILINE))
+                    if completed.returncode:
+                        check_failures.append(f"{name}: {directory} tests failed: {output[-1200:]}")
+                if count == 0:
+                    check_failures.append(f"{name}: deterministic test suite collected no tests")
         if check_failures:
             print(json.dumps({"failures": check_failures}, ensure_ascii=False, indent=2))
             return 1
