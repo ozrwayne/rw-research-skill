@@ -17,3 +17,9 @@
 
 - 台账结构、凭据哈希、Gate 和 Python 脚本随 Skill 提供。
 - 脚本只验证记录结构和 Gate，不读取稿件内容，不替代人工判断。
+- 判断学习使用独立 `judgment-learning/FIND-ID.json` 旁车，保持 `rw-peer-review/v1` 台账兼容。
+- 判断旁车的方法来源摘要保存在 `references/source-evidence.md`。
+- 零经验 reviewer training、RQI、COPE 和 EQUATOR 的专项证据保存在 `references/novice-review-sources.md`。
+- 分层证据、provenance、状态和 research object 的来源保存在 `references/evidence-credential-sources.md`。
+- 主要来源包括 Cognitive Apprenticeship、自我解释、deliberate practice、COPE、EQUATOR、ASA p-value statement、ICH E9(R1) 和交互模型论文。来源用于定义核对步骤，不替代当前稿件证据。
+- 证据凭据结构参考 W3C PROV、W3C Verifiable Credentials Data Model 2.0 和 RO-Crate。当前实现是内部 JSON，不宣称符合这些标准。

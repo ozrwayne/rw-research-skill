@@ -11,10 +11,13 @@
 先运行：
 
 ```bash
+python3 scripts/evidence_credentials.py gate evidence-credentials.json
+python3 scripts/evidence_credentials.py validate-ledger evidence-credentials.json --ledger review-ledger.json --pack-dir context-packs
 python3 scripts/review_ledger.py gate review-ledger.json
+python3 scripts/judgment_learning.py ready judgment-learning/FIND-ID.json --stage synthesis
 ```
 
-返回 BLOCK 时不出编辑判断。还有 `open` 且 `blocking` 的意见，说明辩论没走完，退回辩论阶段。
+任一命令不是 PASS 时不出编辑判断。Finding 缺少当前 Context Pack、还有 `open` 且 `blocking` 的意见，或没有初判、核对和终判时，退回对应阶段。
 
 ## 怎么合成
 
@@ -42,6 +45,12 @@ python3 scripts/review_ledger.py gate review-ledger.json
 4. 建议解决的问题，同样带编号。
 5. Agent 之间的分歧和你的判法。
 6. 真优点，至少一条。找不到就写明找不到。
+
+完成草稿后，逐条检查对外文本没有用户初判、改判过程、Agent 分歧、模型信息、学习字段、内部路径、hash 或迁移记录。把对应旁车的 `delivery_boundary` 更新为已清理并通过，再运行：
+
+```bash
+python3 scripts/judgment_learning.py ready judgment-learning/FIND-ID.json --stage delivery
+```
 
 ## 复审
 

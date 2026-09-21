@@ -28,8 +28,33 @@ def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def strict_json(text: str) -> Any:
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError(f"duplicate JSON key: {key}")
+            result[key] = value
+        return result
+    def constant(value):
+        raise ValueError(f"non-finite JSON number: {value}")
+    result = json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+    json.dumps(result, allow_nan=False)
+    return result
+
+
+def input_errors(data: Any) -> list[str]:
+    if not isinstance(data, dict):
+        return ["root must be an object"]
+    try:
+        json.dumps(data, allow_nan=False)
+    except (ValueError, TypeError, RecursionError) as exc:
+        return [f"invalid JSON data: {exc}"]
+    return []
+
+
 def load(path: Path) -> dict[str, Any]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    data = strict_json(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         raise ValueError("review ledger root must be an object")
     return data
@@ -40,7 +65,7 @@ def atomic_write(path: Path, data: dict[str, Any]) -> None:
     handle, temp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent, text=True)
     try:
         with os.fdopen(handle, "w", encoding="utf-8") as stream:
-            json.dump(data, stream, ensure_ascii=False, indent=2)
+            json.dump(data, stream, ensure_ascii=False, indent=2, allow_nan=False)
             stream.write("\n")
         os.replace(temp_name, path)
     except Exception:
@@ -66,6 +91,12 @@ def credential_hash(credential: dict[str, Any]) -> str:
     return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
 
 
+def finding_content_hash(finding: dict[str, Any]) -> str:
+    payload = {key: value for key, value in finding.items() if key != "credential_id"}
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    return f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+
+
 def validate_reviewers(data: dict[str, Any], errors: list[str]) -> set[str]:
     reviewer_ids: set[str] = set()
     for index, item in enumerate(data["reviewers"]):
@@ -78,7 +109,7 @@ def validate_reviewers(data: dict[str, Any], errors: list[str]) -> set[str]:
                 errors.append(f"{prefix}.{field} must be a non-empty string")
         identifier = item.get("id")
         if isinstance(identifier, str):
-            if not (identifier.startswith("agent:") or identifier.startswith("human:")):
+            if not ((identifier.startswith("agent:") or identifier.startswith("human:")) and identifier.split(":", 1)[1].strip()):
                 errors.append(f"{prefix}.id must start with agent: or human:")
             reviewer_ids.add(identifier)
         if item.get("role") not in REVIEWER_ROLES:
@@ -154,6 +185,17 @@ def validate_findings(
         credential_id = item.get("credential_id")
         if credential_id is not None and credential_id not in credential_ids:
             errors.append(f"{prefix}.credential_id references missing credential: {credential_id}")
+        evidence_credential_ids = item.get("evidence_credential_ids")
+        context_pack_id = item.get("context_pack_id")
+        if evidence_credential_ids is not None:
+            if not isinstance(evidence_credential_ids, list) or not evidence_credential_ids or not all(
+                isinstance(value, str) and value.strip() for value in evidence_credential_ids
+            ):
+                errors.append(f"{prefix}.evidence_credential_ids must be a non-empty array of strings")
+            if not isinstance(context_pack_id, str) or not context_pack_id.strip():
+                errors.append(f"{prefix}.context_pack_id is required with evidence_credential_ids")
+        elif context_pack_id is not None:
+            errors.append(f"{prefix}.evidence_credential_ids is required with context_pack_id")
     for duplicate in sorted(duplicate_ids(data["findings"])):
         errors.append(f"duplicate finding id: {duplicate}")
     return finding_ids
@@ -182,7 +224,7 @@ def validate_credentials(
             errors.append(f"{prefix}.basis is invalid")
         settled_by = item.get("settled_by")
         if not isinstance(settled_by, list) or not settled_by or not all(
-            isinstance(value, str) and (value.startswith("human:") or value.startswith("agent:"))
+            isinstance(value, str) and (value.startswith("human:") or value.startswith("agent:")) and value.split(":", 1)[1].strip()
             for value in settled_by
         ):
             errors.append(f"{prefix}.settled_by must contain human: or agent: identifiers")
@@ -192,6 +234,11 @@ def validate_credentials(
             value.startswith("agent:") for value in settled_by
         ):
             errors.append(f"{prefix}.{item.get('authority')} requires an agent: identifier")
+        if isinstance(settled_by, list) and all(isinstance(value, str) for value in settled_by):
+            if len(set(settled_by)) != len(settled_by):
+                errors.append(f"{prefix}.settled_by contains duplicate identifiers")
+            if item.get("authority") == "agent_consensus" and len({value for value in settled_by if value.startswith("agent:")}) < 2:
+                errors.append(f"{prefix}.agent_consensus requires at least two distinct agents")
         snapshot = item.get("finding_snapshot")
         if not isinstance(snapshot, dict):
             errors.append(f"{prefix}.finding_snapshot must be an object")
@@ -216,6 +263,19 @@ def validate_credentials(
                         errors.append(f"{prefix}.finding_snapshot.evidence_ids references missing source: {value}")
                 if item.get("basis") == "evidence" and not evidence_ids:
                     errors.append(f"{prefix}.evidence basis requires at least one evidence id")
+            evidence_credential_ids = snapshot.get("evidence_credential_ids")
+            context_pack_id = snapshot.get("context_pack_id")
+            if evidence_credential_ids is not None:
+                if not isinstance(evidence_credential_ids, list) or not evidence_credential_ids or not all(
+                    isinstance(value, str) and value.strip() for value in evidence_credential_ids
+                ):
+                    errors.append(
+                        f"{prefix}.finding_snapshot.evidence_credential_ids must be a non-empty array of strings"
+                    )
+                if not isinstance(context_pack_id, str) or not context_pack_id.strip():
+                    errors.append(
+                        f"{prefix}.finding_snapshot.context_pack_id is required with evidence_credential_ids"
+                    )
         if item.get("finding_id") not in finding_ids:
             errors.append(f"{prefix}.finding_id references missing finding: {item.get('finding_id')}")
         supersedes = item.get("supersedes")
@@ -228,6 +288,16 @@ def validate_credentials(
 
 
 def validate(data: dict[str, Any]) -> list[str]:
+    errors = input_errors(data)
+    if errors:
+        return errors
+    try:
+        return _validate(data)
+    except (TypeError, AttributeError, KeyError, RecursionError) as exc:
+        return [f"invalid field type or structure: {exc}"]
+
+
+def _validate(data: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     required = [
         "schema_version", "review_id", "manuscript", "stage", "updated_at",
@@ -266,7 +336,41 @@ def validate(data: dict[str, Any]) -> list[str]:
     finding_ids = validate_findings(data, errors, reviewer_ids, source_ids, credential_ids)
     validate_credentials(data, errors, finding_ids, source_ids, credential_ids)
 
-    if data["stage"] in {"synthesis", "delivered"}:
+    by_credential = {item["id"]: item for item in data["credentials"] if isinstance(item, dict) and isinstance(item.get("id"), str)}
+    superseded = {item.get("supersedes") for item in data["credentials"] if isinstance(item, dict) and isinstance(item.get("supersedes"), str)}
+    for index, finding in enumerate(data["findings"]):
+        if not isinstance(finding, dict) or not isinstance(finding.get("credential_id"), str):
+            continue
+        credential = by_credential.get(finding["credential_id"])
+        if credential is None:
+            continue
+        if credential.get("finding_id") != finding.get("id"):
+            errors.append(f"findings[{index}].credential_id belongs to a different finding")
+        if credential["id"] in superseded:
+            errors.append(f"findings[{index}].credential_id has been superseded")
+        bound_hash = credential.get("finding_content_hash")
+        if bound_hash is not None and bound_hash != finding_content_hash(finding):
+            errors.append(f"findings[{index}].credential_id is stale for current finding content")
+        snapshot = credential.get("finding_snapshot")
+        if isinstance(snapshot, dict):
+            for field in ("status", "publication_impact", "resolution_note", "evidence_ids", "evidence_credential_ids", "context_pack_id"):
+                if snapshot.get(field) != finding.get(field):
+                    errors.append(f"findings[{index}].credential_id snapshot is stale for {field}")
+    for item in by_credential.values():
+        predecessor = by_credential.get(item.get("supersedes"))
+        if predecessor and (predecessor.get("finding_id") != item.get("finding_id") or predecessor["id"] == item["id"]):
+            errors.append(f"credential {item['id']} has invalid supersedes lineage")
+        seen = set()
+        current = item
+        while current and current.get("supersedes"):
+            identifier = current["id"]
+            if identifier in seen:
+                errors.append(f"credential {item['id']} has cyclic supersedes lineage")
+                break
+            seen.add(identifier)
+            current = by_credential.get(current.get("supersedes"))
+
+    if data["stage"] in {"synthesis", "delivered", "closed"}:
         for index, item in enumerate(data["findings"]):
             if not isinstance(item, dict):
                 continue
@@ -380,6 +484,11 @@ def command_add_finding(args: argparse.Namespace) -> int:
     }
     if args.resolution_note:
         finding["resolution_note"] = args.resolution_note
+    evidence_credential_ids = getattr(args, "evidence_credential_id", [])
+    context_pack_id = getattr(args, "context_pack_id", None)
+    if evidence_credential_ids:
+        finding["evidence_credential_ids"] = evidence_credential_ids
+        finding["context_pack_id"] = context_pack_id
     findings.append(finding)
     append_audit(data, timestamp, "finding_added", args.id, args.reason)
     return write_if_valid(path, data, f"added {args.id}")
@@ -396,6 +505,8 @@ def command_set_finding_status(args: argparse.Namespace) -> int:
         print(f"missing finding: {args.finding_id}")
         return 2
     timestamp = now()
+    # An old ruling remains in history, but no longer attests to a changed finding.
+    target.pop("credential_id", None)
     target["status"] = args.status
     if args.resolution_note:
         target["resolution_note"] = args.resolution_note
@@ -430,6 +541,7 @@ def command_record_credential(args: argparse.Namespace) -> int:
         "authority": args.authority,
         "basis": args.basis,
         "scope": args.scope,
+        "finding_content_hash": finding_content_hash(target),
         "finding_snapshot": {
             "status": target.get("status"),
             "publication_impact": target.get("publication_impact"),
@@ -439,6 +551,9 @@ def command_record_credential(args: argparse.Namespace) -> int:
         "issued_at": timestamp,
         "supersedes": args.supersedes,
     }
+    if target.get("evidence_credential_ids"):
+        credential["finding_snapshot"]["evidence_credential_ids"] = list(target["evidence_credential_ids"])
+        credential["finding_snapshot"]["context_pack_id"] = target.get("context_pack_id")
     credential["content_hash"] = credential_hash(credential)
     credentials.append(credential)
     target["credential_id"] = args.credential_id
@@ -503,13 +618,20 @@ def command_gate(args: argparse.Namespace) -> int:
         print("\n".join(errors))
         return 2
     summary = summarize(data)
+    if not data["findings"]:
+        print("REVIEW: no findings recorded; review completeness is not established")
+        return 1
     if summary["open_blocking"]:
         print(f"BLOCK: {summary['open_blocking']} open blocking findings")
         return 2
     if summary["open_non_blocking"]:
         print(f"REVIEW: {summary['open_non_blocking']} open non-blocking findings")
         return 1
-    print("PASS: every finding has a recorded outcome")
+    active_ids = {finding.get("credential_id") for finding in data["findings"] if isinstance(finding.get("credential_id"), str)}
+    if any(item["id"] in active_ids and not item.get("finding_content_hash") for item in data["credentials"]):
+        print("REVIEW: legacy active credentials lack current finding content binding; reissue before reuse")
+        return 1
+    print("PASS: every finding has a recorded outcome; disposition only, not acceptance or evidence freshness")
     return 0
 
 
@@ -556,6 +678,8 @@ def build_parser() -> argparse.ArgumentParser:
     finding_parser.add_argument("--publication-impact", choices=sorted(FINDING_IMPACTS), required=True)
     finding_parser.add_argument("--status", choices=sorted(FINDING_STATUSES), default="open")
     finding_parser.add_argument("--evidence-id", action="append", default=[])
+    finding_parser.add_argument("--evidence-credential-id", action="append", default=[])
+    finding_parser.add_argument("--context-pack-id")
     finding_parser.add_argument("--raised-by", required=True)
     finding_parser.add_argument("--resolution-note")
     finding_parser.add_argument("--reason", default="finding recorded")
@@ -600,7 +724,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = build_parser().parse_args()
-    return args.func(args)
+    try:
+        return args.func(args)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, RecursionError) as exc:
+        print(f"BLOCK: invalid input: {exc}")
+        return 2
 
 
 if __name__ == "__main__":

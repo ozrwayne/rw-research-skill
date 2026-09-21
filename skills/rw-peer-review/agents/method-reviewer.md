@@ -18,6 +18,8 @@
 
 ## 第二阶段：问什么
 
+形成 Finding 前只读取该问题的 Paper Context Pack。核对目标凭据、必要依赖、父节点、相邻文字和根来源覆盖状态。表或图缺 caption、legend、footnote、Methods 定义、分母、单位、时间点、分析人群或 Supplement 依赖时，标记 `needs_input`，不补猜。
+
 ### 真不真
 
 对每一条要进摘要或讨论的结论，逐条过四问：

@@ -1,12 +1,12 @@
 {
   "name": "rw-research-skill",
-  "version": "0.9.0",
+  "version": "0.9.2",
   "description": "本地研究积累扫描、学习起点、研究问题、文献、证据、设计、核验、写作和投稿工作流。",
   "skills": "./skills/",
   "interface": {
     "displayName": "RW Research Skill",
     "shortDescription": "Route and carry out research workflows.",
-    "longDescription": "RW Research Skill provides twenty standalone workflows for local research-learning discovery, research questions, literature discovery, paper extraction, evidence mapping, project state, research materials, statistical reporting, citation auditing, claim auditing, scoped revision, research design, review, academic writing, author tone, journal submission, and tool selection.",
+    "longDescription": "RW Research Skill provides twenty-one standalone workflows for local research-learning discovery, research questions, literature discovery, paper extraction, evidence mapping, project state, research materials, statistical reporting, citation auditing, claim auditing, scoped revision, research design, peer review, academic writing, author tone, journal submission, and tool selection.",
     "category": "Education",
     "capabilities": [],
     "defaultPrompt": "Use $rw-research-router to inspect available local material, identify the current research-learning starting point, and route this request to one research skill."

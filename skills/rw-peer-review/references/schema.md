@@ -56,6 +56,8 @@
 
 - `resolution_note`：下场说明。状态不是 `open` 时必需。
 - `credential_id`：处置被讨论确认时，指向对应的 Review Credential。
+- `evidence_credential_ids`：支持该 Finding 的细粒度证据凭据 ID。使用时不能为空。
+- `context_pack_id`：本次判断使用的 Paper Context Pack。与 `evidence_credential_ids` 成对出现。
 
 规则：
 
@@ -79,6 +81,7 @@
 - `basis`：`evidence`、`reasoning` 或 `delegated_choice`。使用 `evidence` 时至少连接一个来源 ID。
 - `scope`：该处置适用的范围。
 - `finding_snapshot`：签发时的 `status`、`publication_impact`、`resolution_note` 和 `evidence_ids`。
+- Finding 已连接细粒度证据时，`finding_snapshot` 同时保存 `evidence_credential_ids` 和 `context_pack_id`。
 - `issued_at`：UTC ISO 8601 时间。
 - `supersedes`：被替代凭据的 ID；没有时为 `null`。
 - `content_hash`：对其余字段计算的 SHA-256。
@@ -89,6 +92,23 @@
 - Credential 写入后不改写。处置变化时新增 Credential，并用 `supersedes` 指向旧的。
 - `content_hash` 只检查凭据内容是否被改动，不证明评审判断正确。
 
+## Evidence Credential
+
+Review Credential 记录意见如何定案；Evidence Credential 记录定案依赖的正文、图表、脚注和补充材料。两者不是同一对象。
+
+Evidence Credential、依赖图、状态和 Paper Context Pack 保存在独立的 `evidence-credentials.json` 与 `context-packs/`。详细结构和命令见 `references/evidence-credentials.md`。
+
+进入综合前运行 `scripts/evidence_credentials.py validate-ledger`。旧台账仍可读取，但缺少 Context Pack 的 Finding 返回 REVIEW，不能按新流程进入 synthesis。
+
 ## 阶段限制
 
 `stage` 是 `synthesis` 或 `delivered` 时，不允许存在 `open` 且 `blocking` 的意见。
+
+## 当前凭据绑定与处置门
+
+- 新签发的 Review Credential 增加 `finding_content_hash`，绑定签发时 Finding 的全部字段（不含可变指针 `credential_id`）。当前指针必须属于同一 Finding，快照及内容 hash 必须匹配，也不能指向已被替代的凭据。
+- `set-finding-status` 保留旧凭据历史并解除当前指针；新裁决应重新签发，并用 `supersedes` 记录同一 Finding 的替代关系。自指、跨 Finding 替代和循环替代返回 BLOCK。
+- 旧凭据仍可读取；当前引用的旧凭据缺少内容绑定时，处置门返回 REVIEW，重新核验后再签发。
+- `agent_consensus` 至少需要两个不同的 Agent ID。ID 字符串不构成签名或人工参与证明。
+- 空台账返回 REVIEW。`gate` 只检查意见是否有记录处置，不等于接受稿件，也不替代 Evidence Credential 的文件新鲜度门；`sustained`、`deferred` 等状态仍可能表示问题保留。
+- `closed` 与 `synthesis`、`delivered` 同样禁止保留 open 且 blocking 的 Finding。

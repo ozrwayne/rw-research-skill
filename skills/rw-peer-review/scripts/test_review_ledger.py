@@ -119,6 +119,36 @@ class ReviewLedgerTests(unittest.TestCase):
             self.assertEqual(data["audit_log"][-1]["action"], "review_credential_recorded")
             self.assertEqual(ledger.validate(data), [])
 
+    def test_finding_links_evidence_credentials_and_context_pack(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = self.open_review(Path(temp))
+            self.assertEqual(self.add_finding(
+                path,
+                evidence_credential_id=["EV-TABLE-2", "EV-FOOTNOTE-2"],
+                context_pack_id="PACK-FIND-001",
+            ), 0)
+            data = ledger.load(path)
+            finding = data["findings"][0]
+            self.assertEqual(finding["context_pack_id"], "PACK-FIND-001")
+            self.assertEqual(finding["evidence_credential_ids"], ["EV-TABLE-2", "EV-FOOTNOTE-2"])
+            self.assertEqual(ledger.command_set_finding_status(Namespace(
+                path=str(path), finding_id="FIND-001", status="sustained",
+                resolution_note="证据包支持该意见。", evidence_id=[], reason="ruling",
+            )), 0)
+            self.assertEqual(self.settle(path), 0)
+            snapshot = ledger.load(path)["credentials"][0]["finding_snapshot"]
+            self.assertEqual(snapshot["context_pack_id"], "PACK-FIND-001")
+            self.assertEqual(snapshot["evidence_credential_ids"], ["EV-TABLE-2", "EV-FOOTNOTE-2"])
+
+    def test_context_pack_and_evidence_credentials_must_be_paired(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = self.open_review(Path(temp))
+            self.assertEqual(self.add_finding(
+                path,
+                evidence_credential_id=["EV-TABLE-2"],
+                context_pack_id=None,
+            ), 2)
+
     def test_changed_credential_fails_hash_validation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             path = self.open_review(Path(temp))

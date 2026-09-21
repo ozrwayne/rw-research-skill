@@ -1,18 +1,68 @@
-# RW Research Skill v0.9.0 验证记录
+# 本地 v0.9.2 同行评审审计修复
 
-日期：2026-07-23。
+日期：2026-09-19。
+
+仅同步 `rw-peer-review` 的证据凭据、Context Pack、台账与判断学习修复；该历史工作树的其他模块保持原样。本次运行确定性回归，没有执行新的跨模型实验、用户研究或真实投稿；没有提交、推送或发布。以下 v0.9.1 记录保留为历史证据，不自动转移为本次整包结论。
+
+# RW Research Skill v0.9.1 验证记录
+
+日期：2026-08-17。
 
 ## 当前证据
 
-- 发布 Skill：20 个。
+- 发布 Skill：21 个。
 - License：Apache-2.0。
-- 505 条知识原子、163 条公理、130 个案例和反例、133 条行为合同。
-- 20 个 Skill 的静态自检通过。
+- 555 条知识原子、187 条公理、149 个案例和反例、162 条行为合同。
+- 20 个独立运行静态自检通过。
 - 仓库版本、manifest、目录、公开计数和 Skill 接续检查通过。
-- 公共内容检查覆盖 Skill、文档和跨模型评测记录。505 条知识原子、130 个案例和 133 条行为合同的隐私检查失败项为 0。
+- 公共内容检查覆盖 Skill、文档和跨模型评测记录。555 条知识原子、149 个案例和 162 条行为合同的隐私检查失败项为 0。
 - 知识原子不保留原始个人材料字段；案例和行为合同标记为合成输入。
 - `rw-citation-audit` 独立结构检查通过。
 - 确定性 Python 工具测试见仓库 `tests/` 和 CI 记录。
+
+## v0.9.1 同行评审判断学习
+
+`rw-peer-review` 增加独立判断学习旁车。它在对外报告前记录用户初判、最强质疑、最强回应、材料核对和用户终判，并在交付前检查内部字段是否清除。
+
+零经验用户使用 `guided`：先完成带预设问题的合成基线题，再查看不同案例的 worked example，然后填写当前 Finding 的引导审稿卡。`ready` 检查本次任务，`mastery` 使用预先声明的课程、期刊或导师标准。
+
+专项来源包括 2023 Cochrane reviewer training review、2004 BMJ 随机试验、2016 BMC Medicine 系统综述、Review Quality Instrument、COPE 和 EQUATOR。现有研究不支持固定分钟数或固定案例数即可掌握同行评审，因此实现删除了这类阈值和效果承诺。
+
+当前确定性测试覆盖：
+
+- 初始模板通过结构验证，但缺少判断时阻断综合。
+- 完整判断记录通过综合 Gate。
+- 对外交付前必须通过内部字段清理检查。
+- 作者提到问题不会自动推出回应成立。
+- 回应成立但正文仍需补报时，不能使用已解决处置。
+- 显式关闭学习返回 REVIEW，不写成学习 PASS。
+- 相邻案例仍需练习时返回 REVIEW。
+- `guided` 缺少基线题、worked example 或引导审稿卡时阻断综合。
+- 完成本次报告不会自动获得 mastery PASS。
+- 7 项 RQI 核心维度达到预设标准、无 critical miss、独立案例满足外部标准并有评定人确认后，mastery 才返回 PASS。
+- Review Ledger 有 14 个测试；判断学习旁车有 13 个测试。
+
+## v0.9.1 分层证据凭据和上下文包
+
+`rw-peer-review` 增加独立 Evidence Credential Store。全文、页面、章节、段落、表、图、caption、legend、footnote、方法定义、结果和补充材料分别使用稳定 ID，并保存来源、父子关系、前后文、必要依赖、状态和 hash。
+
+脚本在本地执行覆盖门、循环依赖检查、失效传播和必要依赖闭包。每条 Finding 生成 Paper Context Pack，只包含目标凭据、必要依赖、父节点和相邻文字。依赖闭包超过上限时返回 BLOCK，不截断。
+
+Review Ledger 的 Finding 可以连接 `evidence_credential_ids` 和 `context_pack_id`。Review Credential snapshot 保存这两个字段。`validate-ledger` 检查 Finding、Context Pack、当前凭据状态和 hash 是否一致。
+
+当前确定性测试覆盖：
+
+- 根来源不能在必要子凭据未验证时通过覆盖门。
+- 悬空引用、循环依赖和被改动的凭据 hash 被阻断。
+- Context Pack 包含必要依赖、父节点和相邻文字。
+- 超过凭据上限时整体阻断，不截断依赖。
+- 必要证据失效后，依赖判断和根来源转为 stale。
+- 旧 Context Pack 在凭据状态变化后校验失败。
+- 缺少 Context Pack 的旧 Finding 返回 REVIEW；连接有效 pack 后通过。
+- 大批量回归样本导入后，Table Finding 的 pack 只选择必要的 3 张相关凭据。测试中的批量规模是回归样本，不是产品限制。
+- Evidence Credential 脚本有 14 个测试，包含来源文件内容变化、大批凭据导入、token 预算和跨来源层级链接检查。
+
+结构参考 W3C PROV、W3C Verifiable Credentials Data Model 2.0 和 RO-Crate 1.2。当前实现是内部 JSON，没有数字签名，也不宣称符合这些标准。结构校验通过不表示图表解释、统计判断或稿件质量正确。
 
 ## v0.9.0 PDF Paper Case
 
@@ -90,13 +140,14 @@ Claude 调用使用本机 Claude CLI 登录状态。真实文档审阅器要求�
 
 ## 证据边界
 
-- 133 条行为合同没有被全部调用执行。跨模型矩阵执行的是另存的 8 个合成任务。
+- 162 条行为合同没有被全部调用执行。跨模型矩阵执行的是另存的 8 个合成任务。
 - 静态自检证明文件、结构、数量和独立运行约束符合当前发布要求，不证明模型输出质量。
 - v0.7.0 记录的场景结果属于维护者记录。仓库没有同时保存完整模型输出、模型版本、参数、判分和重放日志，因此不作为独立复现证据。
 - 当前已有合成任务的 without-Skill 基线和跨模型执行记录。判分是字段和值的确定性检查，不使用被评模型或另一个模型做 Judge。
 - 第 2 组任务在首次调用前固定，但它由仓库维护者编写，不是外部独立 benchmark。
 - 运行开始时工作树含未提交变更。记录保存了 source revision、任务文件 hash、prompt hash 和 Skill-context hash；这不等同于干净 commit 上的独立复现。
 - 当前状态：`CROSS_MODEL_VERIFIED` 只适用于 v0.7.1 已记录的合成任务、模型入口和版本。v0.8.0 的学习入口和 v0.9.0 的 PDF Paper Case 尚未运行跨模型矩阵。整包仍不标记 `VERIFIED EFFECTIVE`。
+- v0.9.1 的判断学习、零经验引导和 Evidence Credential Context Pack 仅通过确定性测试、来源审计和隐私检查，尚未经过随机比较或独立用户研究。
 
 ## 发布边界
 

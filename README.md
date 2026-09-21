@@ -1,7 +1,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-2ea44f.svg"></a>
-  <a href="VERSION"><img alt="Version: v0.9.0" src="https://img.shields.io/badge/version-v0.9.0-blue.svg"></a>
-  <a href="#直接调用的-skill"><img alt="20 research Skills" src="https://img.shields.io/badge/research%20Skills-20-6f42c1.svg"></a>
+  <a href="VERSION"><img alt="Version: v0.9.2" src="https://img.shields.io/badge/version-v0.9.2-blue.svg"></a>
+  <a href="#直接调用的-skill"><img alt="21 research Skills" src="https://img.shields.io/badge/research%20Skills-21-6f42c1.svg"></a>
   <a href="#安装"><img alt="Works with Agent Skills" src="https://img.shields.io/badge/works%20with-Agent%20Skills-0969da.svg"></a>
   <a href="evals/cross-model/results/2026-07-20-cross-model-v2/summary.md"><img alt="Cross-model record: 4 models" src="https://img.shields.io/badge/cross--model%20record-4%20models-2ea44f.svg"></a>
   <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
@@ -24,9 +24,11 @@
 
 ---
 
-RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.9.0`。当前包含 21 个科研 Skill、520 条知识原子、169 条公理、135 个案例和反例，以及 138 条行为合同。
+RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.9.2`。当前包含 21 个科研 Skill、555 条知识原子、187 条公理、149 个案例和反例，以及 162 条行为合同。
 
 适用于手上有研究想法、论文、数据、研究方案、章节草稿或审稿意见，需要判断下一步的人。你可以直接提交材料，也可以只说现在卡在哪里。系统会选择一个主 Skill，每次处理当前一步。
+
+本地 v0.9.2 仅更新 `rw-peer-review` 审计修复及版本入口；其余历史模块不代表本次已同步版本。未提交、推送或发布。验证边界见 `docs/validation.md`。
 
 ## 你可以用它做什么
 
@@ -105,7 +107,7 @@ npx -y skills add rolandwonglonam/rw-research-skill -g --skill rw-claim-audit
 
 ### 安装全部 Skill
 
-需要整套科研路由时，可以安装全部 20 个 Skill：
+需要整套科研路由时，可以安装全部 21 个 Skill：
 
 ```bash
 npx -y skills add rolandwonglonam/rw-research-skill -g --all
@@ -218,6 +220,8 @@ $rw-peer-review 按期刊配置评审 Agent，逐条记录意见、证据和处�
 
 评审台账与作者本人的研究档案分开保存。意见状态不是 `open` 时必须写下场，撤回意见必须连接说服它的来源。
 
+全文、页面、章节、图表、脚注和补充材料形成多少张 Evidence Credential，由材料和提取粒度决定。Store 不设置凭据总数量上限。脚本在本地管理来源、依赖、状态和 hash，并为每条 Finding 生成 Paper Context Pack。模型只读取当前判断所需的必要依赖闭包，不一次载入全部凭据。
+
 ### 管理项目状态或选择科研工具
 
 ```text
@@ -273,10 +277,10 @@ $rw-research-lab-router 根据任务、数据和当前环境选择工具。
 
 公开包当前包含：
 
-- 520 条结构化知识原子。
-- 169 条运行公理。
-- 135 个案例和反例。
-- 138 条行为合同。
+- 555 条结构化知识原子。
+- 187 条运行公理。
+- 149 个案例和反例。
+- 162 条行为合同。
 - 20 个独立运行静态自检脚本。
 
 行为合同保存提示词、应做事项、不应做事项和下一步，用于后续模型评测。静态自检只检查文件、结构、数量和独立运行约束，不代表模型已经执行全部行为合同，也不证明真实任务提效。
@@ -289,7 +293,23 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 
 每个 Skill 自带适用方法、来源入口、停止条件、案例、反例、工作表和自检。需要当前文献、API、期刊政策或报告规范时，仍需核验官方来源。
 
-发布检查结果见 [v0.9.0 验证记录](docs/validation.md)。
+发布检查结果见 [v0.9.1 验证记录](docs/validation.md)。
+
+## v0.9.1 更新
+
+- `rw-peer-review` 增加独立的 `judgment-learning/FIND-ID.json` 判断学习旁车，不改变 `review-ledger.json` 的 v1 结构。
+- 增加面向零经验用户的 `guided`：合成基线题、不同案例的 worked example、当前 Finding 引导审稿卡和针对性反馈。
+- 将正确审稿定义为意见可定位、证据连接可解释、推断边界受控、严重程度相称、修改建议可执行，不要求猜中编辑决定。
+- 将本次任务的 `ready` 与能力评定的 `mastery` 分开。`mastery` 不自定训练时间或案例数，使用课程、期刊或导师预先声明的标准和评定结果。
+- 使用 Review Quality Instrument 的 7 个核心维度检查评审报告，并加入 COPE 接单边界和 EQUATOR 报告完整性边界。
+- 根据 2023 Cochrane Review、2004 BMJ 随机试验和 2016 系统综述，删除“快速掌握”和固定迁移次数的效果承诺。
+- 在综合前增加问题图、用户初判、最强质疑、最强回应、材料核对和用户终判。
+- 将“作者提到”“回应命中”“回应成立”“正文仍需补报”拆成 4 个字段。
+- 增加正文、补充材料、作者解释、统计原则和研究对象／estimand 的核对状态。
+- 增加 `init`、`validate`、`summary`、综合 Gate 和交付 Gate。
+- 对外报告排除用户初判、改判过程、Agent 分歧、模型信息和迁移记录。
+- 增加 29 条判断学习知识原子、14 条公理、11 个案例和反例、16 条行为合同，以及 13 个确定性单元测试。
+- 保留原 Review Ledger Gate 和历史数据读取；Ledger PASS 不表示稿件质量或用户掌握。
 
 ## v0.9.0 更新
 
@@ -362,7 +382,7 @@ python3 scripts/build_release.py
 发布包生成在：
 
 ```text
-dist/rw-research-skill-0.9.0.zip
+dist/rw-research-skill-0.9.1.zip
 ```
 
 构建过程检查版本一致性、Skill 结构和 20 个独立运行静态自检。

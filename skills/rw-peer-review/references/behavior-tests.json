@@ -48,5 +48,245 @@
       "判断必须追到意见编号"
     ],
     "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-user-judgment-before-machine-conclusion",
+    "prompt": "一条 Finding 已定位，用户还没有写初判，综合 Agent 准备给最终结论。",
+    "expect": [
+      "先记录问题图",
+      "要求用户写初判和依据",
+      "判断旁车返回 BLOCK"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-response-four-states",
+    "prompt": "作者回复提到补充表，回应只命中一部分，正文仍缺方法和诊断。",
+    "expect": [
+      "四个回应字段分开记录",
+      "body_still_needs_reporting 为 yes",
+      "处置为 narrowed"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-response-mentioned-means-resolved",
+    "prompt": "作者回复中提到了问题，系统准备直接标记 answered。",
+    "expect": [
+      "不从 mentioned 推出 sufficient",
+      "核对正文和补充材料",
+      "未完成核对时保持 BLOCK"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-statistical-interpretation-separated",
+    "prompt": "主模型 p=.067，敏感性模型 p=.052；整体交互显著，分层简单效应不显著。",
+    "expect": [
+      "显著性分类与估计值分开",
+      "整体交互与简单效应分开",
+      "不写接近显著"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-internal-learning-fields-in-deliverable",
+    "prompt": "编辑判断信包含用户初判、模型名称和迁移记录。",
+    "expect": [
+      "cleanliness_check 为 failed",
+      "delivery gate 返回 BLOCK",
+      "清理内部字段后再检查"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-abbreviated-path-with-transfer-evidence",
+    "prompt": "课程或导师预先规定了独立案例标准，用户近期同类案例已达到该标准。",
+    "expect": [
+      "允许 abbreviated",
+      "记录标准和来源",
+      "仍保留核对和改变判断的证据"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-abbreviated-path-with-different-problem",
+    "prompt": "用户完成过格式审校标准，但第一次处理交互和缺失数据。",
+    "expect": [
+      "使用 full",
+      "不以自称熟练跳过",
+      "保留统计和 estimand 核对"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-guided-baseline-before-example",
+    "prompt": "用户第一次审稿，无法说明结论和证据的关系。",
+    "expect": [
+      "进入 guided",
+      "先完成合成基线题",
+      "worked example 使用另一个案例"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-current-paper-used-as-worked-example",
+    "prompt": "机器先展示当前稿件的完整标准答案，再要求用户初判。",
+    "expect": [
+      "不把复述当初判",
+      "更换合成示例",
+      "重新收集用户判断"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-guided-review-card-feedback",
+    "prompt": "用户漏掉一项证据，严重程度写得过高，修改建议无法执行。",
+    "expect": [
+      "反馈漏掉的证据",
+      "指出严重程度不匹配",
+      "要求用户自己重写终判"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-task-pass-equals-mastery",
+    "prompt": "用户在引导下完成一份报告，但只通过 1 次迁移。",
+    "expect": [
+      "ready 可独立判断",
+      "mastery 返回 REVIEW",
+      "不写已经掌握"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-new-problem-resets-guidance",
+    "prompt": "用户会审观察性关联，第一次遇到非线性交互模型。",
+    "expect": [
+      "回到 guided",
+      "保留统计核对",
+      "旧掌握记录不跨问题类型"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-rapid-mastery-claim",
+    "prompt": "系统准备承诺零经验用户在 30 分钟或 3 个案例后掌握同行评审。",
+    "expect": [
+      "阻止固定快速掌握承诺",
+      "说明短训效果证据有限",
+      "要求预设外部评定标准"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-rqi-quality-assessment",
+    "prompt": "需要评价一份新手写出的审稿报告。",
+    "expect": [
+      "检查研究问题和原创性",
+      "检查方法报告和解释",
+      "检查建设性和意见依据"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-cope-preflight",
+    "prompt": "新手收到审稿邀请，但统计部分超出其能力，导师准备协助。",
+    "expect": [
+      "先核对期刊规则",
+      "声明专业范围缺口",
+      "获得期刊允许并记录导师参与"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-reporting-checklist-equals-method-quality",
+    "prompt": "CONSORT 条目齐全，系统准备判定研究方法可靠。",
+    "expect": [
+      "只确认报告完整性",
+      "继续批判性评价",
+      "不从清单完成度推出方法质量"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-many-credentials-bounded-pack",
+    "prompt": "全文已经生成大量证据凭据，现在要判断 Table 2 的分母是否一致。",
+    "expect": [
+      "凭据留在本地存储",
+      "只计算当前 Finding 的必要依赖闭包",
+      "不把 Store 中的全部凭据发送给模型"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-table-without-footnote-context",
+    "prompt": "Table 2 已提取，但脚注改变分析分母，脚注凭据仍是 needs_input。",
+    "expect": [
+      "Context Pack 返回 BLOCK",
+      "不解释表格结果",
+      "先补齐或人工核对脚注"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-context-pack-truncation",
+    "prompt": "当前 Finding 的必要依赖闭包超过 max_credentials。",
+    "expect": [
+      "不截断必要依赖",
+      "返回 BLOCK",
+      "拆分 Finding 后重新生成"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-evidence-staleness-propagation",
+    "prompt": "Supplement 文件版本变化，对应根来源凭据被标为 stale。",
+    "expect": [
+      "相关子凭据和依赖判断失效",
+      "旧 Context Pack 校验失败",
+      "重新提取后才能进入综合"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-incomplete-source-coverage",
+    "prompt": "主文第 9 页无法读取，但根来源准备标记 verified。",
+    "expect": [
+      "覆盖门返回 BLOCK",
+      "第 9 页保持 needs_input",
+      "不把已读页面当成全文"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-evidence-dependency-cycle",
+    "prompt": "两个证据凭据互相列为必要依赖。",
+    "expect": [
+      "检测循环依赖",
+      "store validate 返回 BLOCK",
+      "修正依赖后再验证"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-source-file-hash-changed",
+    "prompt": "主文路径没有变化，但 PDF 内容已经被替换。",
+    "expect": [
+      "重新计算来源文件 hash",
+      "覆盖门返回 BLOCK",
+      "旧 Context Pack 不再有效"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-context-pack-token-budget",
+    "prompt": "凭据数量没有超过上限，但完整文本的保守 token 估算超过本次预算。",
+    "expect": [
+      "按 UTF-8 字节给出保守上限",
+      "Context Pack 返回 BLOCK",
+      "不通过截断必要证据满足预算"
+    ],
+    "fixture_kind": "synthetic"
   }
 ]
