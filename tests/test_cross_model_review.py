@@ -61,7 +61,7 @@ class CrossModelReviewTests(unittest.TestCase):
             {"model_id": "luna", "provider": "codex", "response": response(issue(codex_only)), "error": None},
             {"model_id": "opus", "provider": "claude", "response": response(issue(shared)), "error": None},
         ]
-        summary = MODULE.summarize({"records": records})
+        summary = MODULE.summarize({"records": records, "models": [{"id": record["model_id"]} for record in records], "finished_at": "fixture-complete"})
         self.assertEqual("MULTI_PROVIDER_REVIEW_COMPLETE", summary["status"])
         self.assertEqual(1, len(summary["cross_provider_findings"]))
         self.assertEqual(["opus", "sol"], summary["cross_provider_findings"][0]["models"])

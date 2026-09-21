@@ -7,8 +7,15 @@ import json
 import re
 import subprocess
 import sys
-import zipfile
 from pathlib import Path
+
+
+try:
+    from .check_repository import run_json_check
+    from .package_safety import load_metadata, no_symlink, regular_files, atomic_zip
+except ImportError:
+    from check_repository import run_json_check
+    from package_safety import load_metadata, no_symlink, regular_files, atomic_zip
 
 
 def frontmatter_name(path: Path) -> str:
@@ -21,6 +28,9 @@ def frontmatter_name(path: Path) -> str:
 
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
+    manifest, version = load_metadata(root)
+    for directory in ("skills", "docs", ".codex-plugin"):
+        regular_files(root / directory)
     repository_check = subprocess.run(
         [sys.executable, str(root / "scripts" / "check_repository.py")],
         capture_output=True,
@@ -30,11 +40,6 @@ def main() -> int:
         print(repository_check.stdout, end="")
         print(repository_check.stderr, end="")
         raise SystemExit("repository check failed")
-    version = (root / "VERSION").read_text(encoding="utf-8").strip()
-    manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
-    plugin = json.loads((root / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
-    if len({version, manifest["version"], plugin["version"]}) != 1:
-        raise SystemExit("VERSION, manifest.json, and plugin.json do not match")
     failures: list[str] = []
     release_skills = list(dict.fromkeys(manifest["skills"]))
     for name in release_skills:
@@ -52,27 +57,22 @@ def main() -> int:
         return 1
 
     for name in release_skills:
-        check = subprocess.run(
-            [sys.executable, str(root / "skills" / name / "scripts/self_check.py")],
-            capture_output=True,
-            text=True,
-        )
-        if check.returncode:
-            print(check.stdout, end="")
-            print(check.stderr, end="")
-            raise SystemExit(f"standalone research self-check failed: {name}")
+        check_failures = []
+        result = run_json_check([sys.executable, str(root / "skills" / name / "scripts/self_check.py")], name, check_failures, allow_legacy_self_check=True)
+        if result.get("standalone") is False:
+            check_failures.append(f"{name}: standalone is false")
+        if check_failures:
+            print(json.dumps({"failures": check_failures}, ensure_ascii=False, indent=2))
+            return 1
 
     package_name = manifest["name"]
     output = root / "dist" / f"{package_name}-{version}.zip"
-    output.parent.mkdir(exist_ok=True)
     include_roots = [root / ".codex-plugin", root / "skills", root / "docs"]
     include_files = [root / "README.md", root / "LICENSE", root / "VERSION", root / "manifest.json"]
-    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for base in include_roots:
-            for path in sorted(p for p in base.rglob("*") if p.is_file() and "__pycache__" not in p.parts and p.suffix != ".pyc"):
-                archive.write(path, Path(package_name) / path.relative_to(root))
-        for path in include_files:
-            archive.write(path, Path(package_name) / path.name)
+    members = [(path, (Path(package_name) / path.relative_to(root)).as_posix())
+               for base in include_roots for path in regular_files(base)]
+    members.extend((path, f"{package_name}/{path.name}") for path in include_files)
+    atomic_zip(output, members)
     print(json.dumps({"version": version, "skills": len(release_skills), "output": str(output)}, ensure_ascii=False))
     return 0
 

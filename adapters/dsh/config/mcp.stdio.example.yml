@@ -1,0 +1,28 @@
+# MCP over stdio。每个 server 一行 mcp-client 实例。
+#
+# 模型看到的工具名固定是 mcp__<serverName>__<rawName>，
+# serverName 必须匹配 [A-Za-z0-9_-]{1,32}，并且在同一进程内唯一。
+#
+# 凭据只从环境变量读。不要把 token 写进这个文件，也不要写进补丁。
+- insert:
+    - id: rw-mcp-fixture-stdio
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: rwfixture
+        transport: stdio
+        command: node
+        args:
+          - "RW_FIXTURE_MCP_PLACEHOLDER"
+          - --transport=stdio
+        failOnStartupError: true
+
+    # 真实科研 MCP 的写法，按需打开：
+    # - id: rw-mcp-openalex
+    #   name: '@deepseek-ai/dsh-mcp-client'
+    #   config:
+    #     serverName: openalex
+    #     transport: stdio
+    #     command: npx
+    #     args: ['-y', '<package>']
+    #     env:
+    #       OPENALEX_MAILTO: !!js process.env.OPENALEX_MAILTO

@@ -6,11 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "cross_model_eval.py"
-SPEC = importlib.util.spec_from_file_location("cross_model_eval", SCRIPT)
-assert SPEC and SPEC.loader
-MODULE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(MODULE)
+from scripts import cross_model_eval as MODULE
 
 
 class CrossModelEvalTests(unittest.TestCase):

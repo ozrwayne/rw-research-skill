@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import subprocess
 import sys
 import tempfile
@@ -42,7 +43,7 @@ class RevisionPatchCliTests(unittest.TestCase):
                 }],
             }
             patch_path.write_text(json.dumps(patch), encoding="utf-8")
-            applied = self.run_cli("apply", str(anchored), "--manifest", str(manifest_path), "--patch", str(patch_path), "--output", str(revised), "--report", str(report_path))
+            applied = self.run_cli("apply", str(anchored), "--manifest", str(manifest_path), "--patch", str(patch_path), "--confirm-patch-sha256", hashlib.sha256(patch_path.read_bytes()).hexdigest(), "--output", str(revised), "--report", str(report_path))
             self.assertEqual(0, applied.returncode, applied.stdout + applied.stderr)
             report = json.loads(report_path.read_text(encoding="utf-8"))
             self.assertEqual(1, report["changed_blocks"])
