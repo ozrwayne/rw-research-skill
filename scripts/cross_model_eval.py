@@ -21,6 +21,12 @@ from pathlib import Path
 from typing import Any
 
 
+try:
+    from .package_safety import safe_name, no_symlink
+except ImportError:
+    from package_safety import safe_name, no_symlink
+
+
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_ROOT = ROOT / "evals" / "cross-model"
 DEFAULT_FIXTURES = EVAL_ROOT / "fixtures.json"
@@ -179,6 +185,30 @@ def extract_json(text: str) -> dict[str, Any]:
     raise ValueError("model output does not contain a JSON object")
 
 
+def validate_schema(value: Any, schema: dict[str, Any], path: str = "response") -> None:
+    """Validate the finite schema vocabulary used by this repository, fail closed."""
+    supported = {"type", "properties", "required", "additionalProperties", "items", "enum", "description"}
+    if not isinstance(schema, dict) or set(schema) - supported:
+        raise ValueError(f"{path}: unsupported schema keyword")
+    types = {"object": dict, "array": list, "string": str, "boolean": bool, "integer": int, "number": (int, float), "null": type(None)}
+    kind = schema.get("type")
+    if kind not in types or not isinstance(value, types[kind]) or (kind in {"number", "integer"} and isinstance(value, bool)):
+        raise ValueError(f"{path}: expected {kind}")
+    if "enum" in schema and value not in schema["enum"]:
+        raise ValueError(f"{path}: value outside enum")
+    if kind == "object":
+        properties = schema.get("properties", {})
+        missing = set(schema.get("required", [])) - set(value)
+        extra = set(value) - set(properties)
+        if missing or (schema.get("additionalProperties") is False and extra):
+            raise ValueError(f"{path}: missing or extra fields")
+        for key in set(value) & set(properties):
+            validate_schema(value[key], properties[key], f"{path}.{key}")
+    elif kind == "array":
+        for index, item in enumerate(value):
+            validate_schema(item, schema.get("items", {}), f"{path}[{index}]")
+
+
 def get_path(value: Any, dotted_path: str) -> Any:
     current = value
     for part in dotted_path.split("."):
@@ -218,7 +248,7 @@ def score_response(response: dict[str, Any], checks: list[dict[str, Any]]) -> di
         results.append({**check, "actual": actual, "passed": passed, "error": error})
     passed_count = sum(1 for item in results if item["passed"])
     return {
-        "passed": passed_count == len(results),
+        "passed": bool(results) and passed_count == len(results),
         "score": passed_count / len(results) if results else 0.0,
         "passed_checks": passed_count,
         "total_checks": len(results),
@@ -351,6 +381,7 @@ def run_one(spec: dict[str, Any], fixture: dict[str, Any], condition: str, repet
         if execution["exit_code"] != 0:
             raise RuntimeError(f"model process exited with {execution['exit_code']}")
         parsed = extract_json(execution["output"])
+        validate_schema(parsed, fixture["schema"])
         record["response"] = parsed
         record["scoring"] = score_response(parsed, fixture["checks"])
         record["error"] = None
@@ -364,6 +395,10 @@ def run_one(spec: dict[str, Any], fixture: dict[str, Any], condition: str, repet
 
 def validate_inputs(fixtures: list[dict[str, Any]], models: list[dict[str, Any]]) -> list[str]:
     failures: list[str] = []
+    if not isinstance(fixtures, list) or not fixtures or not all(isinstance(item, dict) for item in fixtures):
+        return ["fixtures must be a non-empty object list"]
+    if not isinstance(models, list) or not models or not all(isinstance(item, dict) for item in models):
+        return ["models must be a non-empty object list"]
     valid_operations = {"eq", "contains", "set_eq", "min_length"}
     fixture_ids: set[str] = set()
     for fixture in fixtures:
@@ -443,10 +478,20 @@ def summarize(data: dict[str, Any]) -> dict[str, Any]:
     models = {record["model_id"] for record in skill_items}
     skill_errors = sum(1 for item in skill_items if item.get("error"))
     minimum_fixture_rate = min((row["pass_rate"] for row in fixture_rows), default=0.0)
-    eligible = len(providers) >= 2 and len(models) >= 3
+    expected_models = {model["id"] for model in data.get("models", [])}
+    expected_fixtures = set(data.get("fixture_ids", []))
+    repetitions = data.get("repetitions", 0)
+    expected = {(model, fixture, condition, repetition)
+                for model in expected_models for fixture in expected_fixtures
+                for condition in ("with_skill", "without_skill")
+                for repetition in range(1, repetitions + 1)}
+    actual = [(item["model_id"], item["fixture_id"], item["condition"], item.get("repetition")) for item in records]
+    matrix_complete = bool(expected) and len(actual) == len(expected) and set(actual) == expected and bool(data.get("finished_at"))
+    eligible = matrix_complete and len(providers) >= 2 and len(models) >= 3
     verified = eligible and skill_errors == 0 and skill_rate >= 0.80 and minimum_fixture_rate >= 0.75
     return {
         "status": "CROSS_MODEL_VERIFIED" if verified else "CROSS_MODEL_NOT_VERIFIED",
+        "matrix_complete": matrix_complete,
         "providers": sorted(providers),
         "models": sorted(models),
         "with_skill_pass_rate": skill_rate,
@@ -519,6 +564,14 @@ def command_check(args: argparse.Namespace) -> int:
 
 
 def command_run(args: argparse.Namespace) -> int:
+    try:
+        safe_name(args.run_id, "run id")
+        if min(args.repetitions, args.workers, args.timeout) < 1:
+            raise ValueError("repetitions, workers, and timeout must be positive")
+        no_symlink(EVAL_ROOT / "results" / args.run_id)
+    except ValueError as exc:
+        print(json.dumps({"failures": [str(exc)]}))
+        return 2
     fixtures = load_json(Path(args.fixtures))
     models = load_json(Path(args.models))
     failures = validate_inputs(fixtures, models)
@@ -546,7 +599,7 @@ def command_run(args: argparse.Namespace) -> int:
     random.Random(args.seed).shuffle(combinations)
     run_dir = EVAL_ROOT / "results" / args.run_id
     result_path = run_dir / "results.json"
-    if result_path.exists():
+    if run_dir.exists():
         print(f"refusing to overwrite existing run: {result_path}")
         return 2
     fixture_path = Path(args.fixtures)

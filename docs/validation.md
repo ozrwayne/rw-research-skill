@@ -1,3 +1,7 @@
+# 2026-09-19 本地审计
+
+本次对现有 0.12.0 工作树做本地软件修复，未创建发布或转移历史跨模型标签。当前验证入口为 `python3 scripts/run_ci_manifest.py`，覆盖仓库合同、确定性回归、完整包和 SkillHub 包。输入隔离、来源完整性、文件保全及打包边界见 `software-integrity.md`。新增 5 个合成行为合同只通过结构核验，`execution_status` 保持 `not_run`；没有执行新的模型行为或效果实验。以下版本记录保留为历史记录。
+
 # RW Research Skill v0.12.0 验证记录
 
 日期：2026-08-04。

@@ -85,15 +85,23 @@ def main() -> int:
         argv = render_argv(check["argv"])
         print(f"\n[ci:{check['id']}] {check.get('description', '')}", flush=True)
         started = time.monotonic()
-        completed = subprocess.run(argv, cwd=ROOT)
+        error = None
+        try:
+            completed = subprocess.run(argv, cwd=ROOT, timeout=600)
+            returncode = completed.returncode
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            returncode = 1
+            error = f"{type(exc).__name__}: {exc}"
+            print(error, file=sys.stderr)
         duration = round(time.monotonic() - started, 3)
         results.append(
             {
                 "id": check["id"],
                 "required": check["required"],
-                "returncode": completed.returncode,
+                "returncode": returncode,
                 "duration_seconds": duration,
-                "status": "passed" if completed.returncode == 0 else "failed",
+                "status": "passed" if returncode == 0 else "failed",
+                "error": error,
             }
         )
 

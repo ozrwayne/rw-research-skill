@@ -22,6 +22,9 @@ def main() -> int:
         path = root / relative
         if not path.is_file() or path.stat().st_size == 0:
             failures.append(f"missing or empty: {relative}")
+    if failures:
+        print(json.dumps({"skill": root.name, "standalone": False, "failures": failures}, ensure_ascii=False, indent=2))
+        return 1
     atoms = [json.loads(line) for line in (refs / "atoms.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
     tests = json.loads((refs / "behavior-tests.json").read_text(encoding="utf-8"))
     maturity = json.loads((refs / "maturity.json").read_text(encoding="utf-8"))

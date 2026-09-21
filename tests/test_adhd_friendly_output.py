@@ -9,12 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / "skills"
 MANIFEST = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
 SECTION_START = "## 可选 ADHD 友好输出"
-SECTION_END = "\n## 停止条件"
 
 
 def extract_section(skill_text: str) -> str:
     start = skill_text.index(SECTION_START)
-    end = skill_text.index(SECTION_END, start)
+    end = skill_text.find("\n## ", start + len(SECTION_START))
+    if end == -1:
+        end = len(skill_text)
     return skill_text[start:end]
 
 

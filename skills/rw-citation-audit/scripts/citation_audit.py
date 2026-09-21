@@ -17,8 +17,8 @@ REF_AUTHOR_YEAR = re.compile(
 )
 DOI = re.compile(r"(?:https?://doi\.org/|doi:\s*)?(10\.\d{4,9}/[-._;()/:A-Z0-9]+)", re.I)
 PAREN_CITATION = re.compile(r"\(([^()]*?\b\d{4}[a-z]?[^()]*)\)")
-AUTHOR_YEAR = re.compile(r"\b([A-Z][A-Za-z'’\-]+)(?:\s+et\s+al\.)?\s*,\s*(\d{4}[a-z]?)")
-NARRATIVE = re.compile(r"\b([A-Z][A-Za-z'’\-]+)(?:\s+et\s+al\.)?\s*\((\d{4}[a-z]?)\)")
+AUTHOR_YEAR = re.compile(r"\b([A-Z][A-Za-z'’\-]+)(?:\s+(?:et\s+al\.|(?:&|and)\s+[A-Z][A-Za-z'’\-]+))?\s*,\s*(\d{4}[a-z]?)")
+NARRATIVE = re.compile(r"\b([A-Z][A-Za-z'’\-]+)(?:\s+(?:et\s+al\.|(?:&|and)\s+[A-Z][A-Za-z'’\-]+))?\s*\((\d{4}[a-z]?)\)")
 
 
 def split_document(text: str) -> tuple[str, str]:
@@ -30,6 +30,13 @@ def split_document(text: str) -> tuple[str, str]:
 
 def reference_blocks(text: str) -> list[str]:
     return [block.strip() for block in re.split(r"\n\s*\n", text) if block.strip()]
+
+
+def normalize_doi(value: str) -> str:
+    value = value.rstrip(".,;").lower()
+    while value.endswith(")") and value.count(")") > value.count("("):
+        value = value[:-1]
+    return value
 
 
 def parse_references(text: str) -> list[dict]:
@@ -44,7 +51,7 @@ def parse_references(text: str) -> list[dict]:
                 "surname": author.group(1) if author else None,
                 "initial": author.group(2) if author else None,
                 "year": author.group(3) if author else None,
-                "doi": doi.group(1).rstrip(".,;)").lower() if doi else None,
+                "doi": normalize_doi(doi.group(1)) if doi else None,
             }
         )
     return rows
@@ -65,10 +72,13 @@ def issue(level: str, code: str, message: str, **details: object) -> dict:
 
 
 def audit(path: Path, style: str) -> dict:
-    text = path.read_text(encoding="utf-8")
+    if style not in ("generic", "apa7"):
+        raise ValueError("unsupported citation style")
+    raw = path.read_bytes()
+    text = raw.decode("utf-8")
     body, reference_text = split_document(text)
     issues: list[dict] = []
-    if not reference_text:
+    if not reference_text.strip():
         issues.append(issue("BLOCK", "NO_REFERENCE_SECTION", "No References or Bibliography heading was found."))
         refs: list[dict] = []
     else:
@@ -82,13 +92,13 @@ def audit(path: Path, style: str) -> dict:
 
     if style == "apa7":
         for surname, initials in collisions.items():
-            bare = re.compile(rf"(?<!\b[A-Z]\.\s)\b{re.escape(surname)}\s+et\s+al\.")
+            bare = re.compile(rf"(?<!\b[A-Z]\.\s)\b{re.escape(surname)}(?:\s+et\s+al\.)?(?=\s*[,(&]|\s+and\b)")
             if bare.search(body):
                 issues.append(
                     issue(
                         "BLOCK",
                         "APA_SAME_SURNAME_INITIAL",
-                        f"{surname} has different first-author initials in the reference list, but a bare '{surname} et al.' occurs in the text.",
+                        f"{surname} has different first-author initials in the reference list, but a citation without first-author initials occurs in the text.",
                         surname=surname,
                         initials=initials,
                     )
@@ -129,11 +139,19 @@ def audit(path: Path, style: str) -> dict:
         issues.append(issue("REVIEW", "UNPARSED_REFERENCE", "Some references require manual identity review.", entries=unparsed))
 
     levels = {row["level"] for row in issues}
-    status = "BLOCK" if "BLOCK" in levels else "REVIEW" if "REVIEW" in levels else "PASS"
+    structural_status = "BLOCK" if "BLOCK" in levels else "REVIEW" if "REVIEW" in levels else "PASS"
+    # A regex match does not verify author identity, DOI existence or publication metadata.
+    issues.append(issue("REVIEW", "IDENTITY_NOT_VERIFIED", "Local syntax checks do not verify author identities or publication metadata against original sources."))
+    if style == "generic":
+        issues.append(issue("REVIEW", "STYLE_NOT_SPECIFIED", "A required citation style has not been supplied."))
+    status = "BLOCK" if structural_status == "BLOCK" else "REVIEW"
     return {
         "schema_version": "rw-citation-audit/v1",
         "document": str(path),
-        "document_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "document_sha256": hashlib.sha256(raw).hexdigest(),
+        "audit_scope": "local_author_year_syntax_only",
+        "structural_status": structural_status,
+        "identity_verification": "NOT_CHECKED",
         "style": style,
         "status": status,
         "reference_count": len(refs),
@@ -148,7 +166,15 @@ def main() -> int:
     parser.add_argument("document", type=Path)
     parser.add_argument("--style", choices=("generic", "apa7"), default="generic")
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
+    if args.output:
+        if args.output.resolve() == args.document.resolve() or (args.output.exists() and args.document.exists() and args.output.samefile(args.document)):
+            print("BLOCK: audit output must differ from the input document")
+            return 2
+        if args.output.exists() and not args.force:
+            print("BLOCK: output already exists; use --force")
+            return 2
     result = audit(args.document, args.style)
     rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output:
@@ -158,4 +184,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except (OSError, ValueError, TypeError) as exc:
+        print(f"BLOCK: {exc}")
+        raise SystemExit(2)
