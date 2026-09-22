@@ -15,12 +15,7 @@
       "description": "运行确定性工具和治理测试。",
       "argv": [
         "{python}",
-        "-m",
-        "unittest",
-        "discover",
-        "-s",
-        "tests",
-        "-v"
+        "scripts/run_deterministic_tests.py"
       ],
       "required": true
     },

@@ -45,3 +45,10 @@ currentness:
   record_publication_year: true
   record_checked_at: true
   use_latest_only_when_verified: true
+
+editing_scope:
+  approved_document_version: null
+  approved_ranges: []
+  analysis_context: []
+  proposed_expansions: []
+  expansion_confirmation: null

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-2ea44f.svg"></a>
-  <a href="VERSION"><img alt="Version: v0.12.0" src="https://img.shields.io/badge/version-v0.12.0-blue.svg"></a>
+  <a href="VERSION"><img alt="Version: v0.13.1" src="https://img.shields.io/badge/version-v0.13.1-blue.svg"></a>
   <a href="#4-个对外入口"><img alt="4 public entries" src="https://img.shields.io/badge/public%20entries-4-6f42c1.svg"></a>
   <a href="#安装"><img alt="Works with Agent Skills" src="https://img.shields.io/badge/works%20with-Agent%20Skills-0969da.svg"></a>
   <a href="evals/cross-model/results/2026-07-20-cross-model-v2/summary.md"><img alt="Cross-model record: 4 models" src="https://img.shields.io/badge/cross--model%20record-4%20models-2ea44f.svg"></a>
@@ -24,7 +24,7 @@
 
 ---
 
-RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.12.0`。对外提供 4 个入口，内部保留 21 个科研 Skill。当前包含 544 条知识原子、173 条公理、152 个案例和反例，以及 165 条行为合同。
+RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.13.1`。对外提供 4 个入口，内部保留 22 个科研 Skill。当前包含 598 条知识原子、199 条公理、174 个案例和反例，以及 211 条行为合同。
 
 适用于手上有研究想法、论文、数据、研究方案、章节草稿或审稿意见，需要判断下一步的人。你可以直接提交材料，也可以只说现在卡在哪里。系统会选择一个主 Skill，每次处理当前一步。
 
@@ -156,7 +156,7 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 | `rw-research-referee` | 综述方法、研究设计、研究材料、统计报告和结论审查 |
 | `rw-phd-write` | 科研写作、作者语气、局部修订、审稿回复和投稿材料 |
 
-21 个内部 Skill 仍可按原名称直接调用，用于兼容已有流程。对外入口和内部归属由 [`manifest.json`](manifest.json) 统一维护。完整前后关系见 [Skill 关系图](docs/skill-link-map.md)。
+22 个内部 Skill 仍可按原名称直接调用，用于兼容已有流程。对外入口和内部归属由 [`manifest.json`](manifest.json) 统一维护。完整前后关系见 [Skill 关系图](docs/skill-link-map.md)。
 
 依赖不可用、材料不足或上游产物变化时，处理规则见 [degradation registry](docs/degradation-registry.json)。它记录状态、替代动作、禁止行为、用户提示、责任 Skill 和对应测试。4 个入口的合成场景见 [degradation scenarios](docs/degradation-scenarios.json)。
 
@@ -178,10 +178,10 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 
 公开包当前包含：
 
-- 544 条结构化知识原子。
-- 170 条运行公理。
-- 152 个案例和反例。
-- 165 条行为合同。
+- 598 条结构化知识原子。
+- 199 条运行公理。
+- 174 个案例和反例。
+- 211 条行为合同。
 - 21 个独立运行静态自检脚本。
 
 行为合同保存提示词、应做事项、不应做事项和下一步，用于后续模型评测。静态自检只检查文件、结构、数量和独立运行约束，不代表模型已经执行全部行为合同，也不证明真实任务提效。
@@ -192,9 +192,22 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 
 公开内容不包含个人论文、数据、评审记录、研究项目状态或个人来源标签。案例和行为合同使用合成或占位输入。规则见 [`docs/public-content-policy.md`](docs/public-content-policy.md)。
 
-每个 Skill 自带适用方法、来源入口、停止条件、案例、反例、工作表和自检。需要当前文献、API、期刊政策或报告规范时，仍需核验官方来源。
+每个 Skill 自带适用方法、来源入口、停止条件、案例、反例和工作表；自检由模块脚本或确定性测试承担。需要当前文献、API、期刊政策或报告规范时，仍需核验官方来源。
 
-发布检查结果见 [v0.12.0 验证记录](docs/validation.md)。
+当前本地检查见 [v0.13.1 验证记录](docs/validation.md)。
+
+## v0.13.1 写作检查更新
+
+- `rw-phd-write` 在生成和复查阶段检查空泛对照与总括，按段落功能判断，保护有用的主题句、过渡句及科学限定。
+- 最小修改后核对主张范围、否定／因果强度、不确定性和引文支持关系。
+- 新增 12 组配对合成合同，各含生成与复查输入；合同、结构回归和实际行为验证分开记录。
+- 此版本为本地构建；独立新会话 A/B 与跨模型效果验证未执行，既有跨模型成绩不迁移到本次规则。
+
+## v0.13.0 合并
+
+- 将本地审计的证据、状态、检索、文件保护和打包修复合入主包。
+- 新增独立 `rw-peer-review` v0.9.2 模块；外来稿件评审归 `rw-research-referee` 入口，作者本人研究审查仍由后者处理。
+- 该版本仅指仓库内容；合成行为合同数量不等于模型实测次数。
 
 ## v0.12.0 更新
 
@@ -295,10 +308,10 @@ python3 scripts/run_ci_manifest.py
 发布包生成在：
 
 ```text
-dist/rw-research-skill-0.12.0.zip
+dist/rw-research-skill-0.13.1.zip
 ```
 
-本地、Pull Request、main 分支和 GitHub Release 共用 [`ci/manifest.json`](ci/manifest.json)。构建过程检查版本、4 个对外入口、21 个内部 Skill、降级注册表、公开边界、确定性测试和 2 种发行包。
+本地、Pull Request、main 分支和 GitHub Release 共用 [`ci/manifest.json`](ci/manifest.json)。构建过程检查版本、4 个对外入口、22 个内部 Skill、降级注册表、公开边界、确定性测试和 2 种发行包。
 
 ## License
 

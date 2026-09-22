@@ -15,6 +15,9 @@ def main() -> int:
         "references/acceptance.md", "references/behavior-tests.json", "assets/passport-template.json",
     ]
     missing = [item for item in required if not (ROOT / item).exists()]
+    if missing:
+        print("missing files: " + ", ".join(missing))
+        return 1
     atoms = [json.loads(line) for line in (ROOT / "references/atoms.jsonl").read_text(encoding="utf-8").splitlines() if line.strip()]
     tests = json.loads((ROOT / "references/behavior-tests.json").read_text(encoding="utf-8"))
     skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")

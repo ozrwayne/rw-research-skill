@@ -2,6 +2,16 @@
 
 | 情形 | 执行动作 | 不要做 |
 |---|---|---|
+| 需要从既有资料判断学习起点 | 进入 rw-research-learning | 把读过资料等同已掌握方法 |
+| 核对引用身份、书目信息或对应关系 | 进入 rw-citation-audit | 用格式匹配证明来源真实 |
+| 核对来源是否支持具体主张 | 进入 rw-claim-audit | 把 DOI 存在等同支持主张 |
+| 已有证据、需要组织科研正文 | 进入 rw-phd-write | 补造数据或引用 |
+| 只需校准作者语气且有指定样本 | 进入 rw-phd-tone | 扩大事实和修改范围 |
+| 需要执行已确认的局部修改 | 进入 rw-revision-patch | 未确认就覆盖原稿 |
+| 需要记录项目决策、证据和恢复点 | 进入 rw-research-passport | 把记录齐全等同研究有效 |
+| 需要选择科研工具或检查运行环境 | 进入 rw-research-lab-router | 安装成功即声称任务可运行 |
+| 需要规划综述协议、筛选或综合方法 | 进入 rw-review-methods | 跳过问题和协议门 |
+| 需要把确定的问题转为研究方案 | 进入 rw-research-design | 先选工具再倒推问题 |
 | 研究兴趣仍宽泛 | 进入 rw-research-question | 直接写章节 |
 | 需要 MeSH、Emtree、CINAHL Headings、APA Thesaurus 或平台检索式 | 进入 rw-search-strategy | 把关键词清单当成数据库策略 |
 | 需要找文献或补论证 | 进入 rw-literature-discovery | 先建证据结论 |
@@ -11,6 +21,7 @@
 | 需要核对数据、代码、材料或数据声明 | 进入 rw-research-data | 把一句可用性声明当成访问证据 |
 | 需要核对 n、重复层级、统计方法或报告数字 | 进入 rw-statistics-audit | 在没有数据时声称重新分析 |
 | 结论或设计可能站不住 | 进入 rw-research-referee | 先润色 |
+| 需要审查别人的投稿稿件并形成审稿意见 | 进入 rw-peer-review | 把作者本人项目审查与外来稿件评审混在同一台账 |
 | 已有可投稿稿件，且已知目标期刊或需要选刊，且无已知研究关键阻塞项 | 进入 rw-journal-submission，交接稿件版本、目标期刊、作者、披露、数据、伦理、引文与未解决项 | 登录门户、填写字段或点击 Submit |
 
 ## 核心规则

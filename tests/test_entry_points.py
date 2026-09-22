@@ -16,7 +16,7 @@ class EntryPointTests(unittest.TestCase):
     def test_current_entry_map_is_complete(self):
         self.assertEqual(validate_entry_points(self.manifest), [])
         self.assertEqual(len(self.manifest["entry_skills"]), 4)
-        self.assertEqual(len(self.manifest["skills"]) - len(self.manifest["entry_skills"]), 17)
+        self.assertEqual(len(self.manifest["skills"]) - len(self.manifest["entry_skills"]), 18)
 
     def test_duplicate_route_is_rejected(self):
         manifest = copy.deepcopy(self.manifest)

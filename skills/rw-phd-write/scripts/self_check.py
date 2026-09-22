@@ -4,7 +4,58 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
+
+
+CONTRAST_IDS = {
+    'contrast-empty-contrast', 'contrast-redundant-summary',
+    'contrast-affirmative-shell', 'contrast-synonym-only-repair',
+    'contrast-concrete-comparison', 'contrast-defined-constructs',
+    'contrast-functional-topic-sentence', 'contrast-scientific-hedging',
+    'contrast-missing-context', 'contrast-missing-evidence',
+    'contrast-limited-edit-scope', 'contrast-scope-drift',
+}
+
+
+def validate_contrast_contracts(tests: list[dict]) -> list[str]:
+    """Validate fixture coverage/schema only, never the semantic verdict."""
+    failures = []
+    rows = [row for row in tests if row.get('gate') == 'abstract_contrast_v1']
+    ids = [row.get('id') for row in rows]
+    if set(ids) != CONTRAST_IDS or len(ids) != len(CONTRAST_IDS):
+        failures.append('abstract-contrast paired contract IDs missing or duplicated')
+    if Counter(row.get('group') for row in rows) != {'revise': 4, 'preserve': 4, 'boundary': 4}:
+        failures.append('abstract-contrast coverage requires 4 cases in each group')
+    if {row.get('language') for row in rows} != {'en', 'zh'}:
+        failures.append('abstract-contrast coverage requires English and Chinese')
+    verdicts = {'PASS', 'NEEDS_REVISION', 'NEEDS_CONTEXT'}
+    actions = {'KEEP', 'DELETE', 'MERGE', 'REWRITE', 'ASK_AUTHOR'}
+    dimensions = {'missed_issue', 'false_positive', 'claim_drift', 'unnecessary_expansion'}
+    for row in rows:
+        identifier = row.get('id')
+        for key in ('generation_prompt', 'prompt'):
+            if not isinstance(row.get(key), str) or not row[key].strip():
+                failures.append(f'{identifier}: non-empty {key} required')
+        if row.get('fixture_kind') != 'synthetic' or row.get('evaluation_set') != 'development':
+            failures.append(f'{identifier}: synthetic development fixture required')
+        for key in ('must_do', 'must_not'):
+            if not isinstance(row.get(key), list) or not row[key] or any(not isinstance(x, str) or not x.strip() for x in row[key]):
+                failures.append(f'{identifier}: non-empty {key} list required')
+        expected = row.get('review_expectation')
+        if not isinstance(expected, dict):
+            failures.append(f'{identifier}: separate review expectation required')
+            continue
+        for key, allowed in (('verdicts', verdicts), ('actions', actions)):
+            values = expected.get(key)
+            if not isinstance(values, list) or not values or any(not isinstance(x, str) or x not in allowed for x in values):
+                failures.append(f'{identifier}: invalid {key}')
+        if row.get('group') == 'preserve' and expected != {'verdicts': ['PASS'], 'actions': ['KEEP']}:
+            failures.append(f'{identifier}: preservation control must expect PASS / KEEP')
+        values = row.get('evaluation_dimensions')
+        if not isinstance(values, list) or any(not isinstance(x, str) for x in values) or set(values) != dimensions:
+            failures.append(f'{identifier}: evaluation dimensions incomplete')
+    return failures
 
 
 def main() -> int:
@@ -15,6 +66,7 @@ def main() -> int:
         "SKILL.md", "agents/openai.yaml", "assets/worksheet.md",
         "references/standalone.md", "references/source-map.md", "references/standards.md",
         "references/writing-functions.md",
+        "references/abstract-contrast-gate.md",
         "references/method.md", "references/domain-guide.md", "references/atoms.jsonl",
         "references/axioms.md", "references/cases.md", "references/behavior-tests.json",
         "references/acceptance.md", "references/source-evidence.md", "references/maturity.json",
@@ -48,6 +100,7 @@ def main() -> int:
     }
     if not required_test_ids.issubset(test_ids):
         failures.append("writing-function behavior tests missing")
+    failures.extend(validate_contrast_contracts(tests))
     if not maturity.get("standalone") or maturity.get("local_hard_dependencies"):
         failures.append("standalone maturity contract failed")
     forbidden = (

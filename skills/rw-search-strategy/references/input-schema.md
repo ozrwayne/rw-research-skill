@@ -72,3 +72,11 @@
 ```
 
 已核验记录必须有 `source` 和 `verified_at`。专有词表记录不能使用 `verified_by_public_api`。
+
+## 输出完整性与文件保护
+
+- `rejected` 不进入候选草案。已核验状态要求非空来源、ISO 日期和布尔型选项。
+- 任一概念没有可用词时，`query` 留空，`status` 为 `incomplete`；缺失概念保存在 `missing_concepts`，局部草案仅保存在 `draft_query`。不得把局部式当成完整式。
+- 所有渲染结果仍需平台验证；API 失败与零结果分开。PubMed 的短截词前缀会产生 warning。[官方语法说明](https://pubmed.ncbi.nlm.nih.gov/help/#wildcards)。
+- 词表导入要求非空 `records`；任一记录失败时整批不合并，不输出部分更新文件。`atomic_scope: record_merge` 指记录合并，不表示跨文件事务。
+- 输出和报告路径不得与输入同路径、互相重合或通过硬链接指向同一文件。结果以临时文件替换，不原地截断输入。

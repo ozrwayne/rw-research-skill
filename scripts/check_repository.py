@@ -10,19 +10,45 @@ import sys
 from pathlib import Path
 
 
+try:
+    from .package_safety import load_metadata, regular_files
+except ImportError:
+    from package_safety import load_metadata, regular_files
+
+
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def run_json_check(argv: list[str], label: str, failures: list[str], allow_legacy_self_check: bool = False) -> dict:
+    try:
+        result = subprocess.run(argv, capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        failure = f"{label}: check failed to run: {exc}"
+        failures.append(failure)
+        return {"failures": [failure]}
+    if allow_legacy_self_check and result.returncode == 0 and result.stdout.strip() == "self-check passed":
+        return {"standalone": True, "failures": [], "format": "legacy-self-check"}
+    try:
+        payload = json.loads(result.stdout)
+        if not isinstance(payload, dict) or not isinstance(payload.get("failures"), list) or not all(isinstance(item, str) for item in payload["failures"]):
+            raise ValueError("invalid check result schema")
+    except (ValueError, TypeError):
+        payload = {"failures": ["check did not return a JSON object with a failures list"]}
+    failures.extend(f"{label}: {item}" for item in payload["failures"])
+    if result.returncode:
+        failures.append(f"{label}: exited with status {result.returncode}")
+    return payload
 
 
 def main() -> int:
     failures: list[str] = []
-    manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
-    plugin = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
-    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-    skill_names = list(dict.fromkeys(manifest["skills"]))
-    if len({version, manifest.get("version"), plugin.get("version")}) != 1:
-        failures.append("VERSION, manifest.json, and plugin.json do not match")
-    if len(skill_names) != len(manifest["skills"]):
-        failures.append("manifest contains duplicate Skill names")
+    try:
+        manifest, version = load_metadata(ROOT)
+        regular_files(ROOT / "skills")
+        skill_names = manifest["skills"]
+    except (OSError, ValueError, TypeError) as exc:
+        print(json.dumps({"failures": [str(exc)]}, ensure_ascii=False, indent=2))
+        return 1
 
     actual_dirs = {path.name for path in (ROOT / "skills").iterdir() if path.is_dir() and not path.name.startswith("__")}
     missing_dirs = sorted(set(skill_names) - actual_dirs)
@@ -31,6 +57,15 @@ def main() -> int:
         failures.append(f"manifest Skill directories missing: {', '.join(missing_dirs)}")
     if extra_dirs:
         failures.append(f"Skill directories outside manifest: {', '.join(extra_dirs)}")
+
+    if failures:
+        print(json.dumps({"failures": failures}, ensure_ascii=False, indent=2))
+        return 1
+
+    contracts = run_json_check([sys.executable, str(ROOT / "scripts/check_skill_contracts.py")], "skill-contracts", failures)
+    if failures:
+        print(json.dumps({"contracts": contracts, "failures": failures}, ensure_ascii=False, indent=2))
+        return 1
 
     metrics = {"skills": len(skill_names), "atoms": 0, "axioms": 0, "cases": 0, "contracts": 0}
     link_refs: dict[str, set[str]] = {}
@@ -62,57 +97,15 @@ def main() -> int:
     if f"当前版本：`v{version}`" not in readme:
         failures.append("README current version is stale")
 
-    entry_check = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "check_entry_points.py")],
-        capture_output=True,
-        text=True,
-    )
-    try:
-        entry_points = json.loads(entry_check.stdout)
-    except json.JSONDecodeError:
-        entry_points = {"failures": ["entry-point check did not return JSON"]}
-    if entry_check.returncode:
-        failures.extend(f"entry-points: {item}" for item in entry_points.get("failures", []))
-
-    degradation_check = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "check_degradation_registry.py")],
-        capture_output=True,
-        text=True,
-    )
-    try:
-        degradation = json.loads(degradation_check.stdout)
-    except json.JSONDecodeError:
-        degradation = {"failures": ["degradation check did not return JSON"]}
-    if degradation_check.returncode:
-        failures.extend(f"degradation: {item}" for item in degradation.get("failures", []))
-
-    privacy_check = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "check_public_privacy.py")],
-        capture_output=True,
-        text=True,
-    )
-    try:
-        privacy = json.loads(privacy_check.stdout)
-    except json.JSONDecodeError:
-        privacy = {"failures": ["privacy check did not return JSON"]}
-    if privacy_check.returncode:
-        failures.extend(f"privacy: {item}" for item in privacy.get("failures", []))
-
-    cross_model_check = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "cross_model_eval.py"), "check"],
-        capture_output=True,
-        text=True,
-    )
-    try:
-        cross_model = json.loads(cross_model_check.stdout)
-    except json.JSONDecodeError:
-        cross_model = {"failures": ["cross-model check did not return JSON"]}
-    if cross_model_check.returncode:
-        failures.extend(f"cross-model: {item}" for item in cross_model.get("failures", []))
+    entry_points = run_json_check([sys.executable, str(ROOT / "scripts/check_entry_points.py")], "entry-points", failures)
+    degradation = run_json_check([sys.executable, str(ROOT / "scripts/check_degradation_registry.py")], "degradation", failures)
+    privacy = run_json_check([sys.executable, str(ROOT / "scripts/check_public_privacy.py")], "privacy", failures)
+    cross_model = run_json_check([sys.executable, str(ROOT / "scripts/cross_model_eval.py"), "check"], "cross-model", failures)
 
     result = {
         "version": version,
         "metrics": metrics,
+        "contracts": contracts,
         "entry_points": entry_points,
         "degradation": degradation,
         "privacy": privacy,

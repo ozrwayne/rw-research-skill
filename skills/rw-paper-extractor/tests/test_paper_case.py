@@ -209,6 +209,10 @@ class PaperCaseTests(unittest.TestCase):
             report = out / "report.md"
             self.assertTrue(report.is_file())
 
+            paper_case.mark_stage_command(type("Args", (), {
+                "output": out, "stage": "report_assembled", "artifact": "report.md",
+                "status": "complete", "upstream": [f"stages/{name}" for name, _, _ in paper_case.REPORT_STAGES],
+            })())
             audit = {
                 "schema_version": "rw-claim-audit/v1",
                 "document_id": case["paper_id"],
@@ -225,6 +229,8 @@ class PaperCaseTests(unittest.TestCase):
                             {
                                 "id": "source-1",
                                 "source_pointer": str(pdf),
+                                "source_path": str(pdf),
+                                "source_sha256": paper_case.sha256_file(pdf),
                                 "locator": "p. 1",
                                 "support_note": "Test support",
                             }
