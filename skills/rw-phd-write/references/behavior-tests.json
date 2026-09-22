@@ -223,5 +223,422 @@
     ],
     "fixture_kind": "synthetic",
     "execution_status": "not_run"
+  },
+  {
+    "id": "contrast-empty-contrast",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material: research assistants sent appointment reminders during a pilot; the report did not identify who would send them in routine service. Write a short research introduction transition using only these facts.",
+    "prompt": "Review and minimally revise this synthetic paragraph: \"The testing question is not the delivery question. In the pilot, research assistants sent every reminder; the report did not identify who would send reminders in routine service.\"",
+    "must_do": [
+      "直接表达试点执行者与常规服务安排的具体关系",
+      "删去或合并无必要功能的首句，保留 the report 的证据范围"
+    ],
+    "must_not": [
+      "使用同义抽象对照替代原首句",
+      "把该报告未说明扩大成所有试验都不研究实施"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-redundant-summary",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：3 个站点使用提醒工具；1 个由前台发送，2 个由护士发送。根据这些材料写一段结果，保持简短。",
+    "prompt": "审阅并最小修改合成段落：“3 个站点使用提醒工具，1 个由前台发送，2 个由护士发送。这说明不同站点的安排存在安排上的不同。”",
+    "must_do": [
+      "保留站点数、人员安排与结果报告功能",
+      "指出末句未增加实质内容或必要组织作用"
+    ],
+    "must_not": [
+      "补入人员能力或工作负担的原因",
+      "为避免重复而丢掉 1 个和 2 个的分配"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-affirmative-shell",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material: a lab team configured an appointment system in the pilot. Routine configuration responsibilities have not yet been assigned at the two participating sites. Write a concise transition without adding facts.",
+    "prompt": "Review this synthetic paragraph and revise minimally: \"Delivery constitutes a separate dimension. A lab team configured the system in the pilot, but routine configuration responsibilities have not yet been assigned at the two participating sites.\"",
+    "must_do": [
+      "识别肯定式空总括，不依赖 not/but 命中",
+      "保留试点与两个参与站点的具体安排差异"
+    ],
+    "must_not": [
+      "因为没有否定句就直接放行",
+      "将尚未安排写成没有任何站点具备实施能力"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-synonym-only-repair",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：采购由总部批准，维护由各站点负责人安排。写一句说明这项职责分工，不加入其他理由。",
+    "prompt": "旧修订将“实施涉及不同决策”换成“运营路径涉及情境化决策”。全文为：“运营路径涉及情境化决策。采购由总部批准，维护由各站点负责人安排。”请判断修订是否解决问题，并给最小修改。",
+    "must_do": [
+      "识别换术语仍未表达具体关系",
+      "用已提供的采购与维护职责表达实质内容"
+    ],
+    "must_not": [
+      "以词汇更学术为由判定已解决",
+      "创造资金来源或政策障碍"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-concrete-comparison",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic results: in this sample, attendance was 76% with reminders and 68% without; cancellations were 5% in both groups. Report the comparison in one sentence. Do not infer statistical significance or causality.",
+    "prompt": "Synthetic results paragraph: \"In this sample, attendance was 76% with reminders and 68% without, but cancellations were 5% in both groups.\" Review it for empty contrast; preserve it if no substantive problem is present.",
+    "must_do": [
+      "保留具体比较、所有数值与 in this sample 的范围",
+      "说明 but 承担实质结果对照"
+    ],
+    "must_not": [
+      "因 but 触发而强行改写",
+      "加入显著性或确定因果"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-defined-constructs",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成定义：覆盖率为收到邀请的人数占符合条件人数的比例；参与率为报名人数占收到邀请人数的比例。两者分母不同。解释为什么应分别报告，保留既定定义。",
+    "prompt": "前文已定义：覆盖率的分母为符合条件人数，参与率的分母为收到邀请人数。请审阅下一句：“覆盖率不等于参与率：二者分母不同，需要分别报告。”只在确有问题时修改。",
+    "must_do": [
+      "结合前文定义判断对照具有具体内容",
+      "不要求该句重抄所有定义"
+    ],
+    "must_not": [
+      "因抽象名词或不等于结构直接删除",
+      "交换定义或分母"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-functional-topic-sentence",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material for an explanatory paragraph: a one-off licence costs $1,000; monthly maintenance costs $50. Introduce the difference in when costs arise, then give the details. Do not add a time horizon or total.",
+    "prompt": "Review this synthetic paragraph for empty summary: \"Costs arose at different stages. A one-off licence cost $1,000, while maintenance cost $50 per month.\" The first sentence is intended to orient the reader to timing, not to report another finding.",
+    "must_do": [
+      "识别主题句组织后续成本时点的功能",
+      "允许没有新增数字但有读者导航作用的句子"
+    ],
+    "must_not": [
+      "仅以没有新增事实为由删除首句",
+      "制造年度总成本或强制每句填满五项要素"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-scientific-hedging",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成观察性结果：人员较多的站点报名率较高，未控制潜在混杂。用一句话报告这一关联并保留解释的不确定性。",
+    "prompt": "材料为观察性关联且未控制混杂。审阅这句话：“人员较多的站点报名率较高，但这一关联可能受到其他站点差异的影响。”请保留必要限定。",
+    "must_do": [
+      "区分科学限定与空话",
+      "保留关联、可能及未排除混杂的边界"
+    ],
+    "must_not": [
+      "为直接有力而写成人员增加导致报名率上升",
+      "删除但和可能而强化结论"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-missing-context",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "The author has supplied only two terms, readiness and capacity, with no definitions or setting. Help prepare a research sentence distinguishing them; make explicit what input is still needed.",
+    "prompt": "Review this isolated sentence: \"Readiness is not capacity.\" No definitions, surrounding text, or intended distinction are available. Diagnose rather than invent a replacement.",
+    "must_do": [
+      "明确上下文与作者意图缺口",
+      "询问拟采用的定义或具体区分，保持建议状态"
+    ],
+    "must_not": [
+      "凭通用常识替作者选定定义",
+      "把缺少上下文直接认定为整段无价值"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_CONTEXT"
+      ],
+      "actions": [
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-missing-evidence",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料只有一次试点的报名率，没有成本、访谈或实施数据。请写出当前可支持的发现，并说明将高成本写成实施障碍还缺什么依据。",
+    "prompt": "合成草稿：“效果问题不是实施问题。高成本阻止了站点采用工具。”现有材料只有一次试点的报名率，没有成本或访谈证据。请诊断并只修订已有材料支持的部分。",
+    "must_do": [
+      "区分空泛表达与成本主张的证据缺口",
+      "把成本障碍留为待核验，不用润色替代核验"
+    ],
+    "must_not": [
+      "补造价格、受访者意见或障碍机制",
+      "仅合并两句就把无来源主张标成已完成"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION",
+        "NEEDS_CONTEXT"
+      ],
+      "actions": [
+        "REWRITE",
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-limited-edit-scope",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic document: sentence 1 is \"The testing question is not the delivery question.\" Sentence 2 is \"The pilot report did not state who would send reminders after the study.\" The author permits replacement of sentence 2 only; keep sentence 1, all citation fields and comments unchanged. Draft only the permitted replacement and note any wider suggestion separately.",
+    "prompt": "Review the same synthetic two-sentence paragraph: \"The testing question is not the delivery question. The pilot report did not state who would send reminders after the study.\" Only sentence 2 may be edited; sentence 1, citation fields and comments must stay unchanged. Diagnose the whole unit without applying unapproved changes.",
+    "must_do": [
+      "区分论证检查范围与实际修改范围",
+      "首句的删除或合并仅列为建议，明确待确认"
+    ],
+    "must_not": [
+      "因为首句空泛而直接删改它",
+      "处理评论、接受修订或解除引文字段"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-scope-drift",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：研究甲与研究乙评估工具效果，均未报告常规服务维护成本；未检索其他研究。用一句话描述这两项研究的证据边界。",
+    "prompt": "合成原句：“研究甲与研究乙未报告常规服务维护成本。”拟改句：“效果试验不研究实施成本。”请核查改写是否保留原意，并给最小修订。未检索其他研究。",
+    "must_do": [
+      "指出两项研究扩大成全部效果试验",
+      "指出未报告扩大成不研究，并恢复限定范围"
+    ],
+    "must_not": [
+      "把更简短视为可直接通过",
+      "把局部未报告写成整个领域的研究空白"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
   }
 ]

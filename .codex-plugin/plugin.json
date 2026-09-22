@@ -1,6 +1,6 @@
 {
   "name": "rw-research-skill",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "通过 4 个入口处理研究启动、论文证据、研究审查和论文写作。",
   "skills": "./skills/",
   "interface": {
