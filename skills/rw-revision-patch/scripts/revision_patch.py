@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Anchor Markdown blocks and apply hash-checked replacement patches."""
+"""Anchor Markdown blocks and apply hash-checked replacement or explicit block-deletion patches."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from typing import Any
 
 MANIFEST_VERSION = "rw-revision-manifest/v1"
 PATCH_VERSION = "rw-revision-patch/v1"
+PATCH_VERSION_V2 = "rw-revision-patch/v2"
 MARKER_RE = re.compile(r"^<!--rw-block:(B\d{4,})-->\r?\n", re.MULTILINE)
 ANY_MARKER_RE = re.compile(r"<!--rw-block:B\d{4,}-->")
 
@@ -198,7 +199,7 @@ def validate_inputs(document: Path, manifest_path: Path, patch_path: Path, allow
     patch = read_json(patch_path)
     if manifest.get("schema_version") != MANIFEST_VERSION:
         errors.append("invalid manifest schema_version")
-    if patch.get("schema_version") != PATCH_VERSION:
+    if patch.get("schema_version") not in (PATCH_VERSION, PATCH_VERSION_V2):
         errors.append("invalid patch schema_version")
     current_hash = digest(document_text)
     if manifest.get("base_document_hash") != current_hash:
@@ -225,8 +226,10 @@ def validate_inputs(document: Path, manifest_path: Path, patch_path: Path, allow
         if not isinstance(operation, dict):
             errors.append(f"{prefix} must be an object")
             continue
-        if operation.get("op") != "replace":
-            errors.append(f"{prefix}.op must be replace")
+        op = operation.get("op")
+        allowed = ("replace", "delete") if patch.get("schema_version") == PATCH_VERSION_V2 else ("replace",)
+        if op not in allowed:
+            errors.append(f"{prefix}.op must be one of {allowed}")
         block_id = operation.get("block_id")
         if not isinstance(block_id, str) or block_id not in current_blocks:
             errors.append(f"{prefix}.block_id does not exist")
@@ -236,16 +239,28 @@ def validate_inputs(document: Path, manifest_path: Path, patch_path: Path, allow
         seen.add(block_id)
         if operation.get("expected_hash") != current_blocks[block_id].block_hash:
             errors.append(f"{prefix}.expected_hash mismatch for {block_id}")
-        new_text = operation.get("new_text")
-        if not isinstance(new_text, str) or not new_text.strip():
-            errors.append(f"{prefix}.new_text must be non-empty")
-        elif ANY_MARKER_RE.search(new_text):
-            errors.append(f"{prefix}.new_text must not contain RW block markers")
+        if op == "delete":
+            if "new_text" in operation:
+                errors.append(f"{prefix}: delete must omit new_text")
+            # Conservative structural guard; headings need a separate approved
+            # structure-edit workflow, not ordinary paragraph deletion.
+            text = current_blocks[block_id].text
+            if re.search(r"^ {0,3}#{1,6}(?:[ \t]|$)|^ {0,3}(?:=+|-+)[ \t]*\r?$", text, re.MULTILINE):
+                errors.append(f"{prefix}: heading/structural block deletion requires structure revision")
+        elif op == "replace":
+            new_text = operation.get("new_text")
+            if not isinstance(new_text, str) or not new_text.strip():
+                errors.append(f"{prefix}.new_text must be non-empty")
+            elif ANY_MARKER_RE.search(new_text):
+                errors.append(f"{prefix}.new_text must not contain RW block markers")
         if not isinstance(operation.get("reason"), str) or not operation["reason"].strip():
             errors.append(f"{prefix}.reason must be non-empty")
         issue_ids = operation.get("issue_ids")
         if not isinstance(issue_ids, list) or not issue_ids or not all(isinstance(value, str) and value.strip() for value in issue_ids):
             errors.append(f"{prefix}.issue_ids must be an array of strings")
+    deleted_ids = {op.get("block_id") for op in operations if isinstance(op, dict) and op.get("op") == "delete" and isinstance(op.get("block_id"), str)}
+    if set(current_blocks).issubset(deleted_ids):
+        errors.append("deleting every block is not supported")
     touched_ratio = len(seen) / len(blocks)
     if touched_ratio > 0.60 and not allow_large_patch:
         errors.append(f"patch touches {touched_ratio:.1%} of blocks; explicit --allow-large-patch required above 60%")
@@ -307,17 +322,25 @@ def command_apply(args: argparse.Namespace) -> int:
         if operation is None:
             revised.append(block)
             continue
+        if operation["op"] == "delete":
+            changes.append({
+                "op": "delete", "block_id": block.block_id,
+                "old_hash": block.block_hash, "new_hash": None,
+                "reason": operation["reason"], "issue_ids": operation["issue_ids"],
+            })
+            continue
         new_block = Block(block.block_id, operation["new_text"].strip("\r\n"))
         revised.append(new_block)
         changes.append({
             "block_id": block.block_id,
             "old_hash": block.block_hash,
             "new_hash": new_block.block_hash,
+            "op": "replace",
             "reason": operation["reason"],
             "issue_ids": operation["issue_ids"],
         })
-    # Splice only approved body ranges. Marker lines, prefixes, blank lines and
-    # every untouched block remain byte-for-byte unchanged.
+    # Replace approved bodies or remove the complete approved marker/body span.
+    # Every untouched span remains byte-for-byte unchanged.
     matches = list(MARKER_RE.finditer(original_text))
     revised_text = original_text
     for index in range(len(matches) - 1, -1, -1):
@@ -327,19 +350,27 @@ def command_apply(args: argparse.Namespace) -> int:
             continue
         start = match.end()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(original_text)
+        if operation["op"] == "delete":
+            revised_text = revised_text[:match.start()] + revised_text[end:]
+            continue
         raw_body = original_text[start:end]
         leading = len(raw_body) - len(raw_body.lstrip("\r\n"))
         trailing = len(raw_body) - len(raw_body.rstrip("\r\n"))
         body_end = end - trailing if trailing else end
         revised_text = revised_text[:start + leading] + operation["new_text"].strip("\r\n") + revised_text[body_end:]
+    if parse_anchored(revised_text) != revised:
+        print("revised block structure differs from approved operations")
+        return 2
     preserved = len(blocks) - len(changes)
     report = {
-        "schema_version": "rw-revision-report/v1",
+        "schema_version": "rw-revision-report/v2" if patch["schema_version"] == PATCH_VERSION_V2 else "rw-revision-report/v1",
         "base_document_hash": digest(original_text),
         "approved_patch_sha256": expected_confirmation,
         "revised_document_hash": digest(revised_text),
         "total_blocks": len(blocks),
         "changed_blocks": len(changes),
+        "deleted_blocks": sum(c["op"] == "delete" for c in changes),
+        "remaining_blocks": len(revised),
         "preserved_blocks": preserved,
         "preserved_ratio": preserved / len(blocks),
         "changes": changes,

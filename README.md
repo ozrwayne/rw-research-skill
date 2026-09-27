@@ -1,6 +1,6 @@
 <p align="center">
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-2ea44f.svg"></a>
-  <a href="VERSION"><img alt="Version: v0.13.1" src="https://img.shields.io/badge/version-v0.13.1-blue.svg"></a>
+  <a href="VERSION"><img alt="Version: v0.14.0" src="https://img.shields.io/badge/version-v0.14.0-blue.svg"></a>
   <a href="#4-个对外入口"><img alt="4 public entries" src="https://img.shields.io/badge/public%20entries-4-6f42c1.svg"></a>
   <a href="#安装"><img alt="Works with Agent Skills" src="https://img.shields.io/badge/works%20with-Agent%20Skills-0969da.svg"></a>
   <a href="evals/cross-model/results/2026-07-20-cross-model-v2/summary.md"><img alt="Cross-model record: 4 models" src="https://img.shields.io/badge/cross--model%20record-4%20models-2ea44f.svg"></a>
@@ -24,7 +24,7 @@
 
 ---
 
-RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.13.1`。对外提供 4 个入口，内部保留 22 个科研 Skill。当前包含 598 条知识原子、199 条公理、174 个案例和反例，以及 211 条行为合同。
+RW Research Skill 由 Roland Wayne 创建。当前版本：`v0.14.0`。对外提供 4 个入口，内部保留 22 个科研 Skill。当前包含 602 条知识原子、201 条公理、176 个案例和反例，以及 227 条行为合同。
 
 适用于手上有研究想法、论文、数据、研究方案、章节草稿或审稿意见，需要判断下一步的人。你可以直接提交材料，也可以只说现在卡在哪里。系统会选择一个主 Skill，每次处理当前一步。
 
@@ -178,10 +178,10 @@ $rw-phd-write 根据现有证据处理这份论文写作、修改或投稿任务
 
 公开包当前包含：
 
-- 598 条结构化知识原子。
-- 199 条运行公理。
-- 174 个案例和反例。
-- 211 条行为合同。
+- 602 条结构化知识原子。
+- 201 条运行公理。
+- 176 个案例和反例。
+- 227 条行为合同。
 - 21 个独立运行静态自检脚本。
 
 行为合同保存提示词、应做事项、不应做事项和下一步，用于后续模型评测。静态自检只检查文件、结构、数量和独立运行约束，不代表模型已经执行全部行为合同，也不证明真实任务提效。
@@ -194,7 +194,14 @@ v0.8.0 增加真实文档审阅入口。默认使用本机已登录的 Codex 和
 
 每个 Skill 自带适用方法、来源入口、停止条件、案例、反例和工作表；自检由模块脚本或确定性测试承担。需要当前文献、API、期刊政策或报告规范时，仍需核验官方来源。
 
-当前本地检查见 [v0.13.1 验证记录](docs/validation.md)。
+当前本地检查见 [v0.14.0 验证记录](docs/validation.md)。
+
+## v0.14.0 内容取舍与显式删除
+
+- 写前判断必要内容与位置；改前区分保留、删除、合并、移位和改写，不再默认扩写。
+- 保护必要限定、反证、定义和报告责任；删除无据理由后，论证缺口继续记录。
+- 增加 16 个合成回归合同，包括零稿、续写、上下文差异和多轮优化；不将合同数算作模型实测。
+- Markdown 补丁 v2 支持批准后的整段 delete；保留 v1 兼容、原稿保护、hash 与用户确认门。
 
 ## v0.13.1 写作检查更新
 
@@ -308,7 +315,7 @@ python3 scripts/run_ci_manifest.py
 发布包生成在：
 
 ```text
-dist/rw-research-skill-0.13.1.zip
+dist/rw-research-skill-0.14.0.zip
 ```
 
 本地、Pull Request、main 分支和 GitHub Release 共用 [`ci/manifest.json`](ci/manifest.json)。构建过程检查版本、4 个对外入口、22 个内部 Skill、降级注册表、公开边界、确定性测试和 2 种发行包。

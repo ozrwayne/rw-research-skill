@@ -3,12 +3,12 @@ name: rw-revision-patch
 metadata:
   internal: true
 description: |
-  将 Markdown 文稿切成带稳定 ID 和 hash 的段落块，只对用户批准的块执行替换，并输出保留比例、修改理由和问题追踪报告。Use when the user asks for“只改这几段”“按审稿意见局部修改”“保留其他内容不动”“生成可复核修改 patch”,or requests the rw-revision-patch workflow.
+  将 Markdown 文稿切成带稳定 ID 和 hash 的段落块，只对用户批准的块执行替换或显式删除，并输出保留比例、修改理由和问题追踪报告。Use when the user asks for“只改这几段”“按审稿意见局部修改”“保留其他内容不动”“生成可复核修改 patch”,or requests the rw-revision-patch workflow.
 ---
 
 # RW Revision Patch
 
-限制修改范围。第一版只替换已有 Markdown 块，不静默增加、删除或重排章节。
+限制修改范围。v1 保持只替换已有 Markdown 块；v2 增加显式整块删除。章节结构变更另行确认。
 
 ## 启动
 
@@ -34,7 +34,7 @@ python3 scripts/revision_patch.py apply draft.anchored.md --manifest draft.manif
 1. 固定基础文稿和版本 hash。
 2. 按块编号；保留原始换行、空行及 YAML front matter，不在围栏代码内部按空行拆块。
 3. 先确定每条批注对应的完整论证单位。批注框选的词句只是问题位置，不自动等于修改边界；必要时把同段前后句纳入同一 replace。
-4. 将每项修改连接到块 ID、旧 hash、理由和 issue ID。需要跨块、增删或重排时，先说明范围并转入相应流程。
+4. 将每项修改连接到块 ID、旧 hash、理由和 issue ID。普通段落整块删除使用 v2 的 delete；合并可组合已批准的 replace 与 delete。新增、标题删除或章节重排另走结构流程。
 5. 先验证所有操作；任意一项失败时不生成部分结果。
 6. 生成新文件，不覆盖原文件。
 7. 输出修改块、保留块、保留比例和新 hash。
@@ -42,14 +42,14 @@ python3 scripts/revision_patch.py apply draft.anchored.md --manifest draft.manif
 ## 运行规则
 
 - 原文件不被修改。
-- Patch 第一版只支持 `replace`。
+- v1 只支持 `replace`；v2 支持 `replace` 与显式 `delete`。删除不含 `new_text`，不以空替换伪装删除。
 - 一个块在一次 Patch 中只能修改一次。
 - `expected_hash` 必须与 manifest 一致。
 - `new_text` 不能包含 RW block marker。
 - 任意 precondition 失败时整批停止。
 - 未涉及块的正文保持原样。
 - 局部批注限制未经批准的改动范围，不要求修改只停留在高亮词句。内容正确性需要在完整论证单位上复核。
-- “Expand”“Tell me more”“I don't understand”不能只通过增加字数、例子或同义词关闭。先检查主体、对象、行动、发生环节、作用关系、适用边界和当前意义是否仍需读者猜测。
+- “Expand”“Tell me more”“I don't understand”先判断内容是否必要，删除可成为最终动作；对保留内容再检查主体、对象、行动、发生环节、作用关系、适用边界和当前意义是否仍需读者猜测。
 - 新增、删除、重排章节进入结构修改，不伪装成局部替换。
 - Patch 只能限制改动范围，不能证明修改内容正确。
 
