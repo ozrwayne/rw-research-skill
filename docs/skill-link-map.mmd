@@ -10,6 +10,7 @@ flowchart LR
   review["rw-review-methods"]
   design["rw-research-design"]
   referee["rw-research-referee"]
+  peer["rw-peer-review"]
   passport["rw-research-passport"]
   audit["rw-claim-audit"]
   patch["rw-revision-patch"]
@@ -55,6 +56,8 @@ flowchart LR
   design --> write
   referee --> design
   referee --> write
+  referee --> peer
+  router --> peer
   write --> tone
   write --> audit
   write --> patch

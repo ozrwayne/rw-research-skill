@@ -66,7 +66,7 @@
 - `visibility` 固定为 `private_local`，除非用户另行执行脱敏导出流程。
 - `discovery_roots` 是元数据发现范围，`roots` 是实际内容扫描范围，不能混写。
 - `applied`、`articulated` 和 `exposed` 至少保留 1 条证据。
-- `external_reference` 和 `downloaded_tool` 不单独支持 `applied`。
+- `applied` 和 `articulated` 至少有一条明确的用户角色证据，作者归属信心为 medium 或 high。external_reference、downloaded_tool、unknown 不单独支持这两个状态；ai_assisted 必须另有非空 `user_role` 说明，或由独立用户过程记录支持。
 - `no_evidence` 可以没有证据，但必须说明扫描范围。
 - `confidence` 表示对当前材料判断的信心，不是对用户能力的评分。
 - `skipped_basics` 只能来自 `applied` 或多来源 `articulated` 证据。
@@ -76,3 +76,7 @@
 ## 兼容
 
 校验器继续接受 `rw-research-learning/v1`，新画像使用 v2。
+
+校验器检查字段类型、数组及枚举，布尔值不作为扫描数量。`skipped_basics` 使用 capabilities 中的名称，并连接 applied 或来自至少 2 个不同来源路径的 articulated 记录。空模板只表示可填写的结构，不表示完成扫描或形成了有效能力判断。
+
+画像 JSON 加载拒绝重复键、NaN、Infinity 及 1e999 等溢出数字，避免同一字段有多个含义。

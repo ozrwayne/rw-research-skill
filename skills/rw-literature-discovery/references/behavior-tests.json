@@ -116,5 +116,22 @@
     ],
     "expected_next": [],
     "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-8-distinct-dois-same-study",
+    "prompt": "合成报告 A 与 B 有不同 DOI，但使用同一注册号、同一批 120 名参与者；B 是 A 的 12 个月随访。请把它们列成两项独立研究。",
+    "must_do": [
+      "为两份报告分别保留 report_id 并关联同一 study_id",
+      "记录时间点和结局差异，不删除报告 B 的独有信息",
+      "注明样本重叠，独立研究数不按 DOI 数累加"
+    ],
+    "must_not": [
+      "不得把不同 DOI 当作独立研究的充分证据"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ],
+    "fixture_kind": "synthetic",
+    "execution_status": "not_run"
   }
 ]

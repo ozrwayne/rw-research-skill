@@ -32,7 +32,7 @@ python3 scripts/paper_case.py build \
   --zotero-attachment-key ATTACHMENTKEY
 ```
 
-脚本不复制 PDF，不调用外部模型。
+脚本不复制 PDF，不调用外部模型。`build` 只接受新建或空目录；已有工作区保留原样，重新提取请指定新目录。来源、配置、提取文件、阶段产物和上游文件均检查 hash；旧工作区没有提取 hash 时保持待重建状态。
 
 ## 2．检查证据
 
@@ -88,7 +88,7 @@ python3 scripts/paper_case.py mark-stage \
 python3 scripts/paper_case.py validate --output paper-case
 ```
 
-Claim Audit 的 BLOCK 不能进入 LitNet。REVIEW 只能保存为待核。PASS 才能进入回写预览。
+Claim Audit 的 BLOCK 不能进入 LitNet。REVIEW 只能保存为待核。PASS 才能标记为已审计预览；REVIEW 预览保持待核验。
 
 ## 6．LitNet 回写预览
 
@@ -99,5 +99,7 @@ python3 scripts/paper_case.py litnet-preview \
   --litnet-work w_example \
   --zotero-record zotero_example
 ```
+
+生成预览前，`report_assembled` 必须绑定 `report.md` 与全部 5 个阶段文件；Claim Audit 必须绑定同一报告及其当前 hash。每条已核验主张的来源使用 `source_path` 和 `source_sha256` 固化；无快照降为 REVIEW，快照失效停止。hash 只证明版本未变，不证明来源支持主张。预览输出不得覆盖审计输入或来源快照。
 
 输出 `litnet-writeback-preview.json`，其中 `write_performed` 固定为 `false`。预览只提供 Paper Case、报告、视觉证据和主张门禁状态，不修改 LitNet。

@@ -9,12 +9,21 @@ from collections import Counter
 from pathlib import Path
 
 
+try:
+    from .package_safety import skill_names, no_symlink
+except ImportError:
+    from package_safety import skill_names, no_symlink
+
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def validate_entry_points(manifest: dict, root: Path = ROOT) -> list[str]:
     failures: list[str] = []
-    skills = manifest.get("skills")
+    try:
+        skills = skill_names(manifest)
+    except (ValueError, TypeError, AttributeError) as exc:
+        return [str(exc)]
     entries = manifest.get("entry_skills")
     if not isinstance(skills, list) or not all(isinstance(item, str) and item for item in skills):
         return ["manifest skills must be a non-empty string list"]
@@ -40,7 +49,7 @@ def validate_entry_points(manifest: dict, root: Path = ROOT) -> list[str]:
         entry_names.append(name)
         if name not in skills:
             failures.append(f"{name}: entry skill is outside manifest skills")
-        if not (root / "skills" / name / "SKILL.md").is_file():
+        if name in skills and not (root / "skills" / name / "SKILL.md").is_file():
             failures.append(f"{name}: entry SKILL.md is missing")
         if not isinstance(label, str) or not label.strip():
             failures.append(f"{name}: label is missing")
@@ -63,7 +72,13 @@ def validate_entry_points(manifest: dict, root: Path = ROOT) -> list[str]:
     skill_set = set(skills)
     entry_name_set = set(entry_names)
     for name in skills:
-        skill_text = (root / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        path = root / "skills" / name / "SKILL.md"
+        try:
+            no_symlink(path)
+            skill_text = path.read_text(encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            failures.append(f"{name}: {exc}")
+            continue
         frontmatter = skill_text.split("---", 2)[1] if skill_text.startswith("---") else ""
         is_internal = "metadata:\n  internal: true" in frontmatter
         if name in entry_name_set and is_internal:

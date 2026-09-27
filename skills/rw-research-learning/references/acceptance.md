@@ -6,7 +6,7 @@
 - 分别报告发现根目录和实际内容扫描根目录。
 - 明确报告扫描模式、实际根目录、起止时间和文件数。
 - 报告 `indexed`、`partial`、`unsupported`、`too_large`、`sensitive` 和 `unreadable` 状态。
-- 第二次扫描只重新提取新增或修改文件。
+- 第二次扫描复用有效缓存；新增、修改、策略变化、先前读取失败或提取器不可用的项重新处理。
 - 拒绝扫描操作系统根目录。
 - 不读取凭据、私钥、环境变量和密码库。
 - 单个文件解析失败时标记为 `unreadable`，扫描继续完成。
@@ -34,7 +34,6 @@
 
 - `python3 scripts/research_learning_scan.py --help` 通过。
 - `python3 scripts/self_check.py` 通过。
-- `quick_validate.py` 通过。
 
 ## 隐私
 
@@ -42,3 +41,8 @@
 - 内测画像、真实路径、人物、机构、研究内容和冲突记录不进入公开 Skill、README、测试或 Release。
 - 行为测试和回归测试只使用合成材料。
 - 用户未明确要求时，不导出或分享本地状态。
+
+- `python3 -m unittest discover -s tests -p "test_*.py"` 通过；不可读目录、敏感路径、缓存政策变化、状态自索引和类型扰动均有临时样本测试。
+- 检查 manifest 的 complete 与各状态计数，不把进程退出码 0 当作全量资料已读。
+
+静态结构检查、确定性脚本测试和模型行为验证分别记录。合同数量或 self_check 通过不表示合同已由模型执行；缺少运行记录的合同保持未执行状态。

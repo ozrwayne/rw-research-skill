@@ -24,9 +24,11 @@ class ClaimAuditCliTests(unittest.TestCase):
             document.write_text("The reported value was 18%.\n", encoding="utf-8")
             self.assertEqual(0, self.run_cli("init", str(audit), "--document-id", "DOC-1", "--document-path", str(document)).returncode)
             self.assertEqual(0, self.run_cli("add-claim", str(audit), "--id", "CLM-1", "--text", "The reported value was 18%.", "--location", "Results, paragraph 1", "--claim-type", "quantitative").returncode)
+            snapshot = root / "source.txt"
+            snapshot.write_text("The reported value was 18%.", encoding="utf-8")
             updated = self.run_cli(
                 "set-verdict", str(audit), "--claim-id", "CLM-1", "--verdict", "VERIFIED",
-                "--source-id", "SRC-1", "--source-pointer", "paper.pdf", "--locator", "p. 4, Results",
+                "--source-id", "SRC-1", "--source-pointer", str(snapshot), "--locator", "p. 4, Results",
                 "--support-note", "Value and population match.",
             )
             self.assertEqual(0, updated.returncode, updated.stdout + updated.stderr)

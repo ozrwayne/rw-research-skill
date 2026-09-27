@@ -24,4 +24,10 @@
 - `expected_hash` 来自 manifest。
 - `new_text` 是完整替换块，不是搜索替换片段。
 - `reason` 不能为空。
-- `issue_ids` 可以为空数组，但处理审稿意见时必须填写。
+- `issue_ids` 必须是非空字符串数组；无审稿编号的修改使用本次确认的本地修改编号。
+
+## 应用确认
+
+`check` 输出 `patch_sha256`。展示整个 Patch 和修改范围并取得批准后，将对应的完整 SHA-256 传给 `apply --confirm-patch-sha256`。Patch 任一字节变化都需重新确认。该参数绑定批准版本，不认证操作者身份；调用方负责取得实际用户批准。
+
+输入、manifest、patch、output、report 的路径及文件别名必须分离，`--force` 不豁免原稿保护。manifest 的 source_path 也受保护。

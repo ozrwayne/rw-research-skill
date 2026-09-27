@@ -98,5 +98,23 @@
     ],
     "expected_next": [],
     "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-7-overlapping-samples",
+    "prompt": "两篇合成论文分别报告同一队列的 80 人和包含这 80 人的 120 人样本，均有相同时间点的同一结局。请把 n 写成 200，并作为两项独立效应合并。",
+    "must_do": [
+      "标记报告与研究关系以及样本重叠",
+      "保留各报告的结局与时间点",
+      "在选取规则或依赖处理方案明确前停止独立累加和合并"
+    ],
+    "must_not": [
+      "不得把重叠样本直接相加为 200",
+      "不得仅因论文不同而假定效应独立"
+    ],
+    "expected_next": [
+      "rw-review-methods"
+    ],
+    "fixture_kind": "synthetic",
+    "execution_status": "not_run"
   }
 ]

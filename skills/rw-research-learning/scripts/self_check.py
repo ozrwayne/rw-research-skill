@@ -45,6 +45,10 @@ def main() -> int:
         if not path.is_file() or path.stat().st_size == 0:
             failures.append(f"missing or empty: {relative}")
 
+    if failures:
+        print(json.dumps({"skill": root.name, "standalone": False, "failures": failures}, ensure_ascii=False, indent=2))
+        return 1
+
     try:
         atoms = [
             json.loads(line)

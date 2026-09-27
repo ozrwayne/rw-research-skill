@@ -41,9 +41,11 @@
 
 1. 不覆盖旧材料记录。把旧材料标为 `superseded`。
 2. 用新 ID 登记新版本，并在 `supersedes_id` 指向旧材料。
-3. 把只依赖旧材料的 `confirmed` 判断标为 `superseded`；复核结果另建 `proposed` 判断。
+3. 把任何引用旧材料的 `confirmed` 判断标为 `superseded`；复核结果另建 `proposed` 判断。
 4. 把仍引用旧材料的 `prepared` 交接标为 `rejected`。
 5. 在 `audit_log` 分别记录材料、判断和交接的变化原因。
 6. 新材料完成核验、依赖判断重新确认并建立新交接前，不接受交接。
 
 `superseded` 和 `rejected` 表示旧版本不能继续使用，不表示新版本内容错误。
+
+`add-material --supersedes-id` 自动执行旧材料废止、当前判断失效和待交接拒绝；`record-credential --supersedes` 自动废止旧 Decision，保留旧 Credential。复核后使用新 ID，不覆盖历史。

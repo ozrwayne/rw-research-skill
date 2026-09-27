@@ -15,6 +15,7 @@ flowchart LR
   data["rw-research-data"]
   stats["rw-statistics-audit"]
   referee["rw-research-referee"]
+  peer["rw-peer-review"]
   passport["rw-research-passport"]
   citation["rw-citation-audit"]
   audit["rw-claim-audit"]
@@ -73,6 +74,8 @@ flowchart LR
   stats --> write
   referee --> design
   referee --> write
+  referee --> peer
+  router --> peer
   write --> tone
   write --> citation
   write --> audit

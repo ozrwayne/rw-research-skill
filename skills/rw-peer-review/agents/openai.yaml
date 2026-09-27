@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Peer Review"
+  short_description: "Run a seat-based peer review with an auditable finding ledger"
+  default_prompt: "Use $rw-peer-review to review this manuscript and record every finding with its location, evidence, and outcome."

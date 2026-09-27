@@ -6,15 +6,27 @@ from __future__ import annotations
 import json
 import re
 import shutil
-import zipfile
+import tempfile
 from pathlib import Path
+
+
+try:
+    from .package_safety import load_metadata, no_symlink, regular_files, atomic_zip, publish_directory, VERSION
+except ImportError:
+    from package_safety import load_metadata, no_symlink, regular_files, atomic_zip, publish_directory, VERSION
 
 
 MAX_FILES = 200
 EXCLUDED_REFERENCES = {"source-evidence.md"}
+# Match known private provenance, not the generic word "local". Runtime scope
+# and visibility labels such as local_author_year_syntax_only/private_local
+# describe software behavior; they are not themselves personal provenance.
 PRIVATE_MARKERS = re.compile(
-    r"lsss|roland|wayne|local[_ -]|"
-    r"user[-_]provided[-_]supervisor|rw[-_]journal[-_]submission_and_local",
+    r"lsss|roland|wayne|"
+    r"local[_ -](?:design|decision|preference)(?=$|[^a-z0-9])|"
+    r"user[-_]provided[-_]supervisor|rw[-_]journal[-_]submission_and_local|"
+    r"/(?:Users|home)/[^/\r\n]+/|/Volumes/[^/\r\n]+/|"
+    r"[A-Za-z]:[\\/]+Users[\\/]+[^\\/\r\n]+[\\/]",
     re.IGNORECASE,
 )
 
@@ -66,6 +78,30 @@ def public_reference(path: Path) -> str:
     return public_text(text, path)
 
 
+def compact_paths(text: str, skill: Path) -> str:
+    """Map source-package paths to compact-package paths without editing sources."""
+    for path in sorted((skill / "references").iterdir()):
+        if not path.is_file():
+            continue
+        source = f"references/{path.name}"
+        if path.name in EXCLUDED_REFERENCES:
+            text = text.replace(source, "内部来源记录（公共版省略）")
+        else:
+            text = text.replace(source, f"modules/{skill.name}.md#ref-{path.name.replace('.', '-')}")
+    for base_name, path in runtime_files(skill):
+        relative = path.relative_to(skill / base_name).as_posix()
+        target = "tools" if base_name == "scripts" else "templates"
+        text = text.replace(f"{base_name}/{relative}", f"{target}/{skill.name}/{relative}")
+    # Full-repository verification commands are not runnable in a compact bundle.
+    lines = []
+    for line in text.splitlines():
+        if "scripts/self_check.py" in line or "tests/test_" in line or "scripts/test_" in line:
+            lines.append("- 完整仓库的结构检查和测试不随此精简包分发；测试结果以对应版本的 CI 记录为准。")
+        else:
+            lines.append(line)
+    return "\n".join(lines)
+
+
 def module_text(skill: Path) -> str:
     parts = [public_text((skill / "SKILL.md").read_text(encoding="utf-8"), skill / "SKILL.md").rstrip()]
     parts.append("\n## 打包参考资料")
@@ -74,8 +110,8 @@ def module_text(skill: Path) -> str:
         if not path.is_file() or path.name in EXCLUDED_REFERENCES:
             continue
         content = public_atoms(path) if path.name == "atoms.jsonl" else public_reference(path)
-        parts.append(f"\n### {path.name}\n\n{content.rstrip()}")
-    return "\n".join(parts) + "\n"
+        parts.append(f'\n<a id="ref-{path.name.replace(chr(46), chr(45))}"></a>\n### {path.name}\n\n{content.rstrip()}')
+    return compact_paths("\n".join(parts), skill) + "\n"
 
 
 def runtime_files(skill: Path):
@@ -84,11 +120,12 @@ def runtime_files(skill: Path):
         if not source.is_dir():
             continue
         for path in sorted(source.rglob("*")):
-            if path.is_file() and path.name != "self_check.py" and path.suffix != ".pyc":
+            if path.is_file() and path.name != "self_check.py" and not path.name.startswith("test_") and "__pycache__" not in path.parts and path.suffix != ".pyc":
                 yield base_name, path
 
 
 def validate_skill_sources(skill: Path) -> None:
+    regular_files(skill)
     module_text(skill)
     for _, path in runtime_files(skill):
         public_text(path.read_text(encoding="utf-8"), path)
@@ -118,7 +155,7 @@ license: Apache-2.0
 
 {items}
 
-入口和内部模块的归属见 `MANIFEST.json`。内部模块保存在 `modules/`，已有调用仍可继续使用。
+入口和内部模块的归属见 `MANIFEST.json`。内部模块保存在 `modules/`。命令和路径以发行包根目录为基准；工具在 `tools/<模块名>/`，模板在 `templates/<模块名>/`，参考资料合并在模块文件的命名锚点下。
 
 ## 边界
 
@@ -172,7 +209,7 @@ def copy_runtime_files(skill: Path, output: Path) -> None:
 
 
 def validate(output: Path) -> list[Path]:
-    files = sorted(path for path in output.rglob("*") if path.is_file())
+    files = regular_files(output)
     if len(files) > MAX_FILES:
         raise ValueError(f"SkillHub release has {len(files)} files; limit is {MAX_FILES}")
     for path in files:
@@ -183,24 +220,36 @@ def validate(output: Path) -> list[Path]:
 
 
 def build_zip(output: Path, version: str) -> Path:
+    if not VERSION.fullmatch(version):
+        raise ValueError("invalid release version")
     archive = output.parent / f"rw-research-skill-{version}-skillhub.zip"
-    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
-        for path in sorted(item for item in output.rglob("*") if item.is_file()):
-            bundle.write(path, path.relative_to(output))
+    atomic_zip(archive, [(path, path.relative_to(output).as_posix()) for path in regular_files(output)])
     return archive
 
 
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
-    version = (root / "VERSION").read_text(encoding="utf-8").strip()
-    manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
-    skills = list(dict.fromkeys(manifest["skills"]))
+    manifest, version = load_metadata(root)
+    skills = manifest["skills"]
     entries = manifest["entry_skills"]
-    output = root / "dist" / "skillhub"
-    if output.exists():
-        shutil.rmtree(output)
-    output.mkdir(parents=True)
+    # Same repository/privacy gate as the full package; do not erase the old
+    # release until all validation and ZIP writing have completed.
+    import subprocess
+    import sys
+    check = subprocess.run([sys.executable, str(root / "scripts/check_repository.py")], capture_output=True, text=True)
+    if check.returncode:
+        print(check.stdout, end="")
+        print(check.stderr, end="")
+        return 1
+    no_symlink(root / "dist")
+    (root / "dist").mkdir(exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".skillhub-", dir=root / "dist") as temporary:
+        output = Path(temporary) / "skillhub"
+        output.mkdir()
+        return build_output(root, manifest, version, skills, entries, output)
 
+
+def build_output(root: Path, manifest: dict, version: str, skills: list[str], entries: list[dict], output: Path) -> int:
     write_root(output, version, entries, skills)
     write_readme(output, version, entries, skills)
     shutil.copy2(root / "LICENSE", output / "LICENSE")
@@ -230,7 +279,25 @@ def main() -> int:
         copy_runtime_files(skill, output)
 
     files = validate(output)
+    # Scan the actual generated contents, not just the raw source corpus.
+    try:
+        from .check_public_privacy import scan_file
+    except ImportError:
+        from check_public_privacy import scan_file
+    failures = []
+    for path in files:
+        if path.name != "LICENSE":
+            scan_file(path, str(path.relative_to(output)), failures)
+    if failures:
+        raise ValueError("; ".join(failures))
     archive = build_zip(output, version)
+    destination = root / "dist" / "skillhub"
+    final_archive = root / "dist" / archive.name
+    no_symlink(destination)
+    no_symlink(final_archive)
+    publish_directory(output, destination)
+    archive.replace(final_archive)
+    output, archive = destination, final_archive
     print(json.dumps({"files": len(files), "output": str(output), "archive": str(archive)}, ensure_ascii=False))
     return 0
 

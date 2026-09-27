@@ -54,6 +54,17 @@ class ResearchPassportCliTests(unittest.TestCase):
             self.assertEqual(0, second.returncode, second.stdout + second.stderr)
             payload = json.loads(passport.read_text(encoding="utf-8"))
             self.assertEqual("MAT-1", payload["materials"][1]["supersedes_id"])
+            self.assertEqual("superseded", payload["materials"][0]["status"])
+            self.assertTrue(any(entry["action"] == "material_history_linked" for entry in payload["audit_log"]))
+            before = passport.read_bytes()
+            branched = self.run_cli(
+                "add-material", str(passport), "--id", "MAT-BRANCH", "--type", "paper",
+                "--title", "Conflicting successor", "--source-pointer", "source:branch",
+                "--supersedes-id", "MAT-1",
+            )
+            self.assertEqual(2, branched.returncode)
+            self.assertIn("already has a successor", branched.stdout)
+            self.assertEqual(before, passport.read_bytes())
 
             invalid = self.run_cli(
                 "add-material", str(passport), "--id", "MAT-3", "--type", "paper",

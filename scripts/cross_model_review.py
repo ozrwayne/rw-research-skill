@@ -148,6 +148,8 @@ def build_prompt(document: str, brief: str, skill_context: str, max_issues: int)
 
 def validate_models(models: list[dict[str, Any]]) -> list[str]:
     failures: list[str] = []
+    if not isinstance(models, list) or not models or not all(isinstance(item, dict) for item in models):
+        return ["models must be a non-empty object list"]
     ids: set[str] = set()
     for model in models:
         model_id = model.get("id")
@@ -164,6 +166,7 @@ def validate_models(models: list[dict[str, Any]]) -> list[str]:
 
 
 def validate_response(response: dict[str, Any]) -> None:
+    runtime.validate_schema(response, REVIEW_SCHEMA)
     if response.get("verdict") not in VALID_VERDICTS:
         raise ValueError("invalid verdict")
     if response.get("decision") not in VALID_DECISIONS:
@@ -287,7 +290,14 @@ def cluster_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def summarize(data: dict[str, Any]) -> dict[str, Any]:
     records = data.get("records", [])
-    completed = [record for record in records if not record.get("error")]
+    completed = []
+    for record in records:
+        try:
+            validate_response(record.get("response"))
+        except (ValueError, TypeError, AttributeError):
+            continue
+        if not record.get("error"):
+            completed.append(record)
     providers = sorted({record["provider"] for record in completed})
     clusters = cluster_issues(completed)
     provider_assessments: dict[str, list[dict[str, Any]]] = {}
@@ -300,7 +310,10 @@ def summarize(data: dict[str, Any]) -> dict[str, Any]:
             "issue_count": len(response.get("issues", [])),
             "error": record.get("error"),
         })
-    status = "MULTI_PROVIDER_REVIEW_COMPLETE" if len(completed) == len(records) and len(providers) >= 2 else "REVIEW_INCOMPLETE"
+    expected = {model["id"] for model in data.get("models", [])}
+    actual = [record["model_id"] for record in records]
+    complete = bool(expected) and bool(data.get("finished_at")) and len(actual) == len(expected) and set(actual) == expected
+    status = "MULTI_PROVIDER_REVIEW_COMPLETE" if complete and len(completed) == len(records) and len(providers) >= 2 else "REVIEW_INCOMPLETE"
     return {
         "status": status,
         "providers_completed": providers,
@@ -385,6 +398,14 @@ def command_check(args: argparse.Namespace) -> int:
 
 
 def command_run(args: argparse.Namespace) -> int:
+    try:
+        runtime.safe_name(args.run_id, "run id")
+        if min(args.workers, args.timeout, args.max_issues) < 1:
+            raise ValueError("workers, timeout, and max-issues must be positive")
+        runtime.no_symlink(Path(args.output_dir).expanduser() / args.run_id)
+    except ValueError as exc:
+        print(json.dumps({"failures": [str(exc)]}))
+        return 2
     document_path = Path(args.document).expanduser().resolve()
     output_root = Path(args.output_dir).expanduser().resolve()
     if within(output_root, ROOT):
@@ -418,7 +439,7 @@ def command_run(args: argparse.Namespace) -> int:
     prompt = build_prompt(document, brief, skill_context, args.max_issues)
     run_dir = output_root / args.run_id
     result_path = run_dir / "results.json"
-    if result_path.exists():
+    if run_dir.exists():
         print(f"refusing to overwrite existing run: {result_path}")
         return 2
     data: dict[str, Any] = {
@@ -472,6 +493,9 @@ def command_run(args: argparse.Namespace) -> int:
 
 def command_summarize(args: argparse.Namespace) -> int:
     path = Path(args.results).expanduser().resolve()
+    if within(path, ROOT):
+        print("review summaries must remain outside the public repository")
+        return 2
     data = runtime.load_json(path)
     data["summary"] = summarize(data)
     runtime.atomic_json(path, data)

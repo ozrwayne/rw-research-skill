@@ -1,0 +1,18 @@
+{
+  "schema_version": "rw-peer-review/v1",
+  "review_id": "RVW-ID",
+  "manuscript": {
+    "id": "MS-ID",
+    "title": "Manuscript title",
+    "journal": "Journal name",
+    "version": "v1",
+    "pointer": "path-or-identifier"
+  },
+  "stage": "intake",
+  "updated_at": "2000-01-01T00:00:00Z",
+  "reviewers": [],
+  "sources": [],
+  "findings": [],
+  "credentials": [],
+  "audit_log": []
+}

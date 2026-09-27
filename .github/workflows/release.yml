@@ -18,6 +18,8 @@ jobs:
           set -euo pipefail
           version="$(tr -d '[:space:]' < VERSION)"
           test "v${version}" = "${GITHUB_REF_NAME}"
+      - name: Install deterministic PDF test dependency
+        run: python3 -m pip install -r ci/requirements-test.txt
       - name: Run release CI manifest
         run: python3 scripts/run_ci_manifest.py
       - name: Create GitHub release if missing

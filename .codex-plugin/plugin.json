@@ -1,12 +1,12 @@
 {
   "name": "rw-research-skill",
-  "version": "0.12.0",
+  "version": "0.13.1",
   "description": "通过 4 个入口处理研究启动、论文证据、研究审查和论文写作。",
   "skills": "./skills/",
   "interface": {
     "displayName": "RW Research Skill",
     "shortDescription": "Use four entries to route and carry out research workflows.",
-    "longDescription": "RW Research Skill exposes four user-facing entries for research setup and progression, paper reading and evidence, research design and review, and academic writing and submission. Twenty-one internal skills remain available for routing and compatibility.",
+    "longDescription": "RW Research Skill exposes four user-facing entries for research setup and progression, paper reading and evidence, research design and review, and academic writing and submission. Twenty-two skills remain available for routing and compatibility.",
     "category": "Education",
     "capabilities": [],
     "defaultPrompt": "Use one of the four RW entries. Start with $rw-research-router when the current research stage is unclear."
