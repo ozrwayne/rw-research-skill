@@ -17,3 +17,7 @@
 
 - 块编号、hash precondition、整批检查和修改报告由随 Skill 提供的 Python 脚本实现。
 - 第一版只支持 Markdown 块替换；新增、删除和重排章节另行确认。
+
+## v2 更新
+
+v1 原有替换契约保持；v2 增加明确批准的普通段落整块删除。删除标题或重排章节仍走结构修订。详细契约见 `references/patch-format.md`。

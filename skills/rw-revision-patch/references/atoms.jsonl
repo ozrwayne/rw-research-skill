@@ -1,5 +1,5 @@
 {"id":"RWA-REVISION-PATCH-001","knowledge":"原始文稿保留不动，anchor 和 apply 都输出新文件。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
-{"id":"RWA-REVISION-PATCH-002","knowledge":"第一版 Patch 只支持替换已有 Markdown 块。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"scope","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-002","knowledge":"v1 只替换已有 Markdown 块；v2 增加明确批准的普通整块 delete，不以空字符串替换伪装删除。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"scope","confidence":"high"}
 {"id":"RWA-REVISION-PATCH-003","knowledge":"每个块有稳定 ID 和内容 hash。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-REVISION-PATCH-004","knowledge":"一个块在一次 Patch 中只能修改一次。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
 {"id":"RWA-REVISION-PATCH-005","knowledge":"任意 precondition 失败时整批停止。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}

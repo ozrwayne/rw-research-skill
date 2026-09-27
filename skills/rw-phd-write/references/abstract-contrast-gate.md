@@ -15,6 +15,10 @@ Abstract Contrast and Empty Summary Gate 是本 Skill 的工作规则名称，�
 
 认定需要修改时，说明该句在当前上下文缺少什么主张或功能。抽象程度高、没有新数字、出现 `not/but`、句子短，均不单独构成问题。已在上文定义的概念可以直接使用；有功能的主题句、过渡句、总结句及必要的科学限定应保留。中英文使用同一判断标准。
 
+## 上游内容取舍
+
+先按 `references/content-necessity-gate.md` 判断整句或整段是否必要；本专项只诊断保留内容的对照表达。后句具体不等于整段有必要。DELETE 无需补句；论证缺口单独记录。ASK_AUTHOR 对应上游 AUTHOR_DECISION。
+
 ## 生成：先表达可支持的主张
 
 1. 从当前材料写出段落要让读者理解的判断和证据边界，而非先写口号式起句。
@@ -29,7 +33,7 @@ Abstract Contrast and Empty Summary Gate 是本 Skill 的工作规则名称，�
 - **指向**：读者是否知道概念在这里指什么？答案可来自上文，不强迫每句独立复述定义。
 - **命题**：当前论证需要的区别、关系或判断是否已经说清？
 - **作用**：即使没有新事实，该句是否帮助组织证据、提出主张、导航或限制结论？
-- **删除**：删除后事实、推理连接和理解是否同时保持？有损失时保留其必要功能。
+- **删除**：删除后必要事实、推理连接、理解和报告／复现义务是否同时保持？有损失时保留其必要功能。
 - **相邻关系**：信息是否重复，是否存在更小幅度的合并或具体化方案？
 
 只在有实际问题或用户要求详细审计时展开记录：
@@ -55,7 +59,7 @@ Abstract Contrast and Empty Summary Gate 是本 Skill 的工作规则名称，�
 
 ## 合成例子
 
-- **需要合并或删除**：“The testing question is not the delivery question. In the pilot, research assistants sent every reminder; the report did not identify who would send reminders in routine service.” 第一句未增加必要功能；保留后一句中的主体和报告边界。
+- **需要合并或删除**：“The testing question is not the delivery question. In the pilot, research assistants sent every reminder; the report did not identify who would send reminders in routine service.” 若此处首次需要建立发送者证据边界，第一句未增加必要功能，保留后句的主体和报告边界；若上文已完成该任务，整段也可删除。
 - **肯定句仍可能空泛**：“Delivery constitutes a separate dimension.” 换掉否定结构未补足实际关系，按上下文继续判断。
 - **具体对照应保留**：“In this sample, reminders increased attendance but did not change the cancellation rate.” 对象、结果和适用范围清楚；这仅为合成输入，不代表真实研究结论。
 - **组织功能应保留**：“Costs arose at different stages.” 后文分别介绍购置与维护成本时，可承担有效主题句功能，不要求另加数字。

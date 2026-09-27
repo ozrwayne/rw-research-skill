@@ -58,6 +58,40 @@ def validate_contrast_contracts(tests: list[dict]) -> list[str]:
     return failures
 
 
+
+NECESSITY_IDS = {'necessity-zero-draft', 'necessity-missing-context', 'necessity-multi-turn', 'necessity-decision-provenance', 'necessity-continuation', 'necessity-global-repetition', 'necessity-context-needed', 'necessity-preference-invariance', 'necessity-move', 'necessity-reviewer-reword', 'necessity-sole-rationale', 'necessity-uncertainty', 'necessity-counterevidence', 'necessity-no-change', 'necessity-context-repeated', 'necessity-reporting'}
+
+
+def validate_necessity_contracts(tests: list[dict]) -> list[str]:
+    """Check fixture schema, not whether any model follows the instructions."""
+    failures = []
+    rows = [r for r in tests if isinstance(r, dict) and r.get('gate') == 'content_necessity_v1']
+    ids = [r.get('id') for r in rows]
+    if set(ids) != NECESSITY_IDS or len(ids) != len(NECESSITY_IDS):
+        failures.append('content-necessity coverage missing or duplicated')
+    for row in rows:
+        name = row.get('id')
+        if row.get('mode') not in {'generation', 'continuation', 'review', 'multi_turn', 'paired'}:
+            failures.append(f'{name}: invalid mode')
+        if not isinstance(row.get('prompt'), str) or not row['prompt'].strip():
+            failures.append(f'{name}: missing neutral task input')
+        for key in ('must_do', 'must_not'):
+            values = row.get(key)
+            if not isinstance(values, list) or not values or any(not isinstance(x, str) or not x.strip() for x in values):
+                failures.append(f'{name}: invalid {key}')
+        if row.get('fixture_kind') != 'synthetic' or row.get('evaluation_set') != 'development':
+            failures.append(f'{name}: synthetic regression provenance required')
+        # Outcomes belong in separate raw-output records, not in fixture metadata.
+        if row.get('execution_status') != 'not_run':
+            failures.append(f'{name}: fixture must not assert unrecorded execution')
+        for mode, key, count in [('multi_turn', 'follow_up_prompts', 3), ('paired', 'variant_prompts', 2)]:
+            if row.get('mode') == mode:
+                values = row.get(key)
+                if not isinstance(values, list) or len(values) != count or any(not isinstance(x, str) or not x.strip() for x in values):
+                    failures.append(f'{name}: invalid {key}')
+    return failures
+
+
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
     refs = root / "references"
@@ -67,6 +101,7 @@ def main() -> int:
         "references/standalone.md", "references/source-map.md", "references/standards.md",
         "references/writing-functions.md",
         "references/abstract-contrast-gate.md",
+        "references/content-necessity-gate.md",
         "references/method.md", "references/domain-guide.md", "references/atoms.jsonl",
         "references/axioms.md", "references/cases.md", "references/behavior-tests.json",
         "references/acceptance.md", "references/source-evidence.md", "references/maturity.json",
@@ -101,6 +136,7 @@ def main() -> int:
     if not required_test_ids.issubset(test_ids):
         failures.append("writing-function behavior tests missing")
     failures.extend(validate_contrast_contracts(tests))
+    failures.extend(validate_necessity_contracts(tests))
     if not maturity.get("standalone") or maturity.get("local_hard_dependencies"):
         failures.append("standalone maturity contract failed")
     forbidden = (

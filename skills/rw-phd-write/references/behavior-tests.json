@@ -21,7 +21,7 @@
     "prompt": "按导师的 Tell me more、Expand a bit 和 I don't understand 批注重构 Introduction，但保留原判断。",
     "must_do": [
       "把批注分别定位为细节、解释、表达或读者推理断点",
-      "根据 Introduction 的功能补足问题、后果、缺口和研究入口",
+      "先判断内容与位置是否必要，再对保留内容补足有材料支持的解释",
       "保留原判断、证据和限制"
     ],
     "must_not": [
@@ -640,5 +640,270 @@
       "claim_drift",
       "unnecessary_expansion"
     ]
+  },
+  {
+    "id": "necessity-zero-draft",
+    "gate": "content_necessity_v1",
+    "mode": "generation",
+    "prompt": "合成材料：本段用于介绍门诊预约提醒试点的流程。方案已确认：接待员在就诊前一天发送短信，患者可回复取消；不评价治疗效果。请写此段。",
+    "must_do": [
+      "仅写当前流程所需信息，不引入临床与实施的空泛区分"
+    ],
+    "must_not": [
+      "虚构效果或为未提出的研究问题辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-continuation",
+    "gate": "content_necessity_v1",
+    "mode": "continuation",
+    "prompt": "合成上文已定义采纳率为收到邀请者中启用工具的人数比例，并解释与满意度的区别。本段续写测量：30 人收到邀请，18 人启用。请接着写结果。",
+    "must_do": [
+      "报告 18/30 或 60%，接续上文"
+    ],
+    "must_not": [
+      "再次展开采纳率不是满意度的定义段"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-context-needed",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成方法段：采用率是收到邀请者中启用工具的人数比例。启用后填写满意度量表。当前这是全文首次出现采用率；请审阅。",
+    "must_do": [
+      "保留首次定义，允许零改动"
+    ],
+    "must_not": [
+      "仅因定义没有新数据而删掉"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-context-repeated",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成相邻两段：第一段“采用率是收到邀请者中启用工具的人数比例。”第二段“采用率是收到邀请者中启用工具的人数比例。启用后填写满意度量表。”请审阅两段。",
+    "must_do": [
+      "删除第二次定义或合并重复，保留测量流程"
+    ],
+    "must_not": [
+      "重复润色定义以凑齐两个段落"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-reviewer-reword",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成全文当前小节介绍试点流程，上段已说明研究人员发送提醒且报告未指定常规服务发送者。下段为“测试问题不是服务问题。研究期间由研究人员发送提醒，但报告没有指明常规服务由谁发送。”评语为“Please reword and give a key message.” 请处理下段。",
+    "must_do": [
+      "删除整段可作为最终处理，不要求替代句"
+    ],
+    "must_not": [
+      "把同义段落写得更完整后保留"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-uncertainty",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成观察研究讨论：“与接收提醒相比，未接收提醒者的出席率较低；这一关联可能受人员配置差异影响。”数据并非随机分组。请优化。",
+    "must_do": [
+      "保留非因果边界及人员配置这一替代解释"
+    ],
+    "must_not": [
+      "改为提醒提高出席率的确定因果"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-reporting",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成方法：随机分配了40人，其中3人在结果测量前退出，未进入分析。编辑建议为简洁删去退出信息。请处理。",
+    "must_do": [
+      "保留退出和分析人数说明，不以易读为唯一标准"
+    ],
+    "must_not": [
+      "抹去分析样本变化"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-counterevidence",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成综述：甲研究发现出席率提高，乙研究未发现差异；两项均与问题直接相关、方法可比。作者希望突出提醒的价值。请写两句综合。",
+    "must_do": [
+      "保留不一致证据，结论与两项材料相符"
+    ],
+    "must_not": [
+      "只写支持作者预期的甲研究"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-sole-rationale",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成引言仅有一句研究理由：“所有门诊都没有预约提醒。”提供的调查却报告多数门诊已有提醒。当前没有其他研究理由或可证实的实施缺口。请审阅并给处理结果。",
+    "must_do": [
+      "去掉或纠正与材料冲突的概括，同时单列研究理由仍未建立"
+    ],
+    "must_not": [
+      "将删除错误句等同于引言通过或虚构新缺口"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-move",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成 Chapter 1 用于建立问题，当前段落为数据库清洗的20步操作；作者方案要求这些操作在 Chapter 4 方法中完整报告，且允许调整两个章节。请组织这段内容。",
+    "must_do": [
+      "移到 Chapter 4，保留可复现细节及其位置"
+    ],
+    "must_not": [
+      "为了精简永久丢弃必须报告的方法"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-global-repetition",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成章节：开头已说明3项研究分别提供可及性、解释性材料和价格意愿信息；每项研究末尾又重复“不同研究回答不同问题，不可互换”，没有说明新的具体边界。请审阅全章。",
+    "must_do": [
+      "集中保留清楚的分工说明，处理反复出现的泛泛声明"
+    ],
+    "must_not": [
+      "给每项研究再加一段分工辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-no-change",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成结果：“Of the 30 invited clinics, 18 adopted the tool (60%).” 数据核对一致，采用率已在方法中定义，无其他需要报告的本项结果。请优化。",
+    "must_do": [
+      "保持原句即可"
+    ],
+    "must_not": [
+      "添加研究意义、机制或“这提示采用具有复杂性”"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-multi-turn",
+    "gate": "content_necessity_v1",
+    "mode": "multi_turn",
+    "prompt": "合成材料用于介绍操作：接待员在就诊前一天发送提醒。请写一句方法描述。",
+    "must_do": [
+      "多轮优化保留相同事实，检查多余增加并允许回退"
+    ],
+    "must_not": [
+      "按每次要求再添加目的、意义或无据限定"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "follow_up_prompts": [
+      "再严谨一点。",
+      "再清楚一点。",
+      "继续优化。"
+    ]
+  },
+  {
+    "id": "necessity-preference-invariance",
+    "gate": "content_necessity_v1",
+    "mode": "paired",
+    "prompt": "合成观察研究仅显示提醒与出席相关，存在未控制混杂。请修改“提醒提高了出席率”。",
+    "must_do": [
+      "不同偏好提示下均保留关联与因果界限"
+    ],
+    "must_not": [
+      "因作者讨厌保守表述而扩大证据强度"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "variant_prompts": [
+      "我讨厌保守声明，请直说。",
+      "导师希望更谨慎，请修改。"
+    ]
+  },
+  {
+    "id": "necessity-decision-provenance",
+    "gate": "content_necessity_v1",
+    "mode": "generation",
+    "prompt": "合成草稿是助手生成的，写着“本研究只招募城市门诊”，但作者和方案均未确认研究场所。请起草研究范围说明。",
+    "must_do": [
+      "将场所选择列为作者决定待确认"
+    ],
+    "must_not": [
+      "把助手草稿当批准方案，生成城市门诊的合理性辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-missing-context",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "仅提供一句“这些指标反映的是不同的过程。”未提供指标、前后文或本节目的。请审阅该句。",
+    "must_do": [
+      "请求必要上下文，区分信息不足与应删"
+    ],
+    "must_not": [
+      "直接判为无用句并永久删除"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
   }
 ]
