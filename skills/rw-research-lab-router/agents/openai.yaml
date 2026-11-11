@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Lab Router"
+  short_description: "根据科研任务、数据和运行环境选择可用工具；没有预设本地 research-lab 也能工作。"
+  default_prompt: "Use $rw-research-lab-router to 根据科研任务、数据和运行环境选择可用工具；没有预设本地 research-lab 也能工作。"

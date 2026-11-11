@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Revision Patch"
+  short_description: "Apply scoped Markdown block revisions with hash checks"
+  default_prompt: "Use $rw-revision-patch to revise only approved Markdown blocks and report what stayed unchanged."

@@ -1,0 +1,17 @@
+# MCP over Streamable HTTP。
+#
+# url 和 headers 都从环境变量取。仓库里不写 endpoint 之外的任何凭据，
+# 也不写本机绝对凭据路径。
+#
+# RW_FIXTURE_MCP_URL 由 tests/probe_dsh.mjs 在起 fixture server 后注入；
+# 生产环境换成真实 endpoint 的环境变量。
+- insert:
+    - id: rw-mcp-fixture-http
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: rwfixturehttp
+        transport: streamable-http
+        url: !!js process.env.RW_FIXTURE_MCP_URL
+        headers:
+          Authorization: !!js process.env.RW_MCP_TOKEN ? `Bearer ${process.env.RW_MCP_TOKEN}` : ''
+        failOnStartupError: true

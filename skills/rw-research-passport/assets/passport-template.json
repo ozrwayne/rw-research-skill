@@ -1,0 +1,13 @@
+{
+  "schema_version": "rw-research-passport/v1",
+  "project_id": "PROJECT-ID",
+  "title": "Project title",
+  "stage": "question",
+  "updated_at": "2000-01-01T00:00:00Z",
+  "materials": [],
+  "decisions": [],
+  "unknowns": [],
+  "handoffs": [],
+  "credentials": [],
+  "audit_log": []
+}

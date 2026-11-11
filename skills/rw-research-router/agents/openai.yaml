@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Router"
+  short_description: "判断科研任务所处阶段，并把它交给一个主流程。适用于独立科研任务处理。"
+  default_prompt: "Use $rw-research-router to 判断科研任务所处阶段，并把它交给一个主流程。"

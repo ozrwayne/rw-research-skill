@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Search Strategy"
+  short_description: "把中英文研究问题转成多数据库受控词和分平台检索式草案。"
+  default_prompt: "Use $rw-search-strategy to turn this Chinese, English, or mixed-language research question into verified controlled-vocabulary candidates and platform-specific search strategies."

@@ -1,0 +1,18 @@
+{
+  "skill": "rw-paper-extractor",
+  "version": "standalone-v2",
+  "generated_at": "2026-07-23",
+  "standalone": true,
+  "local_hard_dependencies": [],
+  "optional_integrations": [
+    "user-provided files",
+    "internet access",
+    "other RW skills",
+    "PyMuPDF and Pillow for Paper Case mode"
+  ],
+  "atom_count": 30,
+  "axiom_count": 8,
+  "behavior_test_count": 10,
+  "public_source_count": 4,
+  "grounding_status": "public-source-grounded"
+}

@@ -1,0 +1,166 @@
+[
+  {
+    "id": "case-1",
+    "fixture_kind": "synthetic",
+    "prompt": "提取一篇观察性研究的方法和结果。",
+    "must_do": [
+      "确认提取目的、研究类型、可用全文和补充材料。",
+      "执行第二遍核对，区分缺失、未报告、不适用和无法判断。",
+      "结构化论文卡片或批量表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ]
+  },
+  {
+    "id": "case-2",
+    "fixture_kind": "synthetic",
+    "prompt": "批量提取 20 篇论文的样本与结局。",
+    "must_do": [
+      "确认提取目的、研究类型、可用全文和补充材料。",
+      "执行第二遍核对，区分缺失、未报告、不适用和无法判断。",
+      "结构化论文卡片或批量表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ]
+  },
+  {
+    "id": "case-3",
+    "fixture_kind": "synthetic",
+    "prompt": "从随机试验提取主要结果、分析集和流失。",
+    "must_do": [
+      "确认提取目的、研究类型、可用全文和补充材料。",
+      "执行第二遍核对，区分缺失、未报告、不适用和无法判断。",
+      "结构化论文卡片或批量表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": [
+      "rw-research-referee"
+    ]
+  },
+  {
+    "id": "case-4",
+    "fixture_kind": "synthetic",
+    "prompt": "从定性研究提取情境、取样和分析过程。",
+    "must_do": [
+      "确认提取目的、研究类型、可用全文和补充材料。",
+      "执行第二遍核对，区分缺失、未报告、不适用和无法判断。",
+      "结构化论文卡片或批量表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ]
+  },
+  {
+    "id": "counterexample-5",
+    "fixture_kind": "synthetic",
+    "prompt": "只有摘要，补全随机化和缺失数据方法。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": []
+  },
+  {
+    "id": "counterexample-6",
+    "fixture_kind": "synthetic",
+    "prompt": "Discussion 说有效，就把效应写成已证实。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可访问正文时，不填写正文专属字段。"
+    ],
+    "expected_next": []
+  },
+  {
+    "id": "case-7",
+    "fixture_kind": "synthetic",
+    "prompt": "精读这篇 PDF，提取图表并生成分阶段报告。",
+    "must_do": [
+      "建立带来源 hash 和配置 hash 的 Paper Case",
+      "保留章节识别依据、文本 locator 和视觉复核状态",
+      "生成 5 个阶段文件和合并报告脚手架"
+    ],
+    "must_not": [
+      "把图片对象直接当作科研图表",
+      "把跨页拼接图写成一个原始页",
+      "在没有 Claim Audit PASS 时写入已验证主张"
+    ],
+    "expected_next": [
+      "rw-claim-audit"
+    ]
+  },
+  {
+    "id": "case-8",
+    "fixture_kind": "synthetic",
+    "prompt": "把精读结果接入 LitNet。",
+    "must_do": [
+      "先校验 Paper Case 和 Claim Audit 文档 hash",
+      "根据主张 verdict 计算 PASS、REVIEW 或 BLOCK",
+      "只生成 write_performed 为 false 的回写预览"
+    ],
+    "must_not": [
+      "绕过 Claim Audit 门禁",
+      "直接修改 LitNet 正式卡片",
+      "把 LitNet 当作 PDF 或书目正典"
+    ],
+    "expected_next": []
+  },
+  {
+    "id": "degradation-9-full-text-unavailable",
+    "fixture_kind": "synthetic",
+    "prompt": "我只有题名和摘要。请补全论文正文中的随机化、盲法和结果数字。",
+    "must_do": [
+      "阻断：缺少可访问正文。",
+      "只填写元数据和摘要能够支持的字段，列出正文专属缺口。"
+    ],
+    "must_not": [
+      "不得推断正文中的随机化、盲法、模型设定、结果数字或限制。"
+    ],
+    "expected_next": [],
+    "degradation_registry_id": "DEG-002",
+    "expected_status": "BLOCK"
+  },
+  {
+    "id": "degradation-10-figure-rendering-unavailable",
+    "fixture_kind": "synthetic",
+    "prompt": "PDF 文字可以读取，但图像渲染依赖不可用。请继续处理跨页表格。",
+    "must_do": [
+      "需复核：图表候选未自动拼接。",
+      "保留每页候选、page、bbox、text unit 和人工拼接说明，不生成已确认的合并对象。"
+    ],
+    "must_not": [
+      "不得丢弃原始页定位，也不得把候选拼接图当成来源正典。"
+    ],
+    "expected_next": [],
+    "degradation_registry_id": "DEG-004",
+    "expected_status": "REVIEW"
+  }
+]

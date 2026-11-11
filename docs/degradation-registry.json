@@ -1,0 +1,202 @@
+{
+  "schema_version": "rw-degradation-registry/v1",
+  "updated_at": "2026-07-23",
+  "statuses": [
+    "PENDING_VERIFICATION",
+    "REVIEW",
+    "BLOCK",
+    "STALE"
+  ],
+  "entries": [
+    {
+      "id": "DEG-001",
+      "capability": "current-source-verification",
+      "trigger": "网络、官方页面或订阅数据库不可用，无法核验当前文献、词表、期刊政策、费用、API 或工具状态。",
+      "status": "PENDING_VERIFICATION",
+      "severity": "review",
+      "fallback": "继续处理不依赖当前事实的部分，保存检索式、来源入口和核验日期空位。",
+      "must_not": "不得把缓存内容、通用规则或候选词写成已核验的当前事实。",
+      "user_signal": "待核验：当前来源不可访问。",
+      "owners": [
+        "rw-research-router",
+        "rw-search-strategy",
+        "rw-literature-discovery",
+        "rw-journal-submission"
+      ],
+      "test_refs": [
+        "tests/test_search_strategy.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-002",
+      "capability": "full-text-access",
+      "trigger": "只有题名、摘要、元数据或二手转述，没有可访问正文。",
+      "status": "BLOCK",
+      "severity": "block",
+      "fallback": "只填写元数据和摘要能够支持的字段，列出正文专属缺口。",
+      "must_not": "不得推断正文中的随机化、盲法、模型设定、结果数字或限制。",
+      "user_signal": "阻断：缺少可访问正文。",
+      "owners": [
+        "rw-paper-extractor",
+        "rw-evidence-map",
+        "rw-citation-audit",
+        "rw-claim-audit"
+      ],
+      "test_refs": [
+        "tests/test_claim_audit.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-003",
+      "capability": "pdf-text-extraction",
+      "trigger": "PDF 损坏、加密、无文本层，或当前环境缺少可用 PDF 解析器。",
+      "status": "REVIEW",
+      "severity": "review",
+      "fallback": "保留来源 hash 和失败记录；其他可读材料继续处理，并请求可访问版本或 OCR 文本。",
+      "must_not": "不得把空提取结果写成论文未报告，也不得伪造页码或 bbox。",
+      "user_signal": "需复核：PDF 正文未能提取。",
+      "owners": [
+        "rw-paper-extractor"
+      ],
+      "test_refs": [
+        "skills/rw-paper-extractor/tests/test_paper_case.py",
+        "tests/test_research_learning.py"
+      ]
+    },
+    {
+      "id": "DEG-004",
+      "capability": "figure-table-rendering",
+      "trigger": "图像渲染或拼接依赖不可用，或跨页表格的版面关系无法稳定判断。",
+      "status": "REVIEW",
+      "severity": "review",
+      "fallback": "保留每页候选、page、bbox、text unit 和人工拼接说明，不生成已确认的合并对象。",
+      "must_not": "不得丢弃原始页定位，也不得把候选拼接图当成来源正典。",
+      "user_signal": "需复核：图表候选未自动拼接。",
+      "owners": [
+        "rw-paper-extractor"
+      ],
+      "test_refs": [
+        "skills/rw-paper-extractor/tests/test_paper_case.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-005",
+      "capability": "litnet-zotero-writeback",
+      "trigger": "LitNet、Zotero 或对应连接不可用，或 Claim Audit 未达到 PASS。",
+      "status": "BLOCK",
+      "severity": "block",
+      "fallback": "生成本地回写预览，保存目标、字段、来源定位和阻断原因。",
+      "must_not": "不得直接修改正式卡片、Zotero 条目或用户原始文件。",
+      "user_signal": "阻断：只生成回写预览。",
+      "owners": [
+        "rw-paper-extractor",
+        "rw-claim-audit",
+        "rw-research-lab-router"
+      ],
+      "test_refs": [
+        "skills/rw-paper-extractor/tests/test_paper_case.py",
+        "tests/test_claim_audit.py"
+      ]
+    },
+    {
+      "id": "DEG-006",
+      "capability": "research-corpus-access",
+      "trigger": "指定目录、预设工具目录或已有索引不可访问。",
+      "status": "REVIEW",
+      "severity": "advisory",
+      "fallback": "改用用户本轮提供的材料和包内方法，说明没有完成本地积累扫描。",
+      "must_not": "不得声称已经扫描不可读目录，也不得把缺少本地集成写成任务失败。",
+      "user_signal": "范围缩小：未读取本地研究积累。",
+      "owners": [
+        "rw-research-router",
+        "rw-research-learning",
+        "rw-research-lab-router"
+      ],
+      "test_refs": [
+        "tests/test_research_learning.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-007",
+      "capability": "cross-provider-review",
+      "trigger": "模型 CLI 未登录、提供方不可用，或只有单一 provider 返回结果。",
+      "status": "REVIEW",
+      "severity": "review",
+      "fallback": "保留已完成结果和 provider 缺口，输出 REVIEW_INCOMPLETE，不形成跨 provider 结论。",
+      "must_not": "不得把同一 provider 的多个模型当成跨 provider 共识。",
+      "user_signal": "复核未完成：缺少独立 provider 结果。",
+      "owners": [
+        "rw-research-referee"
+      ],
+      "test_refs": [
+        "tests/test_cross_model_review.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-008",
+      "capability": "research-design-evidence",
+      "trigger": "研究问题、目标效应、样本、测量、分析单位或关键设计信息不足。",
+      "status": "BLOCK",
+      "severity": "block",
+      "fallback": "列出缺口、可继续完成的设计部分和取得决策所需材料。",
+      "must_not": "不得给出通过判断、完整样本量结论或专业审批式结论。",
+      "user_signal": "阻断：关键设计信息不足。",
+      "owners": [
+        "rw-research-referee",
+        "rw-review-methods",
+        "rw-research-design",
+        "rw-research-data",
+        "rw-statistics-audit"
+      ],
+      "test_refs": [
+        "scripts/check_repository.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-009",
+      "capability": "evidence-bound-writing",
+      "trigger": "目标主张缺少可核验来源，或用户材料不足以完成指定写作功能。",
+      "status": "BLOCK",
+      "severity": "block",
+      "fallback": "保留论证骨架、证据缺口和待补来源位置，只写已有材料能够支持的部分。",
+      "must_not": "不得生成不存在的来源、DOI、数据、研究结果或因果连接。",
+      "user_signal": "阻断：当前证据不足以完成该主张。",
+      "owners": [
+        "rw-phd-write",
+        "rw-phd-tone",
+        "rw-revision-patch",
+        "rw-journal-submission"
+      ],
+      "test_refs": [
+        "tests/test_revision_patch.py",
+        "tests/test_claim_audit.py",
+        "tests/test_entry_degradation_scenarios.py"
+      ]
+    },
+    {
+      "id": "DEG-010",
+      "capability": "derived-artifact-freshness",
+      "trigger": "来源 hash、配置 hash 或上游阶段 hash 改变。",
+      "status": "STALE",
+      "severity": "block",
+      "fallback": "标记受影响的下游阶段，保留旧产物和变更依据，从最早受影响阶段重建。",
+      "must_not": "不得继续把旧报告、旧 Claim Audit 或旧回写预览标为当前结果。",
+      "user_signal": "已过期：上游材料或配置已改变。",
+      "owners": [
+        "rw-paper-extractor",
+        "rw-claim-audit",
+        "rw-research-passport"
+      ],
+      "test_refs": [
+        "skills/rw-paper-extractor/tests/test_paper_case.py",
+        "tests/test_research_passport.py"
+      ]
+    }
+  ]
+}

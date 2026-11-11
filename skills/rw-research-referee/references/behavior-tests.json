@@ -1,0 +1,132 @@
+[
+  {
+    "id": "case-1",
+    "prompt": "预注册前审一个随机试验方案。",
+    "must_do": [
+      "提取作者最强结论、目标人群、比较和所需证据。",
+      "输出问题、证据位置、结论影响、修复动作和无法修复部分。",
+      "按阻断程度排序的问题清单。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [
+      "rw-research-design"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2",
+    "prompt": "投稿前审 Discussion 的因果结论。",
+    "must_do": [
+      "提取作者最强结论、目标人群、比较和所需证据。",
+      "输出问题、证据位置、结论影响、修复动作和无法修复部分。",
+      "按阻断程度排序的问题清单。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3",
+    "prompt": "审查一项非随机干预研究的混杂和缺失。",
+    "must_do": [
+      "提取作者最强结论、目标人群、比较和所需证据。",
+      "输出问题、证据位置、结论影响、修复动作和无法修复部分。",
+      "按阻断程度排序的问题清单。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [
+      "rw-research-design"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4",
+    "prompt": "检查预测模型论文是否把内部验证当外部验证。",
+    "must_do": [
+      "提取作者最强结论、目标人群、比较和所需证据。",
+      "输出问题、证据位置、结论影响、修复动作和无法修复部分。",
+      "按阻断程度排序的问题清单。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-5",
+    "prompt": "研究设计站不住，但帮我把结论写得更有说服力。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-6",
+    "prompt": "英文不好，所以判定研究无效。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：关键设计信息缺失时，不给出通过判断。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "degradation-7-provider-incomplete",
+    "prompt": "Claude CLI 未登录，只有 3 个 Codex 模型完成了审查。请给出跨 provider 结论。",
+    "must_do": [
+      "复核未完成：缺少独立 provider 结果。",
+      "保留已完成结果和 provider 缺口，输出 REVIEW_INCOMPLETE，不形成跨 provider 结论。"
+    ],
+    "must_not": [
+      "不得把同一 provider 的多个模型当成跨 provider 共识。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-007",
+    "expected_status": "REVIEW"
+  },
+  {
+    "id": "degradation-8-design-information-missing",
+    "prompt": "研究方案没有目标效应、样本依据和分析单位。请直接判断设计通过。",
+    "must_do": [
+      "阻断：关键设计信息不足。",
+      "列出缺口、可继续完成的设计部分和取得决策所需材料。"
+    ],
+    "must_not": [
+      "不得给出通过判断、完整样本量结论或专业审批式结论。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-008",
+    "expected_status": "BLOCK"
+  }
+]

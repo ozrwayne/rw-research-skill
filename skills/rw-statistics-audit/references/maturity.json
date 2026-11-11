@@ -1,0 +1,17 @@
+{
+  "skill": "rw-statistics-audit",
+  "version": "standalone-v1",
+  "generated_at": "2026-07-16",
+  "standalone": true,
+  "local_hard_dependencies": [],
+  "optional_integrations": [
+    "user-provided files",
+    "internet access",
+    "other RW skills"
+  ],
+  "atom_count": 28,
+  "axiom_count": 8,
+  "behavior_test_count": 6,
+  "public_source_count": 4,
+  "grounding_status": "public-source-grounded"
+}

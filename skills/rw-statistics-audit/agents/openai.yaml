@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Statistics Audit"
+  short_description: "审查研究中的分析单位、重复层级、统计方法和结果报告是否对得上，不把报告审查当成重新分析。"
+  default_prompt: "Use $rw-statistics-audit to 审查研究中的分析单位、重复层级、统计方法和结果报告是否对得上，不把报告审查当成重新分析。"

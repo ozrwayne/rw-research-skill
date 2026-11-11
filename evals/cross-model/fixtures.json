@@ -1,0 +1,208 @@
+[
+  {
+    "id": "claim-adjusted-effect-mismatch",
+    "skill": "rw-claim-audit",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Audit this sentence against the only supplied source excerpt. Draft sentence: 'After adjustment, the intervention lowered the outcome by 15.0%.' Source excerpt: 'The adjusted model estimated a 13.6% decrease (95% CI 2.1% to 23.7%).' Return the audit decision and a corrected sentence.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verdict": {"type": "string", "enum": ["VERIFIED", "PARTIAL", "DISTORTED", "UNSUPPORTED", "UNVERIFIABLE_ACCESS", "NOT_CHECKED"]},
+        "gate": {"type": "string", "enum": ["PASS", "REVIEW", "BLOCK"]},
+        "draft_value": {"type": "number"},
+        "source_value": {"type": "number"},
+        "can_mark_verified": {"type": "boolean"},
+        "correction": {"type": "string"},
+        "reason": {"type": "string"}
+      },
+      "required": ["verdict", "gate", "draft_value", "source_value", "can_mark_verified", "correction", "reason"]
+    },
+    "checks": [
+      {"path": "verdict", "op": "eq", "value": "DISTORTED"},
+      {"path": "gate", "op": "eq", "value": "BLOCK"},
+      {"path": "draft_value", "op": "eq", "value": 15.0},
+      {"path": "source_value", "op": "eq", "value": 13.6},
+      {"path": "can_mark_verified", "op": "eq", "value": false},
+      {"path": "correction", "op": "contains", "value": "13.6%"}
+    ]
+  },
+  {
+    "id": "claim-subgroup-fulltext-missing",
+    "skill": "rw-claim-audit",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Audit this claim using only the available abstract. Draft claim: 'Participants aged over 70 had a 27% reduction at 6 months.' Abstract: 'The treatment group improved compared with control during follow-up.' The abstract has no subgroup, percentage, time-specific result, analysis set, or design detail. The full text is inaccessible. Return the audit decision.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verdict": {"type": "string", "enum": ["VERIFIED", "PARTIAL", "DISTORTED", "UNSUPPORTED", "UNVERIFIABLE_ACCESS", "NOT_CHECKED"]},
+        "gate": {"type": "string", "enum": ["PASS", "REVIEW", "BLOCK"]},
+        "can_mark_verified": {"type": "boolean"},
+        "missing_evidence": {"type": "array", "items": {"type": "string"}},
+        "next_step": {"type": "string"}
+      },
+      "required": ["verdict", "gate", "can_mark_verified", "missing_evidence", "next_step"]
+    },
+    "checks": [
+      {"path": "verdict", "op": "eq", "value": "UNVERIFIABLE_ACCESS"},
+      {"path": "gate", "op": "eq", "value": "REVIEW"},
+      {"path": "can_mark_verified", "op": "eq", "value": false},
+      {"path": "missing_evidence", "op": "min_length", "value": 3}
+    ]
+  },
+  {
+    "id": "revision-three-block-hash-drift",
+    "skill": "rw-revision-patch",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "A patch may be applied only if all stored block hashes still match. Current blocks are R-1='Opening stays.', R-2='Current estimate is 15.0%.', and R-3='Closing stays.'. Stored hashes are R-1=h11, R-2=h22, R-3=h33. Current hashes are R-1=h11, R-2=drifted-h22, R-3=h33. The proposed replacement changes R-2 to 'Current estimate is 13.6%.'. Return the decision and all resulting blocks without inventing a hash.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["APPLY", "STOP"]},
+        "reason_code": {"type": "string", "enum": ["OK", "HASH_MISMATCH", "SCOPE_ERROR"]},
+        "modified_ids": {"type": "array", "items": {"type": "string"}},
+        "blocks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {"R-1": {"type": "string"}, "R-2": {"type": "string"}, "R-3": {"type": "string"}},
+          "required": ["R-1", "R-2", "R-3"]
+        },
+        "next_step": {"type": "string"}
+      },
+      "required": ["status", "reason_code", "modified_ids", "blocks", "next_step"]
+    },
+    "checks": [
+      {"path": "status", "op": "eq", "value": "STOP"},
+      {"path": "reason_code", "op": "eq", "value": "HASH_MISMATCH"},
+      {"path": "modified_ids", "op": "set_eq", "value": []},
+      {"path": "blocks", "op": "eq", "value": {"R-1": "Opening stays.", "R-2": "Current estimate is 15.0%.", "R-3": "Closing stays."}}
+    ]
+  },
+  {
+    "id": "revision-caption-only",
+    "skill": "rw-revision-patch",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "The approved scope is one exact replacement. Blocks: T-1='Table 2'; T-2='Values are unadjusted means.'; T-3='Abbreviations stay.'; T-4='Source note stays.'. All stored hashes match. Replace only T-2 with 'Values are adjusted means.' Return every block plus the modified and unchanged IDs.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["APPLY", "STOP"]},
+        "modified_ids": {"type": "array", "items": {"type": "string"}},
+        "unchanged_ids": {"type": "array", "items": {"type": "string"}},
+        "blocks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {"T-1": {"type": "string"}, "T-2": {"type": "string"}, "T-3": {"type": "string"}, "T-4": {"type": "string"}},
+          "required": ["T-1", "T-2", "T-3", "T-4"]
+        }
+      },
+      "required": ["status", "modified_ids", "unchanged_ids", "blocks"]
+    },
+    "checks": [
+      {"path": "status", "op": "eq", "value": "APPLY"},
+      {"path": "modified_ids", "op": "set_eq", "value": ["T-2"]},
+      {"path": "unchanged_ids", "op": "set_eq", "value": ["T-1", "T-3", "T-4"]},
+      {"path": "blocks", "op": "eq", "value": {"T-1": "Table 2", "T-2": "Values are adjusted means.", "T-3": "Abbreviations stay.", "T-4": "Source note stays."}}
+    ]
+  },
+  {
+    "id": "passport-source-version-replaced",
+    "skill": "rw-research-passport",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Review a Passport using its defined status enums. Material MAT-8 is verified with content_sha256 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa. The source now has content_sha256 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb. Decision DEC-9 is confirmed and depends only on MAT-8. Handoff H-7 is prepared and includes MAT-8. Register the changed source as MAT-8-v2. Return the recommended states; do not create new status words.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "old_material_status": {"type": "string", "enum": ["raw", "extracted", "verified", "rejected", "superseded"]},
+        "new_material_id": {"type": "string"},
+        "new_material_status": {"type": "string", "enum": ["raw", "extracted", "verified", "rejected", "superseded"]},
+        "decision_status": {"type": "string", "enum": ["proposed", "confirmed", "rejected", "superseded"]},
+        "handoff_status": {"type": "string", "enum": ["prepared", "accepted", "rejected"]},
+        "can_handoff": {"type": "boolean"},
+        "required_action": {"type": "string"}
+      },
+      "required": ["old_material_status", "new_material_id", "new_material_status", "decision_status", "handoff_status", "can_handoff", "required_action"]
+    },
+    "checks": [
+      {"path": "old_material_status", "op": "eq", "value": "superseded"},
+      {"path": "new_material_id", "op": "eq", "value": "MAT-8-v2"},
+      {"path": "new_material_status", "op": "eq", "value": "raw"},
+      {"path": "decision_status", "op": "eq", "value": "superseded"},
+      {"path": "handoff_status", "op": "eq", "value": "rejected"},
+      {"path": "can_handoff", "op": "eq", "value": false}
+    ]
+  },
+  {
+    "id": "passport-prepared-handoff-missing-id",
+    "skill": "rw-research-passport",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Review prepared handoff H-4. Its material_ids are MAT-A and MAT-Z. The Passport materials array contains MAT-A only, and no record defines MAT-Z. Use the Passport handoff status enum. Return the recommended status, whether the handoff can proceed, and missing IDs.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "handoff_status": {"type": "string", "enum": ["prepared", "accepted", "rejected"]},
+        "can_handoff": {"type": "boolean"},
+        "missing_material_ids": {"type": "array", "items": {"type": "string"}},
+        "required_action": {"type": "string"}
+      },
+      "required": ["handoff_status", "can_handoff", "missing_material_ids", "required_action"]
+    },
+    "checks": [
+      {"path": "handoff_status", "op": "eq", "value": "rejected"},
+      {"path": "can_handoff", "op": "eq", "value": false},
+      {"path": "missing_material_ids", "op": "set_eq", "value": ["MAT-Z"]}
+    ]
+  },
+  {
+    "id": "router-reference-identity-only",
+    "skill": "rw-research-router",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Route this request to one primary Skill: 'Match every citation key in the manuscript to one reference-list entry, correct duplicated 2024a and 2024b suffixes, and flag malformed DOI strings. Do not judge whether any source supports the sentence that cites it.' Also identify the adjacent Skill that is out of scope.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_skill": {"type": "string"},
+        "adjacent_but_out_of_scope_skill": {"type": "string"},
+        "reason": {"type": "string"}
+      },
+      "required": ["primary_skill", "adjacent_but_out_of_scope_skill", "reason"]
+    },
+    "checks": [
+      {"path": "primary_skill", "op": "eq", "value": "rw-citation-audit"},
+      {"path": "adjacent_but_out_of_scope_skill", "op": "eq", "value": "rw-claim-audit"}
+    ]
+  },
+  {
+    "id": "router-pseudoreplication-reporting",
+    "skill": "rw-research-router",
+    "synthetic": true,
+    "suite_role": "held_out_v2",
+    "task": "Route this request to one primary Skill: 'Four independent samples were each measured in five wells. The results section calls this n=20. Check the observation unit, independent analysis unit, technical replicates, and reported n.'",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_skill": {"type": "string"},
+        "reason": {"type": "string"},
+        "next_step": {"type": "string"}
+      },
+      "required": ["primary_skill", "reason", "next_step"]
+    },
+    "checks": [
+      {"path": "primary_skill", "op": "eq", "value": "rw-statistics-audit"}
+    ]
+  }
+]

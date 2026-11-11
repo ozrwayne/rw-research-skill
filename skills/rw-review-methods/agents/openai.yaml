@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Review Methods"
+  short_description: "设计和执行可复现的系统综述、范围综述及其他证据综合流程。"
+  default_prompt: "Use $rw-review-methods to 设计和执行可复现的系统综述、范围综述及其他证据综合流程。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Novelty"
+  short_description: "把证据空白、冲突和异常转成可追溯的候选创新点，并按贡献、可行性和证伪条件筛选。"
+  default_prompt: "Use $rw-research-novelty to 把证据空白、冲突和异常转成可追溯的候选创新点，并按贡献、可行性和证伪条件筛选。"

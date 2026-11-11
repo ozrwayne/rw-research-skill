@@ -1,0 +1,115 @@
+[
+  {
+    "id": "normal-verified",
+    "prompt": "来源表 2 与文稿数字、人群和时间点一致。",
+    "expect": [
+      "记录 locator",
+      "VERIFIED",
+      "PASS"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-partial",
+    "prompt": "来源只支持句子前半部分。",
+    "expect": [
+      "PARTIAL",
+      "说明范围差异",
+      "REVIEW"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-doi-only",
+    "prompt": "只确认 DOI 存在，没有打开正文。",
+    "expect": [
+      "不标 VERIFIED",
+      "NOT_CHECKED 或 UNVERIFIABLE_ACCESS",
+      "不能 PASS"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "adhd-opt-in",
+    "prompt": "请用 ADHD 友好输出。核验这 6 条主张，先告诉我现在只需要做什么。",
+    "expect": [
+      "只看这里",
+      "一个当前动作",
+      "本轮完成标准",
+      "重点词加粗",
+      "保留证据边界"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "adhd-disclosure-only",
+    "prompt": "我有 ADHD。请核验这条数字主张。",
+    "expect": [
+      "保持普通输出",
+      "不主动询问 ADHD 输出偏好",
+      "不保存诊断信息"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "adhd-off",
+    "prompt": "关闭 ADHD 友好模式，继续核验剩余主张。",
+    "expect": [
+      "返回普通输出",
+      "不要求解释关闭原因",
+      "继续保留 verdict 和证据位置"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "claim-three-checks-do",
+    "gate": "merged_rules_v1",
+    "rule": "citation_three_checks",
+    "group": "do",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Manuscript: \"Napping improves memory consolidation (Author J, 2009).\" Author J (2009) is a cross-sectional survey reporting that nappers rated their memory higher. Audit this claim.",
+    "prompt": "Review this synthetic audit record: verdict VERIFIED, reason \"the citation exists\". Same claim and source.",
+    "must_do": [
+      "指出来源类型对不上：机制句挂了横断面调查",
+      "不给 VERIFIED"
+    ],
+    "must_not": [
+      "因为引文存在就判通过"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "claim-three-checks-dont",
+    "gate": "merged_rules_v1",
+    "rule": "citation_three_checks",
+    "group": "dont",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Manuscript: \"Napping was associated with higher self-rated memory (Author J, 2009).\" The source is the same cross-sectional survey; Table 2 reports this association. Audit this claim.",
+    "prompt": "Review this synthetic audit record: verdict VERIFIED, locator \"Table 2\".",
+    "must_do": [
+      "类型、方向、数字都对上，VERIFIED 成立"
+    ],
+    "must_not": [
+      "因为是调查研究就判不支持"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

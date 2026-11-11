@@ -1,0 +1,200 @@
+[
+  {
+    "id": "claim-relative-reduction-mismatch",
+    "suite_role": "development_after_first_run",
+    "skill": "rw-claim-audit",
+    "synthetic": true,
+    "task": "Audit this claim against the only supplied source excerpt. Draft claim: 'The program reduced the primary outcome by 20%.' Source excerpt: 'The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%).' No other source is available. Return the audit decision and a correction.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verdict": {"type": "string", "enum": ["VERIFIED", "PARTIAL", "DISTORTED", "UNSUPPORTED", "UNVERIFIABLE_ACCESS", "NOT_CHECKED"]},
+        "gate": {"type": "string", "enum": ["PASS", "REVIEW", "BLOCK"]},
+        "claim_value": {"type": "number"},
+        "source_value": {"type": "number"},
+        "can_mark_verified": {"type": "boolean"},
+        "correction": {"type": "string"},
+        "reason": {"type": "string"}
+      },
+      "required": ["verdict", "gate", "claim_value", "source_value", "can_mark_verified", "correction", "reason"]
+    },
+    "checks": [
+      {"path": "verdict", "op": "eq", "value": "DISTORTED"},
+      {"path": "gate", "op": "eq", "value": "BLOCK"},
+      {"path": "claim_value", "op": "eq", "value": 20},
+      {"path": "source_value", "op": "eq", "value": 18},
+      {"path": "can_mark_verified", "op": "eq", "value": false},
+      {"path": "correction", "op": "contains", "value": "18%"}
+    ]
+  },
+  {
+    "id": "claim-full-text-unavailable",
+    "skill": "rw-claim-audit",
+    "synthetic": true,
+    "task": "Audit this claim using only the available material. Draft claim: 'The intervention caused a 32% reduction at 12 months.' Available abstract: 'Outcomes improved during follow-up.' The abstract gives no number, comparison, analysis set, or causal design information. The full text cannot be accessed. Return the audit decision.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verdict": {"type": "string", "enum": ["VERIFIED", "PARTIAL", "DISTORTED", "UNSUPPORTED", "UNVERIFIABLE_ACCESS", "NOT_CHECKED"]},
+        "gate": {"type": "string", "enum": ["PASS", "REVIEW", "BLOCK"]},
+        "can_mark_verified": {"type": "boolean"},
+        "missing_evidence": {"type": "array", "items": {"type": "string"}},
+        "next_step": {"type": "string"}
+      },
+      "required": ["verdict", "gate", "can_mark_verified", "missing_evidence", "next_step"]
+    },
+    "checks": [
+      {"path": "verdict", "op": "eq", "value": "UNVERIFIABLE_ACCESS"},
+      {"path": "gate", "op": "eq", "value": "REVIEW"},
+      {"path": "can_mark_verified", "op": "eq", "value": false},
+      {"path": "missing_evidence", "op": "min_length", "value": 2}
+    ]
+  },
+  {
+    "id": "revision-stale-block-hash",
+    "skill": "rw-revision-patch",
+    "synthetic": true,
+    "task": "Apply a proposed replacement only if every precondition holds. Current blocks are B-1='Context sentence.' and B-2='Current result sentence.' The patch was prepared with stored hashes B-1=aa11 and B-2=bb22. Rechecking the document gives B-1=aa11 and B-2=changed-bb22. The proposed patch would replace B-2 with 'Revised result sentence.' Return the decision and the resulting blocks. Do not invent a new hash.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["APPLY", "STOP"]},
+        "reason_code": {"type": "string", "enum": ["OK", "HASH_MISMATCH", "SCOPE_ERROR"]},
+        "modified_ids": {"type": "array", "items": {"type": "string"}},
+        "blocks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {"B-1": {"type": "string"}, "B-2": {"type": "string"}},
+          "required": ["B-1", "B-2"]
+        },
+        "next_step": {"type": "string"}
+      },
+      "required": ["status", "reason_code", "modified_ids", "blocks", "next_step"]
+    },
+    "checks": [
+      {"path": "status", "op": "eq", "value": "STOP"},
+      {"path": "reason_code", "op": "eq", "value": "HASH_MISMATCH"},
+      {"path": "modified_ids", "op": "set_eq", "value": []},
+      {"path": "blocks", "op": "eq", "value": {"B-1": "Context sentence.", "B-2": "Current result sentence."}}
+    ]
+  },
+  {
+    "id": "revision-one-of-five-blocks",
+    "skill": "rw-revision-patch",
+    "synthetic": true,
+    "task": "The approved scope is one exact replacement. Blocks: B-1='Background stays.'; B-2='Method stays.'; B-3='The value was 20%.'; B-4='Limitation stays.'; B-5='Conclusion stays.'. All stored hashes match the current document. Replace only B-3 with 'The value was 18%.' Return all blocks and the modified and unchanged IDs.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["APPLY", "STOP"]},
+        "modified_ids": {"type": "array", "items": {"type": "string"}},
+        "unchanged_ids": {"type": "array", "items": {"type": "string"}},
+        "blocks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "B-1": {"type": "string"}, "B-2": {"type": "string"}, "B-3": {"type": "string"},
+            "B-4": {"type": "string"}, "B-5": {"type": "string"}
+          },
+          "required": ["B-1", "B-2", "B-3", "B-4", "B-5"]
+        }
+      },
+      "required": ["status", "modified_ids", "unchanged_ids", "blocks"]
+    },
+    "checks": [
+      {"path": "status", "op": "eq", "value": "APPLY"},
+      {"path": "modified_ids", "op": "set_eq", "value": ["B-3"]},
+      {"path": "unchanged_ids", "op": "set_eq", "value": ["B-1", "B-2", "B-4", "B-5"]},
+      {"path": "blocks", "op": "eq", "value": {"B-1": "Background stays.", "B-2": "Method stays.", "B-3": "The value was 18%.", "B-4": "Limitation stays.", "B-5": "Conclusion stays."}}
+    ]
+  },
+  {
+    "id": "passport-material-hash-changed",
+    "skill": "rw-research-passport",
+    "synthetic": true,
+    "task": "Review this project state. MAT-1 was verified with hash old-111. Its current hash is new-222. Decision DEC-1 is marked verified and depends only on MAT-1. Handoff H-1 includes DEC-1. Return the project, decision, and handoff states plus invalidated material IDs.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "project_status": {"type": "string", "enum": ["READY", "REVIEW", "BLOCKED"]},
+        "decision_status": {"type": "string", "enum": ["VERIFIED", "NEEDS_REVIEW", "PROPOSED"]},
+        "handoff_status": {"type": "string", "enum": ["READY", "REVIEW", "BLOCKED"]},
+        "invalidated_material_ids": {"type": "array", "items": {"type": "string"}},
+        "required_action": {"type": "string"}
+      },
+      "required": ["project_status", "decision_status", "handoff_status", "invalidated_material_ids", "required_action"]
+    },
+    "checks": [
+      {"path": "project_status", "op": "eq", "value": "REVIEW"},
+      {"path": "decision_status", "op": "eq", "value": "NEEDS_REVIEW"},
+      {"path": "handoff_status", "op": "eq", "value": "BLOCKED"},
+      {"path": "invalidated_material_ids", "op": "set_eq", "value": ["MAT-1"]}
+    ]
+  },
+  {
+    "id": "passport-handoff-missing-material",
+    "skill": "rw-research-passport",
+    "synthetic": true,
+    "task": "Review handoff H-2. It requires materials MAT-1 and MAT-3. The project contains only MAT-1. No other record points to MAT-3. Return whether handoff can proceed and list missing material IDs.",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "handoff_status": {"type": "string", "enum": ["READY", "REVIEW", "BLOCKED"]},
+        "can_handoff": {"type": "boolean"},
+        "missing_material_ids": {"type": "array", "items": {"type": "string"}},
+        "required_action": {"type": "string"}
+      },
+      "required": ["handoff_status", "can_handoff", "missing_material_ids", "required_action"]
+    },
+    "checks": [
+      {"path": "handoff_status", "op": "eq", "value": "BLOCKED"},
+      {"path": "can_handoff", "op": "eq", "value": false},
+      {"path": "missing_material_ids", "op": "set_eq", "value": ["MAT-3"]}
+    ]
+  },
+  {
+    "id": "router-citation-format-only",
+    "skill": "rw-research-router",
+    "synthetic": true,
+    "task": "Route this request to one primary Skill: 'Check whether every in-text citation appears in the reference list, resolve same-author same-year suffixes, and verify DOI formatting. Do not assess whether the sources support the claims.'",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_skill": {"type": "string"},
+        "excluded_skills": {"type": "array", "items": {"type": "string"}},
+        "reason": {"type": "string"}
+      },
+      "required": ["primary_skill", "excluded_skills", "reason"]
+    },
+    "checks": [
+      {"path": "primary_skill", "op": "eq", "value": "rw-citation-audit"},
+      {"path": "excluded_skills", "op": "contains", "value": "rw-claim-audit"}
+    ]
+  },
+  {
+    "id": "router-technical-replicates",
+    "skill": "rw-research-router",
+    "synthetic": true,
+    "task": "Route this request to one primary Skill: 'The manuscript reports n=9 from three independent experiments with three technical wells in each experiment. Check the analysis unit, n, and statistical reporting.'",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_skill": {"type": "string"},
+        "reason": {"type": "string"},
+        "next_step": {"type": "string"}
+      },
+      "required": ["primary_skill", "reason", "next_step"]
+    },
+    "checks": [
+      {"path": "primary_skill", "op": "eq", "value": "rw-statistics-audit"}
+    ]
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "normal-two-blocks",
+    "prompt": "只修改 5 个块中的 2 个。",
+    "expect": [
+      "原文件不变",
+      "2 个块被替换",
+      "报告 preserved ratio"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-comment-span",
+    "fixture_kind": "synthetic",
+    "prompt": "导师只高亮一句话并要求 Expand，但问题的前提和边界位于同一段的前后句。",
+    "expect": [
+      "把高亮句作为问题位置而非论证边界",
+      "在已批准段落块内修复完整论证单位",
+      "报告实际修改范围和概念闭合结果"
+    ]
+  },
+  {
+    "id": "stop-stale-hash",
+    "prompt": "文稿在生成 Patch 后被改动。",
+    "expect": [
+      "hash 不匹配",
+      "整批停止",
+      "不生成部分结果"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-structural",
+    "prompt": "要求删除两节并重排标题。",
+    "expect": [
+      "识别结构修改",
+      "不使用第一版 Patch",
+      "请求单独确认"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "patch-local-profile-do",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "宿主规则指定的本地档案写明：改 Word 要开修订，只用固定脚本。请为批准的 2 块生成 patch，并说明怎么落到 Word。",
+    "prompt": "复查这段合成的回复：助手没读档案，直接建议手动改 Word。",
+    "must_do": [
+      "先读档案，按档案的修改约定说明"
+    ],
+    "must_not": [
+      "忽略档案，按包内默认处理"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "patch-local-profile-dont",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "档案指定的 Word 修改约定文件读不到。请继续。",
+    "prompt": "复查这段合成的回复：助手按包内默认继续生成并应用 patch。",
+    "must_do": [
+      "停下告诉用户哪一个文件读不到"
+    ],
+    "must_not": [
+      "按包内默认继续应用 patch"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

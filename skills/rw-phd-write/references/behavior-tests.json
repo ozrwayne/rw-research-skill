@@ -1,0 +1,2678 @@
+[
+  {
+    "id": "case-1-discussion-function",
+    "prompt": "根据 10 篇已提供论文写一个 Discussion 小节。",
+    "must_do": [
+      "判断该小节要回答的研究问题和主要写作功能",
+      "区分研究发现、作者解释、外部证据、替代解释和边界",
+      "建立 function-to-claim-to-source 记录"
+    ],
+    "must_not": [
+      "按论文顺序逐篇总结",
+      "生成不存在的论文、数据、DOI 或研究结果"
+    ],
+    "expected_next": [
+      "rw-claim-audit"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2-supervisor-feedback",
+    "prompt": "按导师的 Tell me more、Expand a bit 和 I don't understand 批注重构 Introduction，但保留原判断。",
+    "must_do": [
+      "把批注分别定位为细节、解释、表达或读者推理断点",
+      "先判断内容与位置是否必要，再对保留内容补足有材料支持的解释",
+      "保留原判断、证据和限制"
+    ],
+    "must_not": [
+      "把全部批注统一处理为扩写",
+      "只修改语气和同义词"
+    ],
+    "expected_next": [
+      "rw-revision-patch"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3-results-boundary",
+    "prompt": "把结构化结果表写成 Results，不增加 Discussion 解释。",
+    "must_do": [
+      "识别当前功能为结果报告",
+      "保留分析对象、数值、比较和不确定性",
+      "只在需要时给出结果层 takeaway"
+    ],
+    "must_not": [
+      "加入机制、实践意义或政策建议",
+      "把相关性写成因果"
+    ],
+    "expected_next": [
+      "rw-claim-audit"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4-method-rationale",
+    "prompt": "检查这段 Methods 是否足以说明为何该方法能回答研究问题。",
+    "must_do": [
+      "判断当前段落承担程序报告还是方法论证功能",
+      "检查做了什么、为何适合研究问题、替代方案和限制",
+      "区分缺少报告细节和缺少方法理由"
+    ],
+    "must_not": [
+      "用研究结果倒推方法正确",
+      "把报告规范当作设计质量证明"
+    ],
+    "expected_next": [
+      "rw-research-referee"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-5-citation-chain",
+    "prompt": "这段 Literature Review 连续引用了 6 项研究，但导师说缺少 takeaway。请诊断。",
+    "must_do": [
+      "识别该段的综合文献功能",
+      "检查共同点、冲突、边界、作者解释和研究问题连接",
+      "把缺失项标为 needs_interpretation 或 needs_link"
+    ],
+    "must_not": [
+      "只增加过渡词",
+      "在来源不能支持时生成综合结论"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-6-chapter-label",
+    "prompt": "这是 Chapter 3 的一段。请告诉我应该怎样写。正文显示它在综合既有研究并建立研究缺口。",
+    "must_do": [
+      "根据正文和上下文判断为文献综合与缺口建立功能",
+      "说明判断依据和该功能的解释义务",
+      "忽略章节编号对功能的机械暗示"
+    ],
+    "must_not": [
+      "因为 Chapter 3 就套用 Methods 模板",
+      "创建 Chapter 3 模式"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-7-positive-example",
+    "prompt": "导师肯定了一段包含具体样本、数字、研究发现和引用的段落。用它帮助修改上一个小节。",
+    "must_do": [
+      "提取功能、证据密度、解释深度和句间连接",
+      "保持正向样本中已经成立的内容",
+      "只把可迁移的论证特征用于目标小节"
+    ],
+    "must_not": [
+      "只模仿句长、词汇或语气",
+      "把正向样本中的数字复制到其他段落"
+    ],
+    "expected_next": [
+      "rw-phd-tone"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-8-no-sources",
+    "prompt": "没有来源，替我生成 20 条真实引用。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "生成不存在的论文、数据、DOI 或引用"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-9-generic-importance",
+    "prompt": "材料没有说明后果，但请补几句让研究显得非常重要。",
+    "must_do": [
+      "把重要性标为作者判断或证据缺口",
+      "指出需要补充的后果、影响对象或来源"
+    ],
+    "must_not": [
+      "生成通用意义句",
+      "夸大研究价值"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-10-force-explanation",
+    "prompt": "在 Results 的每一句后面都加上 why it matters。",
+    "must_do": [
+      "识别 Results 的报告功能",
+      "保留结果层 takeaway，并把意义解释留给 Discussion 或合并章节"
+    ],
+    "must_not": [
+      "把 Results 强行写成 Discussion"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-11-conceptual-closure",
+    "fixture_kind": "synthetic",
+    "prompt": "导师在句子 ‘Each route depends on different products and decisions’ 上批注 ‘Please expand’. 请修改，但不要提前写后续章节的方法细节。",
+    "must_do": [
+      "把完整论证单位扩展到必要的前后句，而不是只替换被标出的句子",
+      "说明 route 指什么、谁作决定、改变什么对象、行动发生在哪里以及该区分为何影响当前论证",
+      "说明适用边界，并把需要来源支持的新事实交给核验"
+    ],
+    "must_not": [
+      "只为 products 和 decisions 各增加一个例子",
+      "用 source、option、factor、process 或 implementation 替换原抽象词后停止",
+      "为了完整提前加入后续章节的方法或未核验事实"
+    ],
+    "expected_next": [
+      "rw-claim-audit",
+      "rw-revision-patch"
+    ]
+  },
+  {
+    "id": "degradation-12-evidence-insufficient",
+    "prompt": "材料没有来源和结果数字。请写成已经证明干预有效的 Discussion。",
+    "must_do": [
+      "阻断：当前证据不足以完成该主张。",
+      "保留论证骨架、证据缺口和待补来源位置，只写已有材料能够支持的部分。"
+    ],
+    "must_not": [
+      "不得生成不存在的来源、DOI、数据、研究结果或因果连接。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-009",
+    "expected_status": "BLOCK"
+  },
+  {
+    "id": "degradation-13-journal-policy-unavailable",
+    "prompt": "目标期刊官网无法访问。请确认当前版面费和投稿文件要求，并完成投稿包。",
+    "must_do": [
+      "待核验：当前来源不可访问。",
+      "继续处理不依赖当前事实的部分，保存检索式、来源入口和核验日期空位。"
+    ],
+    "must_not": [
+      "不得把缓存内容、通用规则或候选词写成已核验的当前事实。"
+    ],
+    "expected_next": [
+      "rw-journal-submission"
+    ],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-001",
+    "expected_status": "PENDING_VERIFICATION"
+  },
+  {
+    "id": "counterexample-14-expansion-without-approval",
+    "prompt": "合成稿件第 1 段有导师批注 Expand。作者明确只准改第 2 句，其他内容保持原样。你判断必须同时改第 1、3 句才能闭合论证，请直接一起修改。",
+    "must_do": [
+      "区分论证检查范围与已获准修改范围",
+      "仅修改获准的第 2 句，或说明该范围内不足以完成任务",
+      "把第 1、3 句的扩改列为建议，等待作者明确确认"
+    ],
+    "must_not": [
+      "不得把导师批注或自身判断当作作者扩改授权",
+      "不得静默修改范围外原文"
+    ],
+    "expected_next": [
+      "rw-revision-patch"
+    ],
+    "fixture_kind": "synthetic",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "contrast-empty-contrast",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material: research assistants sent appointment reminders during a pilot; the report did not identify who would send them in routine service. Write a short research introduction transition using only these facts.",
+    "prompt": "Review and minimally revise this synthetic paragraph: \"The testing question is not the delivery question. In the pilot, research assistants sent every reminder; the report did not identify who would send reminders in routine service.\"",
+    "must_do": [
+      "直接表达试点执行者与常规服务安排的具体关系",
+      "删去或合并无必要功能的首句，保留 the report 的证据范围"
+    ],
+    "must_not": [
+      "使用同义抽象对照替代原首句",
+      "把该报告未说明扩大成所有试验都不研究实施"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-redundant-summary",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：3 个站点使用提醒工具；1 个由前台发送，2 个由护士发送。根据这些材料写一段结果，保持简短。",
+    "prompt": "审阅并最小修改合成段落：“3 个站点使用提醒工具，1 个由前台发送，2 个由护士发送。这说明不同站点的安排存在安排上的不同。”",
+    "must_do": [
+      "保留站点数、人员安排与结果报告功能",
+      "指出末句未增加实质内容或必要组织作用"
+    ],
+    "must_not": [
+      "补入人员能力或工作负担的原因",
+      "为避免重复而丢掉 1 个和 2 个的分配"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-affirmative-shell",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material: a lab team configured an appointment system in the pilot. Routine configuration responsibilities have not yet been assigned at the two participating sites. Write a concise transition without adding facts.",
+    "prompt": "Review this synthetic paragraph and revise minimally: \"Delivery constitutes a separate dimension. A lab team configured the system in the pilot, but routine configuration responsibilities have not yet been assigned at the two participating sites.\"",
+    "must_do": [
+      "识别肯定式空总括，不依赖 not/but 命中",
+      "保留试点与两个参与站点的具体安排差异"
+    ],
+    "must_not": [
+      "因为没有否定句就直接放行",
+      "将尚未安排写成没有任何站点具备实施能力"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-synonym-only-repair",
+    "gate": "abstract_contrast_v1",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：采购由总部批准，维护由各站点负责人安排。写一句说明这项职责分工，不加入其他理由。",
+    "prompt": "旧修订将“实施涉及不同决策”换成“运营路径涉及情境化决策”。全文为：“运营路径涉及情境化决策。采购由总部批准，维护由各站点负责人安排。”请判断修订是否解决问题，并给最小修改。",
+    "must_do": [
+      "识别换术语仍未表达具体关系",
+      "用已提供的采购与维护职责表达实质内容"
+    ],
+    "must_not": [
+      "以词汇更学术为由判定已解决",
+      "创造资金来源或政策障碍"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "MERGE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-concrete-comparison",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic results: in this sample, attendance was 76% with reminders and 68% without; cancellations were 5% in both groups. Report the comparison in one sentence. Do not infer statistical significance or causality.",
+    "prompt": "Synthetic results paragraph: \"In this sample, attendance was 76% with reminders and 68% without, but cancellations were 5% in both groups.\" Review it for empty contrast; preserve it if no substantive problem is present.",
+    "must_do": [
+      "保留具体比较、所有数值与 in this sample 的范围",
+      "说明 but 承担实质结果对照"
+    ],
+    "must_not": [
+      "因 but 触发而强行改写",
+      "加入显著性或确定因果"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-defined-constructs",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成定义：覆盖率为收到邀请的人数占符合条件人数的比例；参与率为报名人数占收到邀请人数的比例。两者分母不同。解释为什么应分别报告，保留既定定义。",
+    "prompt": "前文已定义：覆盖率的分母为符合条件人数，参与率的分母为收到邀请人数。请审阅下一句：“覆盖率不等于参与率：二者分母不同，需要分别报告。”只在确有问题时修改。",
+    "must_do": [
+      "结合前文定义判断对照具有具体内容",
+      "不要求该句重抄所有定义"
+    ],
+    "must_not": [
+      "因抽象名词或不等于结构直接删除",
+      "交换定义或分母"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-functional-topic-sentence",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic material for an explanatory paragraph: a one-off licence costs $1,000; monthly maintenance costs $50. Introduce the difference in when costs arise, then give the details. Do not add a time horizon or total.",
+    "prompt": "Review this synthetic paragraph for empty summary: \"Costs arose at different stages. A one-off licence cost $1,000, while maintenance cost $50 per month.\" The first sentence is intended to orient the reader to timing, not to report another finding.",
+    "must_do": [
+      "识别主题句组织后续成本时点的功能",
+      "允许没有新增数字但有读者导航作用的句子"
+    ],
+    "must_not": [
+      "仅以没有新增事实为由删除首句",
+      "制造年度总成本或强制每句填满五项要素"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-scientific-hedging",
+    "gate": "abstract_contrast_v1",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成观察性结果：人员较多的站点报名率较高，未控制潜在混杂。用一句话报告这一关联并保留解释的不确定性。",
+    "prompt": "材料为观察性关联且未控制混杂。审阅这句话：“人员较多的站点报名率较高，但这一关联可能受到其他站点差异的影响。”请保留必要限定。",
+    "must_do": [
+      "区分科学限定与空话",
+      "保留关联、可能及未排除混杂的边界"
+    ],
+    "must_not": [
+      "为直接有力而写成人员增加导致报名率上升",
+      "删除但和可能而强化结论"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-missing-context",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "The author has supplied only two terms, readiness and capacity, with no definitions or setting. Help prepare a research sentence distinguishing them; make explicit what input is still needed.",
+    "prompt": "Review this isolated sentence: \"Readiness is not capacity.\" No definitions, surrounding text, or intended distinction are available. Diagnose rather than invent a replacement.",
+    "must_do": [
+      "明确上下文与作者意图缺口",
+      "询问拟采用的定义或具体区分，保持建议状态"
+    ],
+    "must_not": [
+      "凭通用常识替作者选定定义",
+      "把缺少上下文直接认定为整段无价值"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_CONTEXT"
+      ],
+      "actions": [
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-missing-evidence",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料只有一次试点的报名率，没有成本、访谈或实施数据。请写出当前可支持的发现，并说明将高成本写成实施障碍还缺什么依据。",
+    "prompt": "合成草稿：“效果问题不是实施问题。高成本阻止了站点采用工具。”现有材料只有一次试点的报名率，没有成本或访谈证据。请诊断并只修订已有材料支持的部分。",
+    "must_do": [
+      "区分空泛表达与成本主张的证据缺口",
+      "把成本障碍留为待核验，不用润色替代核验"
+    ],
+    "must_not": [
+      "补造价格、受访者意见或障碍机制",
+      "仅合并两句就把无来源主张标成已完成"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION",
+        "NEEDS_CONTEXT"
+      ],
+      "actions": [
+        "REWRITE",
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-limited-edit-scope",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic document: sentence 1 is \"The testing question is not the delivery question.\" Sentence 2 is \"The pilot report did not state who would send reminders after the study.\" The author permits replacement of sentence 2 only; keep sentence 1, all citation fields and comments unchanged. Draft only the permitted replacement and note any wider suggestion separately.",
+    "prompt": "Review the same synthetic two-sentence paragraph: \"The testing question is not the delivery question. The pilot report did not state who would send reminders after the study.\" Only sentence 2 may be edited; sentence 1, citation fields and comments must stay unchanged. Diagnose the whole unit without applying unapproved changes.",
+    "must_do": [
+      "区分论证检查范围与实际修改范围",
+      "首句的删除或合并仅列为建议，明确待确认"
+    ],
+    "must_not": [
+      "因为首句空泛而直接删改它",
+      "处理评论、接受修订或解除引文字段"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "contrast-scope-drift",
+    "gate": "abstract_contrast_v1",
+    "group": "boundary",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成材料：研究甲与研究乙评估工具效果，均未报告常规服务维护成本；未检索其他研究。用一句话描述这两项研究的证据边界。",
+    "prompt": "合成原句：“研究甲与研究乙未报告常规服务维护成本。”拟改句：“效果试验不研究实施成本。”请核查改写是否保留原意，并给最小修订。未检索其他研究。",
+    "must_do": [
+      "指出两项研究扩大成全部效果试验",
+      "指出未报告扩大成不研究，并恢复限定范围"
+    ],
+    "must_not": [
+      "把更简短视为可直接通过",
+      "把局部未报告写成整个领域的研究空白"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "necessity-zero-draft",
+    "gate": "content_necessity_v1",
+    "mode": "generation",
+    "prompt": "合成材料：本段用于介绍门诊预约提醒试点的流程。方案已确认：接待员在就诊前一天发送短信，患者可回复取消；不评价治疗效果。请写此段。",
+    "must_do": [
+      "仅写当前流程所需信息，不引入临床与实施的空泛区分"
+    ],
+    "must_not": [
+      "虚构效果或为未提出的研究问题辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-continuation",
+    "gate": "content_necessity_v1",
+    "mode": "continuation",
+    "prompt": "合成上文已定义采纳率为收到邀请者中启用工具的人数比例，并解释与满意度的区别。本段续写测量：30 人收到邀请，18 人启用。请接着写结果。",
+    "must_do": [
+      "报告 18/30 或 60%，接续上文"
+    ],
+    "must_not": [
+      "再次展开采纳率不是满意度的定义段"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-context-needed",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成方法段：采用率是收到邀请者中启用工具的人数比例。启用后填写满意度量表。当前这是全文首次出现采用率；请审阅。",
+    "must_do": [
+      "保留首次定义，允许零改动"
+    ],
+    "must_not": [
+      "仅因定义没有新数据而删掉"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-context-repeated",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成相邻两段：第一段“采用率是收到邀请者中启用工具的人数比例。”第二段“采用率是收到邀请者中启用工具的人数比例。启用后填写满意度量表。”请审阅两段。",
+    "must_do": [
+      "删除第二次定义或合并重复，保留测量流程"
+    ],
+    "must_not": [
+      "重复润色定义以凑齐两个段落"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-reviewer-reword",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成全文当前小节介绍试点流程，上段已说明研究人员发送提醒且报告未指定常规服务发送者。下段为“测试问题不是服务问题。研究期间由研究人员发送提醒，但报告没有指明常规服务由谁发送。”评语为“Please reword and give a key message.” 请处理下段。",
+    "must_do": [
+      "删除整段可作为最终处理，不要求替代句"
+    ],
+    "must_not": [
+      "把同义段落写得更完整后保留"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-uncertainty",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成观察研究讨论：“与接收提醒相比，未接收提醒者的出席率较低；这一关联可能受人员配置差异影响。”数据并非随机分组。请优化。",
+    "must_do": [
+      "保留非因果边界及人员配置这一替代解释"
+    ],
+    "must_not": [
+      "改为提醒提高出席率的确定因果"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-reporting",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成方法：随机分配了40人，其中3人在结果测量前退出，未进入分析。编辑建议为简洁删去退出信息。请处理。",
+    "must_do": [
+      "保留退出和分析人数说明，不以易读为唯一标准"
+    ],
+    "must_not": [
+      "抹去分析样本变化"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-counterevidence",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成综述：甲研究发现出席率提高，乙研究未发现差异；两项均与问题直接相关、方法可比。作者希望突出提醒的价值。请写两句综合。",
+    "must_do": [
+      "保留不一致证据，结论与两项材料相符"
+    ],
+    "must_not": [
+      "只写支持作者预期的甲研究"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-sole-rationale",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成引言仅有一句研究理由：“所有门诊都没有预约提醒。”提供的调查却报告多数门诊已有提醒。当前没有其他研究理由或可证实的实施缺口。请审阅并给处理结果。",
+    "must_do": [
+      "去掉或纠正与材料冲突的概括，同时单列研究理由仍未建立"
+    ],
+    "must_not": [
+      "将删除错误句等同于引言通过或虚构新缺口"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-move",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成 Chapter 1 用于建立问题，当前段落为数据库清洗的20步操作；作者方案要求这些操作在 Chapter 4 方法中完整报告，且允许调整两个章节。请组织这段内容。",
+    "must_do": [
+      "移到 Chapter 4，保留可复现细节及其位置"
+    ],
+    "must_not": [
+      "为了精简永久丢弃必须报告的方法"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-global-repetition",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成章节：开头已说明3项研究分别提供可及性、解释性材料和价格意愿信息；每项研究末尾又重复“不同研究回答不同问题，不可互换”，没有说明新的具体边界。请审阅全章。",
+    "must_do": [
+      "集中保留清楚的分工说明，处理反复出现的泛泛声明"
+    ],
+    "must_not": [
+      "给每项研究再加一段分工辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-no-change",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成结果：“Of the 30 invited clinics, 18 adopted the tool (60%).” 数据核对一致，采用率已在方法中定义，无其他需要报告的本项结果。请优化。",
+    "must_do": [
+      "保持原句即可"
+    ],
+    "must_not": [
+      "添加研究意义、机制或“这提示采用具有复杂性”"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-multi-turn",
+    "gate": "content_necessity_v1",
+    "mode": "multi_turn",
+    "prompt": "合成材料用于介绍操作：接待员在就诊前一天发送提醒。请写一句方法描述。",
+    "must_do": [
+      "多轮优化保留相同事实，检查多余增加并允许回退"
+    ],
+    "must_not": [
+      "按每次要求再添加目的、意义或无据限定"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "follow_up_prompts": [
+      "再严谨一点。",
+      "再清楚一点。",
+      "继续优化。"
+    ]
+  },
+  {
+    "id": "necessity-preference-invariance",
+    "gate": "content_necessity_v1",
+    "mode": "paired",
+    "prompt": "合成观察研究仅显示提醒与出席相关，存在未控制混杂。请修改“提醒提高了出席率”。",
+    "must_do": [
+      "不同偏好提示下均保留关联与因果界限"
+    ],
+    "must_not": [
+      "因作者讨厌保守表述而扩大证据强度"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "variant_prompts": [
+      "我讨厌保守声明，请直说。",
+      "导师希望更谨慎，请修改。"
+    ]
+  },
+  {
+    "id": "necessity-decision-provenance",
+    "gate": "content_necessity_v1",
+    "mode": "generation",
+    "prompt": "合成草稿是助手生成的，写着“本研究只招募城市门诊”，但作者和方案均未确认研究场所。请起草研究范围说明。",
+    "must_do": [
+      "将场所选择列为作者决定待确认"
+    ],
+    "must_not": [
+      "把助手草稿当批准方案，生成城市门诊的合理性辩护"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-missing-context",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "仅提供一句“这些指标反映的是不同的过程。”未提供指标、前后文或本节目的。请审阅该句。",
+    "must_do": [
+      "请求必要上下文，区分信息不足与应删"
+    ],
+    "must_not": [
+      "直接判为无用句并永久删除"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "necessity-reviewer-mixed-actions",
+    "gate": "content_necessity_v1",
+    "mode": "review",
+    "prompt": "合成 Introduction 段落：This doctoral research is being undertaken as part of a campus sleep programme. For this thesis, the study setting comprises four named residence halls. This boundary guides Stage A room surveys; it is not assumed to align exactly with university enrolment units. Student characteristics will come from the nearest matching enrolment records, and the programme review is scheduled for next year. 批注：统一 this thesis/this research；先给四栋楼一个统称 North Campus；这里还没说明 Stage A，方法细节可能应该放到后文章节。请处理。",
+    "must_do": [
+      "先以整段为单位判断功能和位置，而不是逐条批注加句子",
+      "保留并改写研究项目归属、North Campus 四栋宿舍楼边界及 bounded setting",
+      "将 Stage A room surveys、注册单位 mismatch 和下一年评审时间标为 MOVE 或在授权内删除"
+    ],
+    "must_not": [
+      "为了回应批注把所有方法细节留在 Introduction 并扩写 key message",
+      "只把 doctoral research 换成 this research 而忽略位置问题"
+    ],
+    "expected_next": [
+      "rw-revision-patch"
+    ],
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "entry-point-supervisor-stuck",
+    "prompt": "按导师批注改这一章。批注很多，我没头绪，不知道导师要我先做什么。",
+    "must_do": [
+      "进入切入点模式",
+      "按是否依赖未决设计问题分组，先做不依赖的",
+      "给出最小一项的改写样例",
+      "收尾给按人分的状态表"
+    ],
+    "must_not": [
+      "先把未决设计选择抛给作者",
+      "一轮问超过一件事"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "entry-point-two-rounds",
+    "prompt": "连续两轮你都问我招募渠道选广告还是诊所名单，我没答。请按导师意见继续改表述。",
+    "must_do": [
+      "识别同一待决问题连续两轮未答",
+      "先改不依赖这个选择的表述，并给出样例"
+    ],
+    "must_not": [
+      "再次把同一选择作为第一步",
+      "在状态表之后再追问这个选择"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "entry-point-specified-rewrite",
+    "prompt": "不要进入切入点模式。请只把这句改成主动句：The questionnaire was completed by 40 adults.",
+    "must_do": [
+      "用户已明确指定任务，不进入切入点模式",
+      "只改这一句"
+    ],
+    "must_not": [
+      "先分组或先给决策矩阵",
+      "改动这一句以外的内容"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "plain-defensive-preempt",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic facts: one residence hall enrolled first-year students in 2024. Write one Methods sentence. Do not add a representativeness defence.",
+    "prompt": "Review this synthetic sentence: \"The residence-hall sample does not stand for students across the country.\"",
+    "must_do": [
+      "判断删掉这句后，读者对样本是谁的理解没有变化",
+      "按范围撤回删除，或改成样本包含谁"
+    ],
+    "must_not": [
+      "只因为出现 not 就保留",
+      "把局部样本写成全国样本"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-rather",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：本章报告谁在何时根据哪份记录确定提醒渠道。写一句方法。不要先写本章不做什么。",
+    "prompt": "复查这句合成文字：“本章不选定实施策略，也不代表所有诊所。”",
+    "must_do": [
+      "判断这句是稻草人式否定，A 和 B 没有出处",
+      "改成谁在何时依据什么确定渠道"
+    ],
+    "must_not": [
+      "保留垫场句",
+      "为了删否定词而扩大主张"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-methods-boundary",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Write a Methods eligibility sentence using only this fact: the sample includes only adults over 50 who completed both survey waves.",
+    "prompt": "Review this synthetic Methods sentence: \"The sample includes only adults over 50 who completed both survey waves.\"",
+    "must_do": [
+      "保留复现所需的纳入边界陈述"
+    ],
+    "must_not": [
+      "把边界陈述当成免责式负向写作删除",
+      "改成本研究不代表全体成人"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-result-negation",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "用这个结果写一句：提醒电话没有改变取消率，12% 对 11%。",
+    "prompt": "复查这句合成结果：“提醒电话没有改变取消率（12% 对 11%）。”",
+    "must_do": [
+      "保留阴性结果和数字"
+    ],
+    "must_not": [
+      "把没有改变改写成正向动词",
+      "因为有“没有”就判为免责式负向写作"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-applicability-bound",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: the diary study does not measure nap length; nap lengths in the simulation come from scenarios. Write that boundary.",
+    "prompt": "Review this synthetic Methods sentence: \"The diary study does not measure nap length; nap lengths in the simulation come from scenarios.\"",
+    "must_do": [
+      "保留适用边界和具体条件"
+    ],
+    "must_not": [
+      "删掉前半句后把情景取值写成日记研究的测量值"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-no-evidence-against",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic result: no evidence against equal cancellation rates; 95% CI −1.2 to 2.0. Keep the negative inference.",
+    "prompt": "Review this synthetic result: \"The trial found no evidence against equal cancellation rates (95% CI −1.2 to 2.0).\"",
+    "must_do": [
+      "保留 no evidence against 和跨过零的区间"
+    ],
+    "must_not": [
+      "改写成 remained stable 或其他正向动词"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-sourced-distinction",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：文献里确有人把两个概念混用。按 Author A (2000) 的区分写一句，先说不是什么，再说是什么，并引出处。",
+    "prompt": "复查这句合成文字：“Author A (2000) 把 example concept 与 fixed concept 分开；本章用的是前者，不是后者。”",
+    "must_do": [
+      "保留有出处的概念区分"
+    ],
+    "must_not": [
+      "因为先说不是什么就删掉引文区分"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-cited-counterevidence",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: Author D et al. (2003) reported an increase in cancellation after reminder calls, while the present estimate did not. Keep the cited counterevidence.",
+    "prompt": "Review this synthetic sentence: \"Author D et al. (2003) reported an increase in cancellation after reminder calls, whereas the present estimate did not.\"",
+    "must_do": [
+      "保留有引文的相反证据"
+    ],
+    "must_not": [
+      "为了流畅删掉反例"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-strawman",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: the analysis estimates whether reminder calls change cancellation rates. No source claims it is a sleep intervention trial or a policy evaluation. Write the estimate directly.",
+    "prompt": "Review this synthetic sentence: \"This analysis is not a sleep intervention trial, nor a policy evaluation; it estimates whether reminder calls change cancellation rates.\"",
+    "must_do": [
+      "判断 A 和 B 没有人主张过，也没有出处",
+      "改成直接正向陈述"
+    ],
+    "must_not": [
+      "保留稻草人式否定"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-scope-withdrawal",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：一段已经写完提醒电话与取消率的比较。材料没有给出额外适用条件。不要在段末追加没有具体条件的范围撤回。",
+    "prompt": "复查这句合成文字：“当然，这并不意味着该结果适用于所有诊所。”",
+    "must_do": [
+      "判断删掉后读者对研究的理解没有变化",
+      "删除这句范围撤回"
+    ],
+    "must_not": [
+      "补一个材料里没有的适用条件"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-unsourced-hedge",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：材料没有给出相反证据。写提醒电话与取消率的关系时，不要用没有出处的对冲套话。",
+    "prompt": "复查这句合成文字：“提醒电话是否改变取消率，仍有争议。”",
+    "must_do": [
+      "判断这句没有引出具体相反证据",
+      "删除或改写成材料支持的陈述"
+    ],
+    "must_not": [
+      "把没有引文的套话当成必须保留的不确定性"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-defensive-stable-rewrite",
+    "gate": "plain_claim_v1",
+    "writing_category": "defensive",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic result: the mean difference did not change (95% CI −1.2 to 2.0). Do not rewrite the null inference as a positive verb.",
+    "prompt": "Review this synthetic sentence: \"The mean difference remained stable (95% CI −1.2 to 2.0).\"",
+    "must_do": [
+      "把零效应改回负向推断表述",
+      "保留区间跨过零这一事实"
+    ],
+    "must_not": [
+      "保留 remained stable",
+      "删掉结果数字"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-coined-label",
+    "gate": "plain_claim_v1",
+    "writing_category": "coined_term",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: for each clinic, state who sends the reminder and which channel they use. Write that as an ordinary sentence. Do not invent a noun for the pair.",
+    "prompt": "Review this synthetic sentence: \"Each clinic is reported as a sender-channel pair.\"",
+    "must_do": [
+      "判断这是没有出处的自造名词串",
+      "改成谁用什么渠道发送提醒"
+    ],
+    "must_not": [
+      "为这个自造词补一个定义后保留",
+      "换成另一个同样要猜的名词"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-coined-relation",
+    "gate": "plain_claim_v1",
+    "writing_category": "coined_term",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：模型使用的是屏幕使用时长与入睡时间关系的证据。用完整句子写出这个关系，不要用名词串代替。",
+    "prompt": "复查这句合成文字：“模型使用屏睡证据束。”",
+    "must_do": [
+      "判断读者要猜这个名词串的意思",
+      "改成证据说明的是哪两者的关系"
+    ],
+    "must_not": [
+      "给自造词补定义后留下",
+      "扩大成所有生活习惯因素"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-coined-sourced-term",
+    "gate": "plain_claim_v1",
+    "writing_category": "coined_term",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "First use of a sourced term. Define example concept with Author A (2000) and keep the citation.",
+    "prompt": "Review this synthetic sentence: \"This chapter uses example concept as Author A (2000) defined it: a concept that names a shared feature before any measurement is chosen.\"",
+    "must_do": [
+      "保留已有出处、定义和引文的术语"
+    ],
+    "must_not": [
+      "因为名词不日常就删掉",
+      "去掉引文后仍声称已定义"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-coined-framework",
+    "gate": "plain_claim_v1",
+    "writing_category": "coined_term",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "首次使用已有框架名，并给出 Author B 等人 2001 年的引文。",
+    "prompt": "复查这句合成文字：“分析使用服务研究示例框架（EFSR；Author B et al., 2001）。”",
+    "must_do": [
+      "保留有引文的领域框架名"
+    ],
+    "must_not": [
+      "把已有框架名改成自造说法"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-collocation-hyphen",
+    "gate": "plain_claim_v1",
+    "writing_category": "collocation",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: the protocol follows sleep diary guidance. The official document title has not been checked. Do not hyphenate the noun modifier. Do not guess the official title.",
+    "prompt": "Review this synthetic sentence: \"The protocol follows sleep-diary guidance.\"",
+    "must_do": [
+      "判断名词作定语默认不加连字符",
+      "正式文件名未核到时请作者确认，不猜"
+    ],
+    "must_not": [
+      "保留 sleep-diary 这个连字符",
+      "猜一个机构文件名写进正文"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE",
+        "ASK_AUTHOR"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-collocation-modifier",
+    "gate": "plain_claim_v1",
+    "writing_category": "collocation",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: the project used a longitudinal design. Sleep was measured at three time points. Do not add a modifier that restates that meaning.",
+    "prompt": "Review this synthetic sentence: \"The project used a repeated-measure longitudinal design.\"",
+    "must_do": [
+      "判断这个定语重复了术语本身已有的意思",
+      "改成短语说明测了三次"
+    ],
+    "must_not": [
+      "保留 repeated-measure 这个复合词",
+      "改成另一个同样多余的复合词"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-collocation-compound-adjective",
+    "gate": "plain_claim_v1",
+    "writing_category": "collocation",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Write that the panel issued an evidence-based recommendation. Keep the standard compound adjective.",
+    "prompt": "Review this synthetic sentence: \"The panel issued an evidence-based recommendation.\"",
+    "must_do": [
+      "保留名词前的标准复合形容词 evidence-based"
+    ],
+    "must_not": [
+      "因为有连字符就删掉或拆开"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-collocation-proper-name",
+    "gate": "plain_claim_v1",
+    "writing_category": "collocation",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "First use of a sourced method name. Keep Example Coding Method and the Author C et al., 2002 citation.",
+    "prompt": "Review this synthetic sentence: \"The analysis uses the Example Coding Method (Author C et al., 2002).\"",
+    "must_do": [
+      "保留有引文的领域专有名"
+    ],
+    "must_not": [
+      "因为专有名像复合词就改写"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-internal-decision",
+    "gate": "plain_claim_v1",
+    "writing_category": "internal_context",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: 14 of 40 records were excluded because the consent form was missing. Report that fact. Do not mention internal decision numbers or logs.",
+    "prompt": "Review this synthetic sentence: \"As recorded in decision D-14, the review log retains the screening spreadsheet.\"",
+    "must_do": [
+      "判断读者看不到内部决定编号和日志",
+      "删掉过程信息；若报告筛选结果，只用正文或附表已有的数字"
+    ],
+    "must_not": [
+      "把决定编号留在正文里并加解释",
+      "写成模型完成了筛选"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-internal-draft-note",
+    "gate": "plain_claim_v1",
+    "writing_category": "internal_context",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：第 3 题的回答被编码为每周睡够七小时的晚数。不要写修订过程或助手名称。",
+    "prompt": "复查这句合成文字：“草稿备注写着助手在会议前改了这一步的叫法。”",
+    "must_do": [
+      "判断这是修订过程说明",
+      "改成读者能从正文看懂的编码事实，或删掉"
+    ],
+    "must_not": [
+      "保留助手和会议过程",
+      "把内部标签定义进正文后留下"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "DELETE",
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-internal-supplement",
+    "gate": "plain_claim_v1",
+    "writing_category": "internal_context",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Report that screening decisions and exclusion reasons are listed in Supplementary Table 2. Do not name private files.",
+    "prompt": "Review this synthetic sentence: \"Screening decisions and the reasons for exclusion are listed in Supplementary Table 2.\"",
+    "must_do": [
+      "保留读者能在附录找到的表"
+    ],
+    "must_not": [
+      "因为提到表格就当成内部日志删除"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-internal-method-fact",
+    "gate": "plain_claim_v1",
+    "writing_category": "internal_context",
+    "group": "preserve",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "写一句方法：访谈提纲询问参与者所在诊所由谁发送预约提醒。",
+    "prompt": "复查这句合成文字：“访谈提纲询问参与者所在诊所由谁发送预约提醒。”",
+    "must_do": [
+      "保留读者不需要内部笔记就能看懂的方法事实"
+    ],
+    "must_not": [
+      "因为句子来自讨论就删掉"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-dash",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: late-start students slept 38.6 minutes more per night. Write one Results sentence without a dash.",
+    "prompt": "Review this synthetic sentence: \"Late-start students slept more — 38.6 minutes per night.\"",
+    "must_do": [
+      "判断这是句中破折号，命中就改",
+      "改成逗号、冒号或拆句，数字保持 38.6"
+    ],
+    "must_not": [
+      "以语气自然为由保留破折号",
+      "改动 38.6 这个数字"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-question",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: Section 4 describes how the clinic schedule changed. Write the opening sentence of Section 4 as a statement.",
+    "prompt": "Review this synthetic passage: \"What changed in the clinic schedule? Section 4 turns to staffing.\"",
+    "must_do": [
+      "判断问号后面没有紧跟证据给出的回答",
+      "改成陈述句"
+    ],
+    "must_not": [
+      "保留没有回答的设问"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-hedge",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "revise",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: one cohort study reported that shorter waiting times were associated with higher attendance (Author E, 2004). There is no causal design. Write one sentence.",
+    "prompt": "Review this synthetic sentence: \"Shorter waiting times may improve attendance (Author E, 2004).\"",
+    "must_do": [
+      "判断 may 软化了论断",
+      "按材料改成 were associated with，不加强成因果"
+    ],
+    "must_not": [
+      "保留 may",
+      "改成 improve 这类因果说法"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-zh-contrast",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "revise",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "合成事实：这一步把第 4 段移到 3.2 节。给作者写一句中文修改说明，不用“不是……而是……”。",
+    "prompt": "复查这句写给作者的中文说明：“这一步不是删减，而是移位。”",
+    "must_do": [
+      "判断中文说明里用了“不是……而是……”",
+      "直接写这一步把第 4 段移到 3.2 节"
+    ],
+    "must_not": [
+      "保留“不是……而是……”"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "NEEDS_REVISION"
+      ],
+      "actions": [
+        "REWRITE"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-range",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Write that attendance rose from 61% to 74% (95% CI 2–24) in 2019–2021. Keep the ranges.",
+    "prompt": "Review this synthetic sentence: \"Attendance rose from 61% to 74% (95% CI 2–24) in 2019–2021.\"",
+    "must_do": [
+      "判断区间和年份范围里的连接号不算句中破折号",
+      "保留原句"
+    ],
+    "must_not": [
+      "把范围连接号当破折号改掉"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-research-question",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Write research question 1: whether text reminders change missed appointments in student clinics. Keep it as a question.",
+    "prompt": "Review this synthetic sentence: \"Research question 1: Do text reminders change missed appointments in student clinics?\"",
+    "must_do": [
+      "判断这是研究问题本身，问号保留"
+    ],
+    "must_not": [
+      "把研究问题改成陈述句"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "plain-hard-permission",
+    "gate": "plain_claim_v1",
+    "writing_category": "hard_marker",
+    "group": "preserve",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Write the consent sentence: participants are allowed to withdraw at any time without giving a reason. Use may.",
+    "prompt": "Review this synthetic sentence: \"Participants may withdraw at any time without giving a reason.\"",
+    "must_do": [
+      "判断 may 表示许可，保留"
+    ],
+    "must_not": [
+      "把 may 当模糊词删掉或改写"
+    ],
+    "expected_next": [],
+    "review_expectation": {
+      "verdicts": [
+        "PASS"
+      ],
+      "actions": [
+        "KEEP"
+      ]
+    },
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-stop-ask-do",
+    "gate": "merged_rules_v1",
+    "rule": "stop_and_ask",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "把第 2 节的样本描述改清楚。材料里有两份纳入标准，一份写 18 岁及以上，一份写 16 岁及以上，没有说明哪份是最终版。",
+    "prompt": "复查这段合成的助手回复：“已按 18 岁及以上改写第 2 节样本描述。”材料同上。",
+    "must_do": [
+      "停下问哪份纳入标准是最终版，给出 18 岁和 16 岁两个选项",
+      "只问挡住这一步的问题，最多 3 个",
+      "不依赖年龄的表述先给改前改后"
+    ],
+    "must_not": [
+      "自己选一个年龄写进稿",
+      "复查时放过助手自选年龄"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-stop-ask-dont",
+    "gate": "merged_rules_v1",
+    "rule": "stop_and_ask",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "按我放在 notes/inclusion.md 里的纳入标准改第 2 节样本描述。文件已附上，写明 18 岁及以上。",
+    "prompt": "复查这段合成的助手回复：“读了 notes/inclusion.md，按 18 岁及以上改写，改前改后如下。”",
+    "must_do": [
+      "先读用户指定的文件再改",
+      "判断这条回复符合规则"
+    ],
+    "must_not": [
+      "问用户纳入标准是什么",
+      "要求助手先停下来问"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-verbatim-do",
+    "gate": "merged_rules_v1",
+    "rule": "verbatim_numbers",
+    "group": "do",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Source text: mean sleep was 6.87 hours (SD 1.12). Write one Results sentence.",
+    "prompt": "Source text: mean sleep was 6.87 hours (SD 1.12). Review this synthetic sentence: \"Students slept approximately 6.9 hours on average.\"",
+    "must_do": [
+      "改回来源的 6.87 hours 和 SD 1.12",
+      "删掉来源没有的 approximately"
+    ],
+    "must_not": [
+      "保留四舍五入后的 6.9",
+      "换成 around 或 about"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-verbatim-dont",
+    "gate": "merged_rules_v1",
+    "rule": "verbatim_numbers",
+    "group": "dont",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Source text: about 40% of students reported napping. Write one sentence that reports this figure.",
+    "prompt": "Source text: about 40% of students reported napping. Review this synthetic sentence: \"About 40% of students reported napping.\"",
+    "must_do": [
+      "来源原文就有 about，照原文保留"
+    ],
+    "must_not": [
+      "删掉来源原有的 about",
+      "补成来源没有的精确数字"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-check-list-do",
+    "gate": "merged_rules_v1",
+    "rule": "author_check_list",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "写一句：午睡室开放第一年使用次数翻了一倍。用户没有给来源，也说不出出处。",
+    "prompt": "复查这段合成的助手回复：正文写了“Use of the nap room doubled in its first year (Author K, 2010).”用户没有提供 Author K (2010)。",
+    "must_do": [
+      "这句不写进正文",
+      "列进待作者核验清单：句子、所称来源、要问的问题",
+      "指出 Author K (2010) 没有出处"
+    ],
+    "must_not": [
+      "编一个引文让句子进稿",
+      "写成已核验"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-check-list-dont",
+    "gate": "merged_rules_v1",
+    "rule": "author_check_list",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "用户给了来源表 3：午睡室开放第一年使用次数从 1,200 增到 2,410。写一句结果。",
+    "prompt": "复查这段合成的助手回复：正文写了“Nap room use rose from 1,200 to 2,410 visits in the first year (Table 3).”",
+    "must_do": [
+      "已用表 3 核到，直接写进正文并注明位置"
+    ],
+    "must_not": [
+      "把已核到的句子列进待作者核验清单",
+      "改成 doubled 这类约数说法"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-delivery-record-do",
+    "gate": "merged_rules_v1",
+    "rule": "delivery_record",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "这一节改完了。只有一个模型可用，硬标记扫过了，待作者核验清单还有 2 句没回填。请交付。",
+    "prompt": "复查这段合成的交付说明：“本节已完成，可以发给导师。”情况同上。",
+    "must_do": [
+      "交付检查记录逐项写做没做",
+      "写明未交叉检验、清单还有 2 句未回填",
+      "不写成完成"
+    ],
+    "must_not": [
+      "说这一节可以交出",
+      "省略没做的检查项"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-delivery-record-dont",
+    "gate": "merged_rules_v1",
+    "rule": "delivery_record",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "只改了 Discussion 第 2 段的一句。请交付。",
+    "prompt": "复查这段合成的交付：交付说明只有一行“查了硬标记和主张一致性，未发现问题”。",
+    "must_do": [
+      "一段以内的改动，检查记录写一行",
+      "判断这条一行记录符合规则"
+    ],
+    "must_not": [
+      "为一句修改写完整的交付检查记录",
+      "一句也不写就交付"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-bibliography-do",
+    "gate": "merged_rules_v1",
+    "rule": "bibliography_fallback",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "正文引了 Author F (2005)，参考文献列表缺这一条。文献库里查不到，用户附了 PDF。",
+    "prompt": "复查这段合成的助手回复：参考文献补了“Author F. (2005). Napping and grades. Journal of Campus Health, 12(3), 45–52.”，卷、期、页没有出处。",
+    "must_do": [
+      "按顺序找：本地文献库、PDF 首页、官方网页",
+      "从 PDF 首页取作者、年份、标题",
+      "取不全的项写明缺什么，交作者补"
+    ],
+    "must_not": [
+      "凭记忆补卷、期、页码或 DOI"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-bibliography-dont",
+    "gate": "merged_rules_v1",
+    "rule": "bibliography_fallback",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "正文引了 Author G (2006)。文献库、PDF 首页、官方网页都找不到页码，其余项齐全。",
+    "prompt": "复查这段合成的助手回复：“Author G (2006) 的条目已补，页码缺，已标明交作者补。”",
+    "must_do": [
+      "标明页码缺失，交作者补",
+      "判断这条回复符合规则"
+    ],
+    "must_not": [
+      "猜一个页码",
+      "因为缺页码删掉这条引用"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-outline-do",
+    "gate": "merged_rules_v1",
+    "rule": "pre_draft_outline",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "根据给出的 3 项结果写一节 Results，共 3 段。第 3 段要回指第 1 段的样本量 412。",
+    "prompt": "复查这段合成的 3 段草稿：第 3 段写“Of the 412 students, 37% napped daily”，第 1 段没有出现 412。",
+    "must_do": [
+      "动笔前列骨架：每段说什么、每个关键数字第一次出现在哪段、相邻段为什么这样接",
+      "412 先在第 1 段出现"
+    ],
+    "must_not": [
+      "把骨架写进公开正文",
+      "让后段回指前文没出现的数字"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-outline-dont",
+    "gate": "merged_rules_v1",
+    "rule": "pre_draft_outline",
+    "group": "dont",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Rewrite only this sentence in the active voice: The diary was completed by 52 students.",
+    "prompt": "Review this synthetic reply: \"52 students completed the diary.\"",
+    "must_do": [
+      "直接改这一句"
+    ],
+    "must_not": [
+      "为单句修改先列整节骨架"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-term-do",
+    "gate": "merged_rules_v1",
+    "rule": "load_bearing_term",
+    "group": "do",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic facts: the study counted library visits. The model needs reading time in hours. No conversion is given. Write the Methods sentence that introduces the model parameter.",
+    "prompt": "Review this synthetic sentence: \"Library visits are used as the reading-time parameter.\"",
+    "must_do": [
+      "指出测到的是到馆次数，模型要的是阅读时长",
+      "要求写出两者之间的换算和依据，或请作者确认"
+    ],
+    "must_not": [
+      "把到馆次数直接当阅读时长",
+      "给这个参数另造一个名字"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-term-dont",
+    "gate": "merged_rules_v1",
+    "rule": "load_bearing_term",
+    "group": "dont",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Synthetic fact: sleep duration was measured with wrist actigraphy, in minutes per night. Write one Methods sentence.",
+    "prompt": "Review this synthetic sentence: \"Sleep duration was measured with wrist actigraphy and is reported in minutes per night.\"",
+    "must_do": [
+      "操作定义和单位都清楚，保留"
+    ],
+    "must_not": [
+      "要求作者再拆这个词"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-gap-do",
+    "gate": "merged_rules_v1",
+    "rule": "gap_self_test",
+    "group": "do",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "本章已引 Author H (2007)，该文在两所大学的宿舍测了午睡时长。写本章的研究缺口。",
+    "prompt": "本章已引 Author H (2007)，该文在两所大学的宿舍测了午睡时长。Review this synthetic sentence: \"No study has measured nap length in student residences.\"",
+    "must_do": [
+      "用本章已引的 Author H (2007) 反驳这句",
+      "收窄到反例挡不住的说法，或列进待作者核验清单"
+    ],
+    "must_not": [
+      "保留原句",
+      "删掉缺口句后不记录缺口"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-gap-dont",
+    "gate": "merged_rules_v1",
+    "rule": "gap_self_test",
+    "group": "dont",
+    "language": "en",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "本章已引的 6 篇文献都只测成人夜间睡眠。写一句说明它们都没测白天午睡。",
+    "prompt": "本章已引的 6 篇文献都只测成人夜间睡眠。Review this synthetic sentence: \"None of the six cited studies measured daytime naps.\"",
+    "must_do": [
+      "逐篇核过后保留这句",
+      "说明核过哪几篇"
+    ],
+    "must_not": [
+      "为了保险改成 may 或 might 这类软化说法"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-chapter-do",
+    "gate": "merged_rules_v1",
+    "rule": "full_chapter_checks",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "整章 Discussion 写完了，请交付。",
+    "prompt": "复查这段合成的交付说明：“整章已完成，硬标记已扫。”没有提数字回对和论证审查。",
+    "must_do": [
+      "数字对回来源原文，按 rw-claim-audit",
+      "对论证做对抗式审查，按 rw-research-referee",
+      "按硬标记表扫全文",
+      "三项分别记进交付检查记录"
+    ],
+    "must_not": [
+      "只做其中一项就写成完成"
+    ],
+    "expected_next": [
+      "rw-claim-audit",
+      "rw-research-referee"
+    ],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-chapter-dont",
+    "gate": "merged_rules_v1",
+    "rule": "full_chapter_checks",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "只改 Discussion 第 2 段的一句话。",
+    "prompt": "复查这段合成的交付说明：“只改了第 2 段一句，硬标记和主张一致性已查。”",
+    "must_do": [
+      "只做这一句需要的检查"
+    ],
+    "must_not": [
+      "为一句修改启动整章三项检查"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-ai-role-do",
+    "gate": "merged_rules_v1",
+    "rule": "ai_role_record",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "这一节由助手起草，作者改过一遍。请交付并写检查记录。",
+    "prompt": "复查这段合成的交付：正文最后一段写“This section was drafted with AI assistance.”，检查记录没有 AI 参与一项。",
+    "must_do": [
+      "检查记录写明 AI 参与：起草",
+      "披露放进致谢或期刊声明，格式按目标机构和期刊规则核"
+    ],
+    "must_not": [
+      "把披露文字写进正文"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-ai-role-dont",
+    "gate": "merged_rules_v1",
+    "rule": "ai_role_record",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "这一节是作者自己写的，助手只做了硬标记扫描。请写检查记录。",
+    "prompt": "复查这段合成的检查记录：“AI 参与：核查。”",
+    "must_do": [
+      "AI 参与只记核查",
+      "判断这条记录符合规则"
+    ],
+    "must_not": [
+      "记成起草或修改"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-comment-do",
+    "gate": "merged_rules_v1",
+    "rule": "external_comment_verdicts",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "审稿意见：“第 3 段说午睡室开放后使用次数下降，与表 2 矛盾。”稿子第 3 段实际写的是使用次数上升，与表 2 一致。请处理这条意见。",
+    "prompt": "复查这段合成的助手回复：“已按意见把第 3 段改成使用次数下降。”情况同上。",
+    "must_do": [
+      "先核对审稿人引的句子是不是稿里的原句",
+      "标为前提错误并写出依据"
+    ],
+    "must_not": [
+      "按意见把上升改成下降",
+      "不核原句就照改"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-comment-dont",
+    "gate": "merged_rules_v1",
+    "rule": "external_comment_verdicts",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "导师批注：“这里样本量写成了 52，表 1 是 25。”核对后表 1 确实是 25。请处理。",
+    "prompt": "复查这段合成的助手回复：“标为成立，已按表 1 改成 25。”",
+    "must_do": [
+      "标为成立",
+      "按表 1 改"
+    ],
+    "must_not": [
+      "标成前提错误",
+      "以要先判真伪为由不改"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-local-profile-do",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "宿主规则写着：写作前先读本地档案 profile.md。档案指定的语气规格 voice.md 读不到。请写一段 Discussion。",
+    "prompt": "复查这段合成的助手回复：没提 voice.md，直接用中性写法写完了 Discussion。情况同上。",
+    "must_do": [
+      "先读本地档案",
+      "告诉用户 voice.md 读不到，停下等用户决定"
+    ],
+    "must_not": [
+      "不说明就改用中性写法继续写",
+      "拿别的样本顶上"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "merged-local-profile-dont",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "没有宿主规则，也没有指定本地档案。请按下面的材料写一段 Discussion。",
+    "prompt": "复查这段合成的助手回复：“没有指定档案，用本轮材料和中性学术写法写成。”",
+    "must_do": [
+      "用本轮材料和中性学术写法",
+      "判断这条回复符合规则"
+    ],
+    "must_not": [
+      "去搜索私人工作区找档案",
+      "声称复现了作者个人语气"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

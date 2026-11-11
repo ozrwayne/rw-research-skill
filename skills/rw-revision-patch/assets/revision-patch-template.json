@@ -1,0 +1,14 @@
+{
+  "schema_version": "rw-revision-patch/v1",
+  "base_document_hash": "BASE-DOCUMENT-HASH",
+  "operations": [
+    {
+      "op": "replace",
+      "block_id": "B0001",
+      "expected_hash": "BLOCK-HASH",
+      "new_text": "Replacement block text.",
+      "reason": "Reason for the change.",
+      "issue_ids": []
+    }
+  ]
+}

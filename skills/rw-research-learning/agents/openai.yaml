@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Learning"
+  short_description: "发现并扫描本地研究积累，判断已有基础，生成下一份学习产物"
+  default_prompt: "Use $rw-research-learning to 发现并扫描我的本地积累，判断研究基础，并生成适合我的第一份学习产物。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Data"
+  short_description: "审查研究数据、代码和材料的可取得性、版本、标识符、限制和声明，不把公开等同于可复用。"
+  default_prompt: "Use $rw-research-data to 审查研究数据、代码和材料的可取得性、版本、标识符、限制和声明，不把公开等同于可复用。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Question"
+  short_description: "把研究兴趣转成可界定、可检索、可证伪和可执行的问题。"
+  default_prompt: "Use $rw-research-question to 把研究兴趣转成可界定、可检索、可证伪和可执行的问题。"

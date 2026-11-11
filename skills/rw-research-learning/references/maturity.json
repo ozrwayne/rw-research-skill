@@ -1,0 +1,18 @@
+{
+  "skill": "rw-research-learning",
+  "version": "standalone-v2",
+  "generated_at": "2026-07-21",
+  "standalone": true,
+  "local_hard_dependencies": [],
+  "optional_integrations": [
+    "user-provided folders",
+    "read access to user content",
+    "pypdf for PDF text extraction",
+    "other RW research skills"
+  ],
+  "atom_count": 29,
+  "axiom_count": 12,
+  "behavior_test_count": 13,
+  "public_source_count": 0,
+  "grounding_status": "user-material-grounded"
+}

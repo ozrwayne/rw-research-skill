@@ -1,0 +1,37 @@
+{
+  "schema_version": "rw-research-learning/v2",
+  "visibility": "private_local",
+  "generated_at": "",
+  "topic": "",
+  "scope": {
+    "mode": "folder",
+    "discovery_roots": [],
+    "roots": [],
+    "manifest": "scan-manifest.json"
+  },
+  "scan_summary": {
+    "files_seen": 0,
+    "indexed": 0,
+    "partial": 0,
+    "unsupported": 0,
+    "too_large": 0,
+    "sensitive": 0,
+    "unreadable": 0,
+    "unchanged": 0,
+    "changed": 0,
+    "deleted": 0
+  },
+  "capabilities": [],
+  "conflicts": [],
+  "unknowns": [],
+  "learning_start": {
+    "goal": "",
+    "reason": "",
+    "skipped_basics": [],
+    "first_artifact": "",
+    "artifact_type": "document",
+    "next_skill": ""
+  },
+  "user_corrections": [],
+  "updated_at": ""
+}

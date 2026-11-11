@@ -1,0 +1,520 @@
+{
+  "schema_version": 1,
+  "run_id": "2026-07-20-smoke",
+  "started_at": "2026-07-19T23:20:53Z",
+  "finished_at": "2026-07-19T23:21:18Z",
+  "git_sha": "f5f27d504a74e1e22a3a3fb846f406d8408fafb7",
+  "seed": 20260720,
+  "repetitions": 1,
+  "cli_versions": {
+    "codex": "codex-cli 0.144.6",
+    "claude": "2.1.157 (Claude Code)"
+  },
+  "models": [
+    {
+      "id": "openai-gpt-5.6-terra",
+      "provider": "codex",
+      "model": "gpt-5.6-terra"
+    },
+    {
+      "id": "anthropic-claude-sonnet",
+      "provider": "claude",
+      "model": "sonnet"
+    }
+  ],
+  "fixture_ids": [
+    "claim-relative-reduction-mismatch"
+  ],
+  "records": [
+    {
+      "model_id": "anthropic-claude-sonnet",
+      "provider": "claude",
+      "requested_model": "sonnet",
+      "fixture_id": "claim-relative-reduction-mismatch",
+      "skill": "rw-claim-audit",
+      "condition": "with_skill",
+      "repetition": 1,
+      "started_at": "2026-07-19T23:20:54Z",
+      "prompt_sha256": "5c3e0589da80ff4aee7a74bbe60b9e955702307eb8867b3bea6e64486549b313",
+      "skill_context_sha256": "645ef88b9da2278fa74b352db709cc62a281ed938c72d8bb462acc6c12adb136",
+      "execution": {
+        "exit_code": 0,
+        "duration_ms": 12446,
+        "output": "{\"verdict\": \"DISTORTED\", \"gate\": \"BLOCK\", \"claim_value\": 20, \"source_value\": 18, \"can_mark_verified\": false, \"correction\": \"将\\\"20%\\\"改为\\\"18%（95% CI 4% 至 29%）\\\"，与来源报告的预设分析结果一致。\", \"reason\": \"主张称相对降幅为 20%，但来源原文明确报告预设分析结果为 18%（95% CI 4% to 29%）。数字相差 2 个百分点，且主张省略了置信区间。依据 AXIOM-01 和 DISTORTED 定义，这属于对来源数值的错误概括，不能标记为 VERIFIED，gate 状态保持 BLOCK。\"}",
+        "usage": {
+          "input_tokens": 3,
+          "cache_creation_input_tokens": 21783,
+          "cache_read_input_tokens": 0,
+          "output_tokens": 569,
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 21783,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 1,
+              "output_tokens": 2,
+              "cache_read_input_tokens": 0,
+              "cache_creation_input_tokens": 14642,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 14642
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "cost_usd": 0.09315425000000001,
+        "actual_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "stderr": ""
+      },
+      "response": {
+        "verdict": "DISTORTED",
+        "gate": "BLOCK",
+        "claim_value": 20,
+        "source_value": 18,
+        "can_mark_verified": false,
+        "correction": "将\"20%\"改为\"18%（95% CI 4% 至 29%）\"，与来源报告的预设分析结果一致。",
+        "reason": "主张称相对降幅为 20%，但来源原文明确报告预设分析结果为 18%（95% CI 4% to 29%）。数字相差 2 个百分点，且主张省略了置信区间。依据 AXIOM-01 和 DISTORTED 定义，这属于对来源数值的错误概括，不能标记为 VERIFIED，gate 状态保持 BLOCK。"
+      },
+      "scoring": {
+        "passed": true,
+        "score": 1.0,
+        "passed_checks": 6,
+        "total_checks": 6,
+        "checks": [
+          {
+            "path": "verdict",
+            "op": "eq",
+            "value": "DISTORTED",
+            "actual": "DISTORTED",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "gate",
+            "op": "eq",
+            "value": "BLOCK",
+            "actual": "BLOCK",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "claim_value",
+            "op": "eq",
+            "value": 20,
+            "actual": 20,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "source_value",
+            "op": "eq",
+            "value": 18,
+            "actual": 18,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "can_mark_verified",
+            "op": "eq",
+            "value": false,
+            "actual": false,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "correction",
+            "op": "contains",
+            "value": "18%",
+            "actual": "将\"20%\"改为\"18%（95% CI 4% 至 29%）\"，与来源报告的预设分析结果一致。",
+            "passed": true,
+            "error": null
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "model_id": "anthropic-claude-sonnet",
+      "provider": "claude",
+      "requested_model": "sonnet",
+      "fixture_id": "claim-relative-reduction-mismatch",
+      "skill": "rw-claim-audit",
+      "condition": "without_skill",
+      "repetition": 1,
+      "started_at": "2026-07-19T23:21:06Z",
+      "prompt_sha256": "9d6510305543fb0122b4d16d257a298dfab8039b9a743a5028354ae3d401901b",
+      "skill_context_sha256": null,
+      "execution": {
+        "exit_code": 0,
+        "duration_ms": 11135,
+        "output": "{\"verdict\": \"DISTORTED\", \"gate\": \"BLOCK\", \"claim_value\": 20, \"source_value\": 18, \"can_mark_verified\": false, \"correction\": \"The program reduced the primary outcome by 18% (95% CI 4% to 29%), not 20%. The claim overstates the relative reduction by 2 percentage points.\", \"reason\": \"The draft claim cites a 20% relative reduction, but the only available source excerpt reports a prespecified relative reduction of 18% (95% CI 4% to 29%). The figure is directionally correct but numerically inaccurate, constituting a distortion rather than a minor rounding that falls within the confidence interval. The CI lower bound is 4% and upper bound is 29%, so 20% does fall within the interval, but the point estimate—the figure that should be reported—is explicitly 18%, not 20%. Reporting 20% misrepresents the study's primary finding.\"}",
+        "usage": {
+          "input_tokens": 3,
+          "cache_creation_input_tokens": 7865,
+          "cache_read_input_tokens": 9500,
+          "output_tokens": 433,
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 7865,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "inference_geo": "not_available",
+          "iterations": [
+            {
+              "input_tokens": 1,
+              "output_tokens": 2,
+              "cache_read_input_tokens": 8208,
+              "cache_creation_input_tokens": 4157,
+              "cache_creation": {
+                "ephemeral_5m_input_tokens": 0,
+                "ephemeral_1h_input_tokens": 4157
+              },
+              "type": "message"
+            }
+          ],
+          "speed": "standard"
+        },
+        "cost_usd": 0.039669750000000004,
+        "actual_models": [
+          "claude-haiku-4-5-20251001",
+          "claude-sonnet-4-6"
+        ],
+        "stderr": ""
+      },
+      "response": {
+        "verdict": "DISTORTED",
+        "gate": "BLOCK",
+        "claim_value": 20,
+        "source_value": 18,
+        "can_mark_verified": false,
+        "correction": "The program reduced the primary outcome by 18% (95% CI 4% to 29%), not 20%. The claim overstates the relative reduction by 2 percentage points.",
+        "reason": "The draft claim cites a 20% relative reduction, but the only available source excerpt reports a prespecified relative reduction of 18% (95% CI 4% to 29%). The figure is directionally correct but numerically inaccurate, constituting a distortion rather than a minor rounding that falls within the confidence interval. The CI lower bound is 4% and upper bound is 29%, so 20% does fall within the interval, but the point estimate—the figure that should be reported—is explicitly 18%, not 20%. Reporting 20% misrepresents the study's primary finding."
+      },
+      "scoring": {
+        "passed": true,
+        "score": 1.0,
+        "passed_checks": 6,
+        "total_checks": 6,
+        "checks": [
+          {
+            "path": "verdict",
+            "op": "eq",
+            "value": "DISTORTED",
+            "actual": "DISTORTED",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "gate",
+            "op": "eq",
+            "value": "BLOCK",
+            "actual": "BLOCK",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "claim_value",
+            "op": "eq",
+            "value": 20,
+            "actual": 20,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "source_value",
+            "op": "eq",
+            "value": 18,
+            "actual": 18,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "can_mark_verified",
+            "op": "eq",
+            "value": false,
+            "actual": false,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "correction",
+            "op": "contains",
+            "value": "18%",
+            "actual": "The program reduced the primary outcome by 18% (95% CI 4% to 29%), not 20%. The claim overstates the relative reduction by 2 percentage points.",
+            "passed": true,
+            "error": null
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "model_id": "openai-gpt-5.6-terra",
+      "provider": "codex",
+      "requested_model": "gpt-5.6-terra",
+      "fixture_id": "claim-relative-reduction-mismatch",
+      "skill": "rw-claim-audit",
+      "condition": "with_skill",
+      "repetition": 1,
+      "started_at": "2026-07-19T23:20:54Z",
+      "prompt_sha256": "5c3e0589da80ff4aee7a74bbe60b9e955702307eb8867b3bea6e64486549b313",
+      "skill_context_sha256": "645ef88b9da2278fa74b352db709cc62a281ed938c72d8bb462acc6c12adb136",
+      "execution": {
+        "exit_code": 0,
+        "duration_ms": 13495,
+        "output": "{\"verdict\":\"DISTORTED\",\"gate\":\"BLOCK\",\"claim_value\":20,\"source_value\":18,\"can_mark_verified\":false,\"correction\":\"The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.\",\"reason\":\"The supplied source reports an 18% relative reduction, not 20%; the draft claim overstates the reported estimate.\"}",
+        "usage": {
+          "input_tokens": 14043,
+          "cached_input_tokens": 0,
+          "output_tokens": 135,
+          "reasoning_output_tokens": 37
+        },
+        "cost_usd": null,
+        "stderr": "Reading additional input from stdin...\n"
+      },
+      "response": {
+        "verdict": "DISTORTED",
+        "gate": "BLOCK",
+        "claim_value": 20,
+        "source_value": 18,
+        "can_mark_verified": false,
+        "correction": "The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.",
+        "reason": "The supplied source reports an 18% relative reduction, not 20%; the draft claim overstates the reported estimate."
+      },
+      "scoring": {
+        "passed": true,
+        "score": 1.0,
+        "passed_checks": 6,
+        "total_checks": 6,
+        "checks": [
+          {
+            "path": "verdict",
+            "op": "eq",
+            "value": "DISTORTED",
+            "actual": "DISTORTED",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "gate",
+            "op": "eq",
+            "value": "BLOCK",
+            "actual": "BLOCK",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "claim_value",
+            "op": "eq",
+            "value": 20,
+            "actual": 20,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "source_value",
+            "op": "eq",
+            "value": 18,
+            "actual": 18,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "can_mark_verified",
+            "op": "eq",
+            "value": false,
+            "actual": false,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "correction",
+            "op": "contains",
+            "value": "18%",
+            "actual": "The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.",
+            "passed": true,
+            "error": null
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "model_id": "openai-gpt-5.6-terra",
+      "provider": "codex",
+      "requested_model": "gpt-5.6-terra",
+      "fixture_id": "claim-relative-reduction-mismatch",
+      "skill": "rw-claim-audit",
+      "condition": "without_skill",
+      "repetition": 1,
+      "started_at": "2026-07-19T23:21:07Z",
+      "prompt_sha256": "9d6510305543fb0122b4d16d257a298dfab8039b9a743a5028354ae3d401901b",
+      "skill_context_sha256": null,
+      "execution": {
+        "exit_code": 0,
+        "duration_ms": 8611,
+        "output": "{\"verdict\":\"DISTORTED\",\"gate\":\"REVIEW\",\"claim_value\":20,\"source_value\":18,\"can_mark_verified\":false,\"correction\":\"The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.\",\"reason\":\"The claim overstates the reported relative reduction by 2 percentage points; the source reports 18%, not 20%.\"}",
+        "usage": {
+          "input_tokens": 12502,
+          "cached_input_tokens": 0,
+          "output_tokens": 98,
+          "reasoning_output_tokens": 0
+        },
+        "cost_usd": null,
+        "stderr": "Reading additional input from stdin...\n"
+      },
+      "response": {
+        "verdict": "DISTORTED",
+        "gate": "REVIEW",
+        "claim_value": 20,
+        "source_value": 18,
+        "can_mark_verified": false,
+        "correction": "The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.",
+        "reason": "The claim overstates the reported relative reduction by 2 percentage points; the source reports 18%, not 20%."
+      },
+      "scoring": {
+        "passed": false,
+        "score": 0.8333333333333334,
+        "passed_checks": 5,
+        "total_checks": 6,
+        "checks": [
+          {
+            "path": "verdict",
+            "op": "eq",
+            "value": "DISTORTED",
+            "actual": "DISTORTED",
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "gate",
+            "op": "eq",
+            "value": "BLOCK",
+            "actual": "REVIEW",
+            "passed": false,
+            "error": null
+          },
+          {
+            "path": "claim_value",
+            "op": "eq",
+            "value": 20,
+            "actual": 20,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "source_value",
+            "op": "eq",
+            "value": 18,
+            "actual": 18,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "can_mark_verified",
+            "op": "eq",
+            "value": false,
+            "actual": false,
+            "passed": true,
+            "error": null
+          },
+          {
+            "path": "correction",
+            "op": "contains",
+            "value": "18%",
+            "actual": "The prespecified analysis found a relative reduction of 18% (95% CI 4% to 29%) in the primary outcome.",
+            "passed": true,
+            "error": null
+          }
+        ]
+      },
+      "error": null
+    }
+  ],
+  "summary": {
+    "status": "CROSS_MODEL_NOT_VERIFIED",
+    "providers": [
+      "claude",
+      "codex"
+    ],
+    "models": [
+      "anthropic-claude-sonnet",
+      "openai-gpt-5.6-terra"
+    ],
+    "with_skill_pass_rate": 1.0,
+    "without_skill_pass_rate": 0.5,
+    "paired_delta": 0.5,
+    "minimum_fixture_pass_rate": 1.0,
+    "skill_condition_errors": 0,
+    "model_results": [
+      {
+        "model_id": "anthropic-claude-sonnet",
+        "condition": "with_skill",
+        "passed": 1,
+        "total": 1,
+        "pass_rate": 1.0,
+        "mean_score": 1.0,
+        "median_duration_ms": 12446,
+        "reported_cost_usd": 0.093154,
+        "errors": 0
+      },
+      {
+        "model_id": "anthropic-claude-sonnet",
+        "condition": "without_skill",
+        "passed": 1,
+        "total": 1,
+        "pass_rate": 1.0,
+        "mean_score": 1.0,
+        "median_duration_ms": 11135,
+        "reported_cost_usd": 0.03967,
+        "errors": 0
+      },
+      {
+        "model_id": "openai-gpt-5.6-terra",
+        "condition": "with_skill",
+        "passed": 1,
+        "total": 1,
+        "pass_rate": 1.0,
+        "mean_score": 1.0,
+        "median_duration_ms": 13495,
+        "reported_cost_usd": null,
+        "errors": 0
+      },
+      {
+        "model_id": "openai-gpt-5.6-terra",
+        "condition": "without_skill",
+        "passed": 0,
+        "total": 1,
+        "pass_rate": 0.0,
+        "mean_score": 0.8333333333333334,
+        "median_duration_ms": 8611,
+        "reported_cost_usd": null,
+        "errors": 0
+      }
+    ],
+    "fixture_results": [
+      {
+        "fixture_id": "claim-relative-reduction-mismatch",
+        "passed": 2,
+        "total": 2,
+        "pass_rate": 1.0
+      }
+    ]
+  }
+}

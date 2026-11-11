@@ -1,0 +1,308 @@
+[
+  {
+    "id": "case-1",
+    "prompt": "根据我提供的 5 段 Discussion 提取语气规则。",
+    "must_do": [
+      "先检查用户是否已指定持久 tone profile 或已安装的作者语气 skill，并记录使用来源。",
+      "按最小改动修正，并记录无法从现有样本判断的部分。",
+      "章节对应的语气规则和样本证据。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2",
+    "prompt": "检查这段重写是否偏离我提供的作者样本。",
+    "must_do": [
+      "先检查用户是否已指定持久 tone profile 或已安装的作者语气 skill，并记录使用来源。",
+      "按最小改动修正，并记录无法从现有样本判断的部分。",
+      "章节对应的语气规则和样本证据。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3",
+    "prompt": "只有一段样本，建立临时语气规则并说明不确定性。",
+    "must_do": [
+      "先检查用户是否已指定持久 tone profile 或已安装的作者语气 skill，并记录使用来源。",
+      "按最小改动修正，并记录无法从现有样本判断的部分。",
+      "章节对应的语气规则和样本证据。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4",
+    "prompt": "区分 Methods 和 Discussion 的语气规则。",
+    "must_do": [
+      "先检查用户是否已指定持久 tone profile 或已安装的作者语气 skill，并记录使用来源。",
+      "按最小改动修正，并记录无法从现有样本判断的部分。",
+      "章节对应的语气规则和样本证据。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-5",
+    "prompt": "没有提供任何本人文本，但要保证百分百像我。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-6",
+    "prompt": "模仿一位在世学者的独特个人风格。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有作者样本时，不声称生成个人指纹。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "tone-mode-collab-do",
+    "gate": "merged_rules_v1",
+    "rule": "collab_final_mode",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "协作模式。把这段 Discussion 调成作者语气。作者在第 3 句标了“待导师定”。",
+    "prompt": "复查这段合成的修改：助手把第 3 句润色成定稿，去掉了“待导师定”。",
+    "must_do": [
+      "第 3 句和它的标记保持原样",
+      "其余句子最小改动"
+    ],
+    "must_not": [
+      "把第 3 句润色成定稿"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-mode-final-dont",
+    "gate": "merged_rules_v1",
+    "rule": "collab_final_mode",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "没有本地档案，用户也没指定模式。把这段 Discussion 调成作者语气。",
+    "prompt": "复查这段合成的修改：助手用终稿模式改完，没有故意留白，并写明“用的是终稿模式”。",
+    "must_do": [
+      "判断没指定模式时用终稿模式是对的",
+      "输出写明了用的是哪种模式"
+    ],
+    "must_not": [
+      "要求按协作模式故意留白"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-imperfection-do",
+    "gate": "merged_rules_v1",
+    "rule": "intentional_imperfection",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "作者说明第 2 句的短句是有意保留的。请做语气审计。",
+    "prompt": "复查这段合成的审计：把第 2 句判为 AI 味，建议改长。",
+    "must_do": [
+      "不把第 2 句判成 AI 味或错误",
+      "不改第 2 句"
+    ],
+    "must_not": [
+      "为了句长均匀改写第 2 句"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-imperfection-dont",
+    "gate": "merged_rules_v1",
+    "rule": "intentional_imperfection",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "作者说明第 4 句有意保留。第 4 句里有一个句中破折号。",
+    "prompt": "复查这段合成的审计：以有意保留为由，留下了第 4 句的破折号。",
+    "must_do": [
+      "破折号仍按 rw-phd-write 的硬标记表改",
+      "第 4 句其余部分保留"
+    ],
+    "must_not": [
+      "以有意保留为由留下破折号"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-rule-review-do",
+    "gate": "merged_rules_v1",
+    "rule": "rule_review",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "从 6 段作者样本抽出了 5 条新语气规则。请审查后交付。",
+    "prompt": "复查这段合成的交付：助手没审查，直接把 5 条写成作者指纹。",
+    "must_do": [
+      "每条过 references/rule-review.md 的六个问题",
+      "答不上的标为临时规则"
+    ],
+    "must_not": [
+      "不审就写成作者指纹"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-rule-review-dont",
+    "gate": "merged_rules_v1",
+    "rule": "rule_review",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "用已有的语气规则复查一段草稿，没有抽新规则。",
+    "prompt": "复查这段合成的回复：助手直接按已有规则复查，没有重跑六问。",
+    "must_do": [
+      "判断没有新规则时不需要六问审查"
+    ],
+    "must_not": [
+      "要求对已有规则重跑六问审查"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-profile-unreadable-do",
+    "gate": "merged_rules_v1",
+    "rule": "profile_unreadable",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "用户指定的语气规格文件读不到。请按作者语气改这段。",
+    "prompt": "复查这段合成的回复：助手没说明，改用本轮样本的临时规则改完了。",
+    "must_do": [
+      "告诉用户规格读不到，停下等用户决定"
+    ],
+    "must_not": [
+      "不说明就用临时规则顶上"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "tone-profile-unspecified-dont",
+    "gate": "merged_rules_v1",
+    "rule": "profile_unreadable",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "没有指定语气规格，也没有作者样本。请润色这段。",
+    "prompt": "复查这段合成的回复：助手用中性学术写法润色，写明没有作者样本。",
+    "must_do": [
+      "用中性学术写法",
+      "判断这条回复符合规则"
+    ],
+    "must_not": [
+      "声称复现作者个人语气"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

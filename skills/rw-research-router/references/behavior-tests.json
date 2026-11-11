@@ -1,0 +1,701 @@
+[
+  {
+    "id": "case-1",
+    "prompt": "我有 200 篇论文，下一步该做什么？",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-paper-extractor"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2",
+    "prompt": "导师让我改 Discussion，但我怀疑研究问题不清楚。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-research-question"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3",
+    "prompt": "我要做一个 scoping review，现在只有主题。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-review-methods"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4",
+    "prompt": "我有英文研究问题，需要 PubMed、Embase 和 PsycINFO 的受控词与检索式。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-search-strategy"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-5",
+    "prompt": "我有完整研究设计，想在投稿前找漏洞。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-research-referee"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-6",
+    "prompt": "我已经整理出文献冲突和证据空白，想筛选能做的创新点。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-research-novelty"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-7",
+    "prompt": "投稿前检查数据、代码和材料声明是否真实可取得。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-research-data"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-8",
+    "prompt": "检查论文中的 n、技术重复和统计报告。",
+    "must_do": [
+      "保留用户原问题和预期交付物。",
+      "完成当前阶段后给出一个下一步，不同时启动整条链。",
+      "阶段诊断和主 Skill。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [
+      "rw-statistics-audit"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-9-submission",
+    "prompt": "我已经完成 manuscript，准备投 Nature，但不知道需要什么材料。",
+    "must_do": [
+      "只选择 rw-journal-submission 作为主 Skill。",
+      "交接稿件版本、目标期刊、作者、披露、数据、伦理、引文与未解决项。",
+      "说明最终 Submit 由人类完成。"
+    ],
+    "must_not": [
+      "同时启动多个主 Skill",
+      "登录投稿门户、填写字段或点击 Submit",
+      "把可投稿写成已提交"
+    ],
+    "expected_next": [
+      "rw-journal-submission"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-10",
+    "prompt": "新手入门。我不知道该用哪个 Skill。",
+    "must_do": [
+      "先问用户手上有什么，一轮只问一个问题",
+      "不展示完整 Skill 清单",
+      "根据回答选择一个主 Skill"
+    ],
+    "must_not": [
+      "要求用户先理解全部工作流",
+      "同时启动多个 Skill",
+      "在没有任务材料时猜测研究事实"
+    ],
+    "expected_next": [
+      ""
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-11",
+    "prompt": "没有研究问题，直接替我写整篇论文。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-12",
+    "prompt": "本机没有私人工作区，所以这个科研 Skill 不能运行。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有可识别的交付物时，先澄清，不分配批量任务。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-12-adhd-opt-in",
+    "prompt": "请用 ADHD 友好输出。我有一段带引用的 Discussion，需要检查来源是否支持主张。",
+    "must_do": [
+      "启用可选 ADHD 友好输出",
+      "先给只看这里、一个当前动作和本轮完成标准",
+      "加粗当前任务、用户动作、结论或阻断状态"
+    ],
+    "must_not": [
+      "同时要求用户完成多个主要动作",
+      "为了缩短输出删除证据边界或停止条件",
+      "保存用户的 ADHD 诊断信息"
+    ],
+    "expected_next": [
+      "rw-claim-audit"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-13-adhd-disclosure-only",
+    "prompt": "我有 ADHD。我有一篇带统计结果的文稿，需要检查分析单位和报告数字。",
+    "must_do": [
+      "保持普通输出",
+      "根据当前瓶颈选择 rw-statistics-audit"
+    ],
+    "must_not": [
+      "仅因用户披露 ADHD 自动启用 ADHD 友好输出",
+      "追问用户是否需要 ADHD 友好输出",
+      "保存用户的 ADHD 诊断信息"
+    ],
+    "expected_next": [
+      "rw-statistics-audit"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-14-adhd-off",
+    "prompt": "上一轮开启了 ADHD 友好输出。现在关闭它，按普通方式继续检查研究设计。",
+    "must_do": [
+      "立即返回普通输出",
+      "根据当前瓶颈选择 rw-research-referee"
+    ],
+    "must_not": [
+      "继续强制使用只看这里、暂存区或恢复点",
+      "要求用户解释为什么关闭",
+      "保存用户的 ADHD 诊断信息"
+    ],
+    "expected_next": [
+      "rw-research-referee"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "degradation-15-corpus-unavailable",
+    "prompt": "指定研究资料夹无法访问，但我已经在本轮提供研究问题。请继续判断下一步。",
+    "must_do": [
+      "范围缩小：未读取本地研究积累。",
+      "改用用户本轮提供的材料和包内方法，说明没有完成本地积累扫描。"
+    ],
+    "must_not": [
+      "不得声称已经扫描不可读目录，也不得把缺少本地集成写成任务失败。"
+    ],
+    "expected_next": [
+      "rw-research-question"
+    ],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-006",
+    "expected_status": "REVIEW"
+  },
+  {
+    "id": "degradation-16-current-source-unavailable",
+    "prompt": "当前网络和订阅数据库都不可用。请先为这个研究问题准备检索策略。",
+    "must_do": [
+      "待核验：当前来源不可访问。",
+      "继续处理不依赖当前事实的部分，保存检索式、来源入口和核验日期空位。"
+    ],
+    "must_not": [
+      "不得把缓存内容、通用规则或候选词写成已核验的当前事实。"
+    ],
+    "expected_next": [
+      "rw-search-strategy"
+    ],
+    "fixture_kind": "synthetic",
+    "degradation_registry_id": "DEG-001",
+    "expected_status": "PENDING_VERIFICATION"
+  },
+  {
+    "id": "handoff-save-source",
+    "prompt": "上一轮修改论文。本轮：把导师这条修订和截图存入这个研究项目，作为来源证据。",
+    "must_do": [
+      "切换为研究材料登记",
+      "保留原件并核对已有材料 ID",
+      "回读材料与审计记录并验证"
+    ],
+    "must_not": [
+      "继续用写作流程手工存盘后宣称完成",
+      "仅按保存二字转通用快照",
+      "自动接受导师建议"
+    ],
+    "expected_next": [
+      "rw-research-passport"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-generic-snapshot",
+    "prompt": "我们刚讨论研究；现在只保存这次对话的普通恢复快照，不登记项目材料。",
+    "must_do": [
+      "尊重明确的普通快照范围",
+      "宿主没有通用保存功能时说明没有"
+    ],
+    "must_not": [
+      "仅因有研究背景就写入 Passport"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-explain-only",
+    "prompt": "为什么这个保存任务应该交给 Passport？仅解释，先别写文件。",
+    "must_do": [
+      "解释材料登记与通用快照区别",
+      "报告已有与未完成状态"
+    ],
+    "must_not": [
+      "把问句当新增写入授权"
+    ],
+    "expected_next": [
+      "rw-research-router"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-confirm-decision",
+    "prompt": "我明确采纳导师提出的章节拆分，请把这个决定登记到本项目。",
+    "must_do": [
+      "保留作者确认的具体内容与来源",
+      "登记 Decision 和 Research Credential",
+      "验证适用项目范围"
+    ],
+    "must_not": [
+      "把导师建议本身当作者确认"
+    ],
+    "expected_next": [
+      "rw-research-passport"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-external-review",
+    "prompt": "我是外部审稿人，把对他人投稿的意见和审稿凭据归档。",
+    "must_do": [
+      "使用独立评审台账"
+    ],
+    "must_not": [
+      "写进作者项目的 Research Credential"
+    ],
+    "expected_next": [
+      "rw-peer-review"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-provenance",
+    "prompt": "截图显示这段是导师 Added，不是我写的。",
+    "must_do": [
+      "区分修订署名与最初作者",
+      "核对修改范围和章节功能"
+    ],
+    "must_not": [
+      "仅因导师署名就撤回实质判断",
+      "把署名当接受修订"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-resume-authorized",
+    "prompt": "先前已授权保存研究截图；原件已保存，但材料未登记。我提醒：应该是 Passport 吧？请完成。",
+    "must_do": [
+      "复用已保存原件",
+      "完成仍获授权的登记和验证",
+      "分别报告完成阶段"
+    ],
+    "must_not": [
+      "只改技能名不执行",
+      "重复创建同一项目 Passport"
+    ],
+    "expected_next": [
+      "rw-research-passport"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "handoff-evidence-synthesis",
+    "prompt": "比较这些研究对同一结论的支持和冲突，做证据图。",
+    "must_do": [
+      "追溯研究与原文位置",
+      "综合支持和冲突"
+    ],
+    "must_not": [
+      "见证据二字就只登记材料"
+    ],
+    "expected_next": [
+      "rw-evidence-map"
+    ],
+    "fixture_kind": "synthetic",
+    "gate": "task_handoff_v1",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "entry-point-stuck",
+    "prompt": "导师批注有二十多条，方案也写了，还是没头绪。不知道从哪开始。",
+    "must_do": [
+      "进入切入点模式",
+      "先列出不依赖未决问题、现在就能做的事项，并按难度从低到高排序",
+      "对最小一项给出一段可以直接放进稿件的改写样例",
+      "收尾给按人分的状态表"
+    ],
+    "must_not": [
+      "把决策矩阵当作第一步",
+      "在状态表后问要不要继续",
+      "一轮问超过一件事"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "entry-point-repeated-undecided",
+    "prompt": "上一轮和上上一轮都问我方法选甲还是乙，我没有回答。请继续。",
+    "must_do": [
+      "把同一待决问题连续两轮未答识别为切入点信号",
+      "先做不依赖这个选择的修改，并给出实际样例",
+      "一轮只问一件看样例就能回答的事"
+    ],
+    "must_not": [
+      "第三次把同一设计选择原样抛回",
+      "在可独立部分做完之前要求用户先填决策矩阵"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "entry-point-specified-task",
+    "prompt": "不要帮我找切入点。请只把第 2 段的样本年龄从 18 岁改成 50 岁，其他不动。",
+    "must_do": [
+      "用户已明确指定具体任务，不进入切入点模式",
+      "直接做指定的这一处修改"
+    ],
+    "must_not": [
+      "先做切入点诊断再改",
+      "改动指定范围之外的文字"
+    ],
+    "expected_next": [
+      "rw-revision-patch"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "router-stop-ask-do",
+    "gate": "merged_rules_v1",
+    "rule": "stop_and_ask",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "帮我把研究目的改得更清楚。我也说不好是想比较两种提醒方式，还是只描述现状。",
+    "prompt": "复查这段合成的助手回复：“已把研究目的写成比较两种提醒方式的效果。”情况同上。",
+    "must_do": [
+      "停下问研究目的，给出比较和描述两个选项",
+      "最多 3 个问题，每个带选项或样例"
+    ],
+    "must_not": [
+      "自己选一个目的往下写",
+      "复查时放过助手自选目的"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-stop-ask-dont",
+    "gate": "merged_rules_v1",
+    "rule": "stop_and_ask",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "按 notes/aims.md 里定好的研究目的改第 1 章开头。文件已附上。",
+    "prompt": "复查这段合成的助手回复：“读了 notes/aims.md，按其中的研究目的改了第 1 章开头，改前改后如下。”",
+    "must_do": [
+      "先读 notes/aims.md 再改",
+      "判断这条回复符合规则"
+    ],
+    "must_not": [
+      "问用户研究目的是什么"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-status-table-do",
+    "gate": "merged_rules_v1",
+    "rule": "status_table",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "导师 6 条批注：已改 3 条，2 条要作者选方法，1 条要等导师下周回复。请收尾。",
+    "prompt": "复查这段合成的收尾：“还有 3 条没处理。要不要我继续帮你写回复导师的邮件？”情况同上。",
+    "must_do": [
+      "收尾给状态表：已解决 3 条、等作者决定 2 条、等导师 1 条、助手未做完写“无”",
+      "每条写清事项"
+    ],
+    "must_not": [
+      "表后问要不要继续",
+      "推销与本任务无关的下一步"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-status-table-dont",
+    "gate": "merged_rules_v1",
+    "rule": "status_table",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "只问一个问题：Methods 用过去时还是现在时？",
+    "prompt": "复查这段合成的回复：“Methods 报告已做的步骤，用过去时。”",
+    "must_do": [
+      "直接回答",
+      "判断这里不需要状态表"
+    ],
+    "must_not": [
+      "生成空的状态表"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-plain-labels-do",
+    "gate": "merged_rules_v1",
+    "rule": "plain_labels",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "上一轮把 4 条批注编成 C1 到 C4。请向作者汇报处理情况。",
+    "prompt": "复查这段合成的汇报：“C1、C3 已改；C2 待定；C4 见 D-2。”",
+    "must_do": [
+      "C1 到 C4 第一次出现时各用一句话说明是哪条批注",
+      "D-2 第一次出现时说明是什么，或删掉"
+    ],
+    "must_not": [
+      "整段只写编号不解释"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-plain-labels-dont",
+    "gate": "merged_rules_v1",
+    "rule": "plain_labels",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "本轮开头已写明 C1 是关于样本量的第一条批注。后文第二次提到 C1。",
+    "prompt": "复查这段合成的汇报：后文写“C1 已改”，没有再解释。",
+    "must_do": [
+      "判断同一轮已说明过的编号不必重复说明"
+    ],
+    "must_not": [
+      "要求每次出现都重复解释"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-local-profile-do",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "宿主规则指定了本地档案 profile.md，档案写明语气用协作模式。请为这次改稿选路。",
+    "prompt": "复查这段合成的助手回复：没读 profile.md，按包内默认的终稿模式交给语气流程。",
+    "must_do": [
+      "先读本地档案再选路",
+      "档案里的裁决优先于本包默认"
+    ],
+    "must_not": [
+      "不读档案直接按包内默认处理"
+    ],
+    "expected_next": [
+      "rw-phd-write"
+    ],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "router-local-profile-dont",
+    "gate": "merged_rules_v1",
+    "rule": "local_profile",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "本地档案指定的导师信息文件读不到。请继续准备发给导师的说明。",
+    "prompt": "复查这段合成的助手回复：改用另一个旧文件里的导师信息继续写。",
+    "must_do": [
+      "告诉用户哪个文件读不到，停下等用户决定"
+    ],
+    "must_not": [
+      "用别的文件顶上",
+      "假装已读"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

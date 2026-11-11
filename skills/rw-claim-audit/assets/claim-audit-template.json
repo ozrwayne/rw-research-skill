@@ -1,0 +1,8 @@
+{
+  "schema_version": "rw-claim-audit/v1",
+  "document_id": "DOC-ID",
+  "document_path": "manuscript.md",
+  "document_hash": "",
+  "audited_at": "2000-01-01T00:00:00Z",
+  "claims": []
+}

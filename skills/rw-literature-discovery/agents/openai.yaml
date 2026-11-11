@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Literature Discovery"
+  short_description: "围绕具体判断发现、核验和记录文献，并根据证据修改搜索方向。"
+  default_prompt: "Use $rw-literature-discovery to 围绕具体判断发现、核验和记录文献，并根据证据修改搜索方向。"

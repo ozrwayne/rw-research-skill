@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Evidence Map"
+  short_description: "把研究、构念、设计、样本、结果、偏倚、冲突和缺口组织成可追溯证据图。"
+  default_prompt: "Use $rw-evidence-map to 把研究、构念、设计、样本、结果、偏倚、冲突和缺口组织成可追溯证据图。"

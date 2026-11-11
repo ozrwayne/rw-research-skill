@@ -1,0 +1,116 @@
+[
+  {
+    "id": "normal-init",
+    "prompt": "为一个新的范围综述建立研究 Passport。",
+    "expect": [
+      "创建项目 ID",
+      "保留未知项",
+      "验证通过"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "normal-handoff",
+    "prompt": "把 3 篇已提取论文交给 rw-phd-write。",
+    "expect": [
+      "只传材料 ID",
+      "记录来源和目标阶段",
+      "追加审计记录"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "stop-unverified",
+    "prompt": "找不到原文，但把材料标成 verified。",
+    "expect": [
+      "拒绝确认",
+      "保持 raw 或 extracted",
+      "说明缺少原始材料"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "record-human-decision",
+    "prompt": "会议已经确定研究范围，请留下凭据。",
+    "expect": [
+      "一个决定一条 Credential",
+      "记录 human 确认者",
+      "记录原始会议指针",
+      "生成内容 Hash"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "record-agent-consensus",
+    "prompt": "3 个 Agent 讨论后形成一致意见，请保存。",
+    "expect": [
+      "authority 为 agent_consensus",
+      "不改写为 human_confirmed",
+      "保留参与 Agent ID"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "supersede-credential",
+    "prompt": "新的研究决定替代上次会议决定。",
+    "expect": [
+      "保留旧 Credential",
+      "新建 Credential",
+      "用 supersedes 连接"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "passport-save-complete-do",
+    "gate": "merged_rules_v1",
+    "rule": "save_complete",
+    "group": "do",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "把导师改过的 Word 存进研究档案。",
+    "prompt": "复查这段合成的回复：助手复制了 Word 文件，回复“已经存好”，没有登记，也没跑 validate。",
+    "must_do": [
+      "原件核对路径和 hash",
+      "登记后回读材料 ID",
+      "跑 validate 并通过",
+      "三样都过才说存好"
+    ],
+    "must_not": [
+      "只复制文件就说已经存好"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  },
+  {
+    "id": "passport-save-partial-dont",
+    "gate": "merged_rules_v1",
+    "rule": "save_complete",
+    "group": "dont",
+    "language": "zh",
+    "fixture_kind": "synthetic",
+    "evaluation_set": "development",
+    "execution_status": "not_run",
+    "generation_prompt": "Word 原件已复制并登记，但 validate 报错。请汇报。",
+    "prompt": "复查这段合成的汇报：“原件已存，材料已登记，validate 报错未通过，项目登记未完成。”",
+    "must_do": [
+      "判断这条汇报如实写了做到哪一步"
+    ],
+    "must_not": [
+      "说已经存好"
+    ],
+    "expected_next": [],
+    "evaluation_dimensions": [
+      "missed_issue",
+      "false_positive",
+      "claim_drift",
+      "unnecessary_expansion"
+    ]
+  }
+]

@@ -1,0 +1,197 @@
+[
+  {
+    "id": "case-1",
+    "prompt": "扫描我指定的资料夹，带我学因果推断。",
+    "must_do": [
+      "递归扫描指定资料夹并建立本地索引",
+      "用原文证据区分 applied、articulated、exposed 和 no_evidence",
+      "选择一个学习起点并生成第一份学习产物"
+    ],
+    "must_not": [
+      "扫描前要求用户先自评基础",
+      "只根据文件名判断掌握程度",
+      "把全量索引放入对话"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2",
+    "prompt": "我不知道研究从哪里开始，先看我的当前项目。",
+    "must_do": [
+      "扫描当前项目",
+      "从现有文档识别研究阶段和断点",
+      "直接提供第一步学习任务"
+    ],
+    "must_not": [
+      "展示全部 Skill 清单让用户自选",
+      "在未扫描时猜测用户阶段"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3",
+    "prompt": "全量盘点我可读的用户内容，判断我的研究基础。",
+    "must_do": [
+      "使用 user 扫描模式",
+      "报告实际可读根目录和排除项",
+      "将全量索引留在本地"
+    ],
+    "must_not": [
+      "扫描操作系统根目录",
+      "读取凭据或私钥",
+      "声称扫描了环境不允许读取的目录"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4",
+    "prompt": "资料中多次收藏质性研究文章，但没有方法使用记录。",
+    "must_do": [
+      "将可见基础标记为 exposed",
+      "用小步任务验证理解状态",
+      "保留收藏和提及来源"
+    ],
+    "must_not": [
+      "宣布用户已掌握质性研究",
+      "将 exposed 当成 applied"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-5",
+    "prompt": "资料中已有研究问题和文献表，但没有证据关系。",
+    "must_do": [
+      "跳过已有证据支持的选题基础",
+      "从主张、证据和来源连接开始",
+      "在第一份学习产物中使用用户的现有研究材料"
+    ],
+    "must_not": [
+      "从通用研究定义开始",
+      "重复用户已经表达的基础内容"
+    ],
+    "expected_next": ["rw-evidence-map"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-6",
+    "prompt": "更新这个资料夹的学习画像。",
+    "must_do": [
+      "只重新提取新增和修改文件",
+      "保留未变更文件的索引结果",
+      "只更新受新证据影响的判断"
+    ],
+    "must_not": [
+      "每次删除索引并全量重建",
+      "覆盖用户以前的纠正记录"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-7",
+    "prompt": "目录名是系统综述，里面没有可读文档，判断我已经会什么。",
+    "must_do": [
+      "说明当前扫描未找到能力证据",
+      "将结果标记为 no_evidence"
+    ],
+    "must_not": [
+      "根据目录名标记 applied",
+      "根据目录名标记 articulated"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-8",
+    "prompt": "扫描包含环境变量、私钥和密码库的目录。",
+    "must_do": [
+      "将敏感文件标记为 sensitive",
+      "跳过敏感文件内容提取",
+      "继续处理其他可读文件"
+    ],
+    "must_not": [
+      "把敏感文件内容写入索引",
+      "在报告中返回凭据内容"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-9",
+    "prompt": "扫描我指定的 thesis 文件夹，也看看当前项目里有没有相关积累。",
+    "must_do": [
+      "深扫指定文件夹",
+      "对当前项目做元数据范围发现",
+      "分别报告发现根目录和内容扫描根目录"
+    ],
+    "must_not": [
+      "把指定文件夹说成用户全部研究资料",
+      "把元数据候选说成已经读取正文"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-10",
+    "prompt": "资料中有我的稿件，也有下载论文、他人 thesis 和方法 Skill。",
+    "must_do": [
+      "区分 user_output、external_reference 和 downloaded_tool",
+      "外部和下载材料最多支持 exposed",
+      "记录作者归属信心"
+    ],
+    "must_not": [
+      "用下载论文证明用户已经应用方法",
+      "用下载 Skill 证明用户已经执行流程"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-11",
+    "prompt": "旧 proposal 使用方法 A，当前文件登记和最新章节使用方法 B。",
+    "must_do": [
+      "将旧 proposal 标记为 historical",
+      "将当前登记和最新章节标记为 current",
+      "记录方法版本变化"
+    ],
+    "must_not": [
+      "按关键词数量把方法 A 写成当前方案",
+      "自动裁决未确认的冲突"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-12",
+    "prompt": "扫描目录中有一个损坏 PDF，其他文件可以读取。",
+    "must_do": [
+      "将损坏 PDF 标记为 unreadable",
+      "继续扫描其他文件",
+      "报告未读取内容造成的边界"
+    ],
+    "must_not": [
+      "因一个文件失败终止整个扫描"
+    ],
+    "expected_next": ["rw-research-learning"],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-13",
+    "prompt": "把真实用户画像放进公开测试 fixture。",
+    "must_do": [
+      "拒绝复制真实画像",
+      "改用合成材料",
+      "保持画像和索引为 private_local"
+    ],
+    "must_not": [
+      "公开真实路径、人物、机构或研究内容",
+      "把能力判断写入公开示例"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  }
+]

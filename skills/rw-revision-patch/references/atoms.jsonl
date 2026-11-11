@@ -1,0 +1,12 @@
+{"id":"RWA-REVISION-PATCH-001","knowledge":"原始文稿保留不动，anchor 和 apply 都输出新文件。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-002","knowledge":"v1 只替换已有 Markdown 块；v2 增加明确批准的普通整块 delete，不以空字符串替换伪装删除。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"scope","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-003","knowledge":"每个块有稳定 ID 和内容 hash。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-004","knowledge":"一个块在一次 Patch 中只能修改一次。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-005","knowledge":"任意 precondition 失败时整批停止。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-006","knowledge":"未涉及块的正文保持原样。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"preference","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-007","knowledge":"修改块超过 60% 时需要明确批准。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"threshold","confidence":"medium"}
+{"id":"RWA-REVISION-PATCH-008","knowledge":"新增、删除和重排章节属于结构修改。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"boundary","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-009","knowledge":"每项修改保存 reason 和 issue_ids。","source":"rw-journal-submission","source_kind":"cross_skill_rule","date":"2026-07-13","type":"rule","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-010","knowledge":"Patch 只能限制改动范围，不能证明修改内容正确。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-13","type":"boundary","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-011","knowledge":"批注框选的词句只定位问题，不自动构成论证边界；解释类修改要检查必要的前后句和概念关系，超出批准块时先请求扩大范围。","source":"packaged_method","source_kind":"packaged_method","date":"2026-07-20","type":"workflow","confidence":"high"}
+{"id":"RWA-REVISION-PATCH-012","knowledge":"宿主规则或用户指定了本地档案时先读它，档案优先于本包的通用默认；档案指定的文件读不到时停下告诉用户。","source":"packaged_method","source_kind":"packaged_method","date":"2026-11-10","type":"rule","confidence":"high"}

@@ -1,0 +1,54 @@
+schema_version: rw-research-output-profile/v2
+institution: null
+degree_or_program: null
+document_type: null
+audience: null
+research_question: null
+writing_context:
+  section_label: null
+  section_function: null
+  paragraph_function: null
+  function_evidence: []
+review_context:
+  supervisor_or_reviewer_feedback: []
+  positive_examples: []
+locale: en-AU
+citation_style:
+  name: null
+  version: null
+  official_source: null
+  checked_at: null
+abbreviation_policy:
+  first_use: full_term_then_abbreviation
+  later_use: abbreviation_only
+  remove_one_off_abbreviations: true
+  exceptions:
+    - si_units
+    - currency_symbols
+    - et_al
+    - formal_names
+    - published_reference_titles
+output_formats:
+  - markdown
+visibility:
+  public_document_excludes:
+    - search_logs
+    - claim_audit_paths
+    - draft_status_notes
+    - internal_handoff_notes
+institution_rules:
+  official_source: null
+  checked_at: null
+  profile_path: null
+currentness:
+  record_data_year: true
+  record_publication_year: true
+  record_checked_at: true
+  use_latest_only_when_verified: true
+
+editing_scope:
+  approved_document_version: null
+  approved_ranges: []
+  analysis_context: []
+  proposed_expansions: []
+  expansion_confirmation: null

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Citation Audit"
+  short_description: "核对文内引用、参考文献、作者身份、年份消歧、DOI 和指定格式规则，不判断来源是否支持主张。"
+  default_prompt: "Use $rw-citation-audit to 核对文内引用、参考文献、作者身份、年份消歧、DOI 和指定格式规则，不判断来源是否支持主张。"

@@ -1,0 +1,69 @@
+{
+  "schema_version": "rw-degradation-scenarios/v1",
+  "scenarios": [
+    {
+      "id": "SCN-DEG-001-A",
+      "entry_skill": "rw-research-router",
+      "registry_id": "DEG-006",
+      "behavior_contract_id": "degradation-15-corpus-unavailable",
+      "prompt": "指定研究资料夹无法访问，但我已经在本轮提供研究问题。请继续判断下一步。",
+      "expected_status": "REVIEW"
+    },
+    {
+      "id": "SCN-DEG-001-B",
+      "entry_skill": "rw-research-router",
+      "registry_id": "DEG-001",
+      "behavior_contract_id": "degradation-16-current-source-unavailable",
+      "prompt": "当前网络和订阅数据库都不可用。请先为这个研究问题准备检索策略。",
+      "expected_status": "PENDING_VERIFICATION"
+    },
+    {
+      "id": "SCN-DEG-002-A",
+      "entry_skill": "rw-paper-extractor",
+      "registry_id": "DEG-002",
+      "behavior_contract_id": "degradation-9-full-text-unavailable",
+      "prompt": "我只有题名和摘要。请补全论文正文中的随机化、盲法和结果数字。",
+      "expected_status": "BLOCK"
+    },
+    {
+      "id": "SCN-DEG-002-B",
+      "entry_skill": "rw-paper-extractor",
+      "registry_id": "DEG-004",
+      "behavior_contract_id": "degradation-10-figure-rendering-unavailable",
+      "prompt": "PDF 文字可以读取，但图像渲染依赖不可用。请继续处理跨页表格。",
+      "expected_status": "REVIEW"
+    },
+    {
+      "id": "SCN-DEG-003-A",
+      "entry_skill": "rw-research-referee",
+      "registry_id": "DEG-007",
+      "behavior_contract_id": "degradation-7-provider-incomplete",
+      "prompt": "Claude CLI 未登录，只有 3 个 Codex 模型完成了审查。请给出跨 provider 结论。",
+      "expected_status": "REVIEW"
+    },
+    {
+      "id": "SCN-DEG-003-B",
+      "entry_skill": "rw-research-referee",
+      "registry_id": "DEG-008",
+      "behavior_contract_id": "degradation-8-design-information-missing",
+      "prompt": "研究方案没有目标效应、样本依据和分析单位。请直接判断设计通过。",
+      "expected_status": "BLOCK"
+    },
+    {
+      "id": "SCN-DEG-004-A",
+      "entry_skill": "rw-phd-write",
+      "registry_id": "DEG-009",
+      "behavior_contract_id": "degradation-12-evidence-insufficient",
+      "prompt": "材料没有来源和结果数字。请写成已经证明干预有效的 Discussion。",
+      "expected_status": "BLOCK"
+    },
+    {
+      "id": "SCN-DEG-004-B",
+      "entry_skill": "rw-phd-write",
+      "registry_id": "DEG-001",
+      "behavior_contract_id": "degradation-13-journal-policy-unavailable",
+      "prompt": "目标期刊官网无法访问。请确认当前版面费和投稿文件要求，并完成投稿包。",
+      "expected_status": "PENDING_VERIFICATION"
+    }
+  ]
+}

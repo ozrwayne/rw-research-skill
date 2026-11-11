@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Research Design"
+  short_description: "把研究问题转成构念、设计、样本、测量、分析、证伪和执行计划。"
+  default_prompt: "Use $rw-research-design to 把研究问题转成构念、设计、样本、测量、分析、证伪和执行计划。"

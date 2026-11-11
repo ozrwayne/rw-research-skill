@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW Claim Audit"
+  short_description: "Audit claim-to-source support with locators and verdicts"
+  default_prompt: "Use $rw-claim-audit to audit whether each manuscript claim is supported by its cited source."

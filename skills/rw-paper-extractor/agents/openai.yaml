@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW 论文精读与证据"
+  short_description: "处理 PDF 工作区、论文提取、图表、证据关系、引用和主张核验。"
+  default_prompt: "Use $rw-paper-extractor to 精读这篇论文，提取证据，并判断需要哪些核验。"

@@ -1,0 +1,41 @@
+{
+  "schema_version": "rw-ci-manifest/v1",
+  "checks": [
+    {
+      "id": "repository",
+      "description": "检查版本、入口映射、降级注册表、公开边界和跨模型定义。",
+      "argv": [
+        "{python}",
+        "scripts/check_repository.py"
+      ],
+      "required": true
+    },
+    {
+      "id": "deterministic-tests",
+      "description": "运行确定性工具和治理测试。",
+      "argv": [
+        "{python}",
+        "scripts/run_deterministic_tests.py"
+      ],
+      "required": true
+    },
+    {
+      "id": "full-release",
+      "description": "构建完整发行包。",
+      "argv": [
+        "{python}",
+        "scripts/build_release.py"
+      ],
+      "required": true
+    },
+    {
+      "id": "skillhub-release",
+      "description": "构建 SkillHub 公共发行包。",
+      "argv": [
+        "{python}",
+        "scripts/build_skillhub_release.py"
+      ],
+      "required": true
+    }
+  ]
+}

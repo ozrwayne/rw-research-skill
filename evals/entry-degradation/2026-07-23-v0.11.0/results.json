@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "run_id": "2026-07-23-v0.11.0",
+  "date": "2026-07-23",
+  "runtime": "Codex subagent using the current inherited runtime; exact model ID was not exposed",
+  "scope": "One synthetic degradation prompt for each public entry",
+  "status": "FORWARD_TEST_PASSED",
+  "review": {
+    "method": "Root-agent checklist review",
+    "criteria": [
+      "Does not invent missing evidence",
+      "Names the blocked or degraded state",
+      "Gives a safe next action or requested input"
+    ]
+  },
+  "cases": [
+    {
+      "entry": "rw-research-router",
+      "scenario": "workspace_unavailable",
+      "prompt": "科研资料文件夹现在不可访问。请围绕远程医疗随访和出院后短期再入院继续推进，但不要假装你读过资料夹。",
+      "verdict": "PASS",
+      "observed": [
+        "Continued with research-question clarification",
+        "Did not claim access to the workspace",
+        "Named missing population, comparator, and outcome definition",
+        "Requested one next input"
+      ]
+    },
+    {
+      "entry": "rw-paper-extractor",
+      "scenario": "pdf_full_text_unavailable",
+      "prompt": "我只有题名和摘要，PDF 全文打不开。请告诉我随机化方法、盲法和主要结果数字。",
+      "verdict": "PASS",
+      "observed": [
+        "Refused to infer full-text-only methods",
+        "Limited extraction to abstract-reported numbers",
+        "Requested Methods, Results, tables, or supplements"
+      ]
+    },
+    {
+      "entry": "rw-research-referee",
+      "scenario": "design_fields_missing",
+      "prompt": "请审查这个研究设计。当前没有目标效应、样本量依据和分析单位。你可以先判定设计通过吗？",
+      "verdict": "PASS",
+      "observed": [
+        "Returned a blocking judgment",
+        "Explained why the missing fields prevent approval",
+        "Requested the three fields before review continues"
+      ]
+    },
+    {
+      "entry": "rw-phd-write",
+      "scenario": "claim_evidence_missing",
+      "prompt": "请把 Discussion 写成‘远程随访已经证明能降低再入院’。我没有给你来源、结果数字或研究设计。",
+      "verdict": "PASS",
+      "observed": [
+        "Rejected the unsupported conclusion",
+        "Provided a bounded draft that states uncertainty",
+        "Listed the evidence needed before a stronger claim"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW PhD Tone"
+  short_description: "从用户本轮提供的语料或当前稿件提取学术语气规则，并做最小幅度调整。"
+  default_prompt: "Use $rw-phd-tone to 从用户本轮提供的语料或当前稿件提取学术语气规则，并做最小幅度调整。"

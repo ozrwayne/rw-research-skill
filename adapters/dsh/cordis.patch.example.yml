@@ -1,0 +1,63 @@
+# RW Research Skill → DeepSeek Harness 适配补丁（模板）
+#
+# 这是模板，不能直接喂给 dsh。里面的占位符由
+# scripts/rw_dsh_patch.py 在运行时替换成本机绝对路径。
+# 绝对路径不进仓库，所以这份文件在任何 checkout 下都成立。
+#
+# 生成：
+#   python3 adapters/dsh/scripts/rw_dsh_patch.py --out /tmp/rw-dsh.patch.yml
+#
+# 使用（补丁是 --patch 覆盖层，在 bundle 层和 profile 层之后应用）：
+#   dsh --profile headless --patch /tmp/rw-dsh.patch.yml "任务"
+#   dsh --profile web      --patch /tmp/rw-dsh.patch.yml
+#
+# 补丁语义来自 DSH vendor/include：顶层是 PatchOptions 数组；
+# 带 id 的补丁整体替换那一行的 config（不深合并）；
+# 不带 id 的 insert 追加到根条目列表。这份补丁只 insert，不改任何现有行。
+
+# ── Skill 来源 ────────────────────────────────────────────────────────────────
+#
+# 新增一个独立命名的 skill-filesystem provider，只看 RW 自己的根目录。
+# DSH 自带的 skill-filesystem 行原样不动，宿主默认发现行为不变。
+#
+# includeDefaultRoots: false 是关键。没有它，这个 provider 会把项目根、
+# $DSH_HOME/skills、~/.agents/skills 和 bundled 根再扫一遍，
+# 等于凭空多出一份重复目录。
+#
+# customSkillDirs 直接指向仓库的 skills/，不复制。DSH 每次 skill(name)
+# 调用都重新读盘重新解析，所以改了正文下一次加载就能读到。
+- insert:
+    - id: rw-research-skills
+      name: '@deepseek-ai/dsh-skill-filesystem'
+      config:
+        providerName: rw-research
+        includeDefaultRoots: false
+        customSkillDirs:
+          - "RW_SKILLS_DIR_PLACEHOLDER"
+
+    # fixture 根，只给结构测试用。生产 profile 可以删掉这一行。
+    - id: rw-research-fixture-skills
+      name: '@deepseek-ai/dsh-skill-filesystem'
+      config:
+        providerName: rw-research-fixture
+        includeDefaultRoots: false
+        customSkillDirs:
+          - "RW_FIXTURE_DIR_PLACEHOLDER"
+
+    # ── 研究事件记录 ──────────────────────────────────────────────────────────
+    #
+    # 原生 Cordis 插件，挂 session/event 火管，把 RW 关心的阶段投影成 JSONL。
+    # 不是 Hook 桥，不起子进程。映射见 EVENT_MAP.md。
+    #
+    # 插件路径写成 file:// URL：路径里可能有空格和中文，URL 形式对
+    # Node 的 ESM 解析最没有歧义。
+    - id: rw-research-recorder
+      name: "RW_RECORDER_URL_PLACEHOLDER"
+      config:
+        logPath: "RW_RUN_LOG_PLACEHOLDER"
+
+# ── MCP ──────────────────────────────────────────────────────────────────────
+#
+# MCP server 行在 config/mcp.stdio.example.yml 和
+# config/mcp.streamable-http.example.yml。用 --with-mcp 拼进来，
+# 或者作为第二个 --patch 覆盖层单独挂。凭据只从环境变量读。

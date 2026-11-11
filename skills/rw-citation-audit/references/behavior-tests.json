@@ -1,0 +1,102 @@
+[
+  {
+    "id": "case-1",
+    "prompt": "检查 APA 文稿中 Author A 2026 与 Author B 2024 是否被错误合并。",
+    "must_do": [
+      "确认文稿版本、引用格式、参考文献边界和允许使用的元数据来源。",
+      "把问题分为 BLOCK、REVIEW 和 PASS，并将主张支持问题转交 rw-claim-audit。",
+      "文内引用与参考文献双向核对表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [
+      "rw-delivery-qa"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-2",
+    "prompt": "核对文内引用和参考文献是否双向一致。",
+    "must_do": [
+      "确认文稿版本、引用格式、参考文献边界和允许使用的元数据来源。",
+      "把问题分为 BLOCK、REVIEW 和 PASS，并将主张支持问题转交 rw-claim-audit。",
+      "文内引用与参考文献双向核对表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [
+      "rw-delivery-qa"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-3",
+    "prompt": "检查同作者同年 a、b 后缀和重复 DOI。",
+    "must_do": [
+      "确认文稿版本、引用格式、参考文献边界和允许使用的元数据来源。",
+      "把问题分为 BLOCK、REVIEW 和 PASS，并将主张支持问题转交 rw-claim-audit。",
+      "文内引用与参考文献双向核对表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [
+      "rw-delivery-qa"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "case-4",
+    "prompt": "检查团体作者首次全称和后续缩写是否符合指定格式。",
+    "must_do": [
+      "确认文稿版本、引用格式、参考文献边界和允许使用的元数据来源。",
+      "把问题分为 BLOCK、REVIEW 和 PASS，并将主张支持问题转交 rw-claim-audit。",
+      "文内引用与参考文献双向核对表。"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [
+      "rw-delivery-qa"
+    ],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-5",
+    "prompt": "没有参考文献列表，但直接宣布引用全部正确。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  },
+  {
+    "id": "counterexample-6",
+    "prompt": "引用格式没问题，所以来源一定支持主张。",
+    "must_do": [
+      "说明停止条件、缺失信息和可安全继续的部分"
+    ],
+    "must_not": [
+      "依赖未提供的本地工作区内容",
+      "生成不存在的论文、数据、DOI、工具结果或期刊要求",
+      "越过停止条件：没有文稿版本、参考文献列表或指定引用格式时，不给最终 PASS。"
+    ],
+    "expected_next": [],
+    "fixture_kind": "synthetic"
+  }
+]

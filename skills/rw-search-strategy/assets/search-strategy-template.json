@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "question": "In adults with depression, do digital psychological interventions improve depressive symptoms compared with usual care?",
+  "language": "English",
+  "framework": "PICO",
+  "concepts": [
+    {
+      "id": "population_condition",
+      "label": "Adults with depression",
+      "english_label": "Depressive disorders",
+      "free_text": [
+        "depress*",
+        "depressive disorder*",
+        "major depression"
+      ],
+      "headings": {
+        "mesh": [
+          {
+            "label": "Depressive Disorder",
+            "status": "candidate",
+            "explode": true,
+            "focus": false
+          }
+        ],
+        "emtree": [
+          {
+            "label": "depression",
+            "status": "candidate",
+            "explode": true,
+            "focus": false
+          }
+        ],
+        "cinahl": [],
+        "apa": []
+      }
+    },
+    {
+      "id": "intervention",
+      "label": "Digital psychological intervention",
+      "english_label": "Digital mental health intervention",
+      "free_text": [
+        "digital intervention*",
+        "internet-based therap*",
+        "mobile application*",
+        "mobile app",
+        "mobile apps"
+      ],
+      "headings": {
+        "mesh": [],
+        "emtree": [],
+        "cinahl": [],
+        "apa": []
+      }
+    }
+  ],
+  "targets": [
+    "pubmed",
+    "ovid_medline",
+    "embase_com",
+    "ovid_embase",
+    "ebsco_cinahl",
+    "ebsco_psycinfo",
+    "ovid_psycinfo",
+    "proquest_psycinfo"
+  ],
+  "validation": {
+    "known_relevant_records": [],
+    "peer_reviewed_by": null,
+    "notes": []
+  }
+}

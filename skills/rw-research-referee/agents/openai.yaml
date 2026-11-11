@@ -1,0 +1,4 @@
+interface:
+  display_name: "RW 研究设计与审查"
+  short_description: "检查综述方法、研究设计、研究材料、统计报告和结论边界。"
+  default_prompt: "Use $rw-research-referee to 检查这个研究的设计、材料、统计和结论边界。"
